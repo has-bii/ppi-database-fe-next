@@ -9,6 +9,7 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Validation from "@components/Validation";
+import axios from "axios";
 
 export default function page() {
   const [showPass, setShowPass] = useState(false);
@@ -23,10 +24,15 @@ export default function page() {
     style: "",
     ok: false,
   });
+  const [passValidation, setPassValidation] = useState({
+    message: "",
+    style: "",
+    ok: false,
+  });
 
   useEffect(() => {
     const regex = /^[A-Za-z\s]*$/;
-    if (form.name?.match(regex)) {
+    if (form.name?.match(regex) || form.name.length === 0) {
       setNameValidation({ message: "", style: "", ok: true });
     } else {
       setNameValidation({
@@ -37,12 +43,61 @@ export default function page() {
     }
   }, [form.name]);
 
-  useEffect(() => {}, [form.email]);
+  useEffect(() => {
+    const emailRegex = new RegExp(/^[A-Za-z0-9_]+\@[a-z]+.[a-z.]+$/, "gm");
+
+    if (form.email?.match(emailRegex) || form.email.length === 0) {
+      setEmailValidation({ message: "", style: "", ok: true });
+    } else {
+      setEmailValidation({
+        message: "Invalid email!",
+        style: "text-red-500",
+        ok: false,
+      });
+    }
+  }, [form.email]);
+
+  useEffect(() => {
+    if (form.pass.length === 0 || form.pass.length > 7) {
+      setPassValidation({ message: "", style: "", ok: true });
+    } else {
+      setPassValidation({
+        message: "Password at least 8 characters",
+        style: "text-red-500",
+        ok: false,
+      });
+    }
+  }, [form.pass]);
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+
+    if (nameValidation.ok && emailValidation.ok && passValidation.ok) {
+      try {
+        await axios
+          .post(`${process.env.NEXT_PUBLIC_API_URL}/register`, {
+            name: form.name,
+            email: form.email,
+            password: form.pass,
+          })
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      console.error("All fields are required!");
+    }
+  };
 
   return (
     <div className="_card">
       <div className="text-2xl font-bold text-center">Register</div>
-      <form>
+      <form onSubmit={submitHandler}>
         <div className="_form-input">
           <label htmlFor="name" className="_label-input">
             name
@@ -69,10 +124,18 @@ export default function page() {
           </label>
           <input
             type="email"
-            className="_input"
+            className={`_input ${
+              form.email ? (emailValidation.ok ? "_success" : "_error") : ""
+            }`}
             id="email"
             placeholder="Enter email address"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
             required
+          />
+          <Validation
+            message={emailValidation.message}
+            style={emailValidation.style}
           />
         </div>
         <div className="_form-input">
@@ -81,10 +144,18 @@ export default function page() {
           </label>
           <input
             type={showPass ? "text" : "password"}
-            className="_input"
             id="password"
             placeholder="At least 8 characters"
+            className={`_input ${
+              form.pass ? (passValidation.ok ? "_success" : "_error") : ""
+            }`}
+            value={form.pass}
+            onChange={(e) => setForm({ ...form, pass: e.target.value })}
             required
+          />
+          <Validation
+            message={passValidation.message}
+            style={passValidation.style}
           />
           <FontAwesomeIcon
             icon={showPass ? faEyeSlash : faEye}
