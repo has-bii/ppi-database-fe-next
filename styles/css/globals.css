@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+._card {
+    @apply p-6 border-4 border-black w-fit
+}
+
+._label-input {
+    @apply block capitalize
+}
+
+._form-input {
+    @apply mb-4 relative
+}
+
+._form-input ._input_icon{
+    @apply absolute right-3 top-9
+}
+
+._form-input ._input {
+    @apply border border-black px-4 py-2 lg:w-80 w-72
+}
+
+._input:focus {
+    @apply outline-none
+}
+
+._form-input ._input._success {
+    @apply border-green-500
+}
+._form-input ._input._error {
+    @apply border-red-500
+}
+
+._button {
+    @apply inline-flex bg-black text-white px-4 py-2 w-full items-center gap-2 justify-center hover:font-bold transition-all ease-in-out delay-100
+}
+
+._link {
+    @apply text-sm text-black hover:text-sky-500 transition-all delay-100 ease-in-out
+}
+
+._validation {
+    @apply text-sm first-letter:capitalize hidden
+}
+
+._validation.show {
+    @apply block animate-wiggle
+}
