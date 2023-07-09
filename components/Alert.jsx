@@ -6,16 +6,28 @@ import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 function Alert({ alert = {}, clearAlert }) {
   const [hide, setHide] = useState(false);
 
+  const clear = () => {
+    clearAlert();
+    setHide(false);
+  };
+
   const hideHandler = () => {
     setHide(true);
 
-    const clear = () => {
-      clearAlert();
-      setHide(false);
-    };
-
-    const t = setTimeout(clear, 500);
+    const t = setTimeout(() => {
+      clear();
+      clearTimeout(t);
+    }, 500);
   };
+
+  useEffect(() => {
+    if (Object.keys(alert).length) {
+      const timer = setTimeout(() => {
+        hideHandler();
+        clearTimeout(timer);
+      }, 3000);
+    }
+  }, [alert]);
 
   return Object.keys(alert).length ? (
     <div className="_alerts_container">

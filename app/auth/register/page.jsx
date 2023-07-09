@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import Validation from "@components/Validation";
 import axios from "axios";
 import Alert from "@components/Alert";
+import { useRouter } from "next/navigation";
 
 export default function page() {
   const [showPass, setShowPass] = useState(false);
@@ -31,6 +32,7 @@ export default function page() {
     ok: false,
   });
   const [alert, setAlert] = useState({});
+  const router = useRouter();
 
   useEffect(() => {
     const regex = /^[A-Za-z\s]*$/;
@@ -46,7 +48,7 @@ export default function page() {
   }, [form.name]);
 
   useEffect(() => {
-    const emailRegex = new RegExp(/^[A-Za-z0-9_]+\@[a-z]+.[a-z.]+$/, "gm");
+    const emailRegex = new RegExp(/^[A-Za-z0-9_.]+\@[a-z]+.[a-z.]+$/, "gm");
 
     if (form.email?.match(emailRegex) || form.email.length === 0) {
       setEmailValidation({ message: "", style: "", ok: true });
@@ -74,31 +76,30 @@ export default function page() {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    if (nameValidation.ok && emailValidation.ok && passValidation.ok) {
-      try {
-        await axios
-          .post(`${process.env.NEXT_PUBLIC_API_URL}/register`, {
-            name: form.name,
-            email: form.email,
-            password: form.pass,
-          })
-          .then((res) => {
-            console.log(res);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      } catch (error) {
-        console.error(error);
-      }
+    if (!nameValidation.ok || !emailValidation.ok || !passValidation.ok) {
+      addAlert("All fields are required!");
     } else {
-      console.error("All fields are required!");
+      await axios
+        .post(`${process.env.NEXT_PUBLIC_API_URL}/register`, {
+          name: form.name,
+          email: form.email,
+          password: form.pass,
+        })
+        .then((res) => {
+          addAlert(res.data.meta.message, true);
+          setForm({ name: "", email: "", pass: "" });
+
+          const t = setTimeout(() => router.push("/auth"), 3000);
+        })
+        .catch((error) => {
+          const { message } = error.response.data.meta;
+          addAlert(message, false);
+        });
     }
   };
 
   const addAlert = (message, status) => {
-    // setAlert({ message: message, status: status });
-    setAlert({ message: "Authentication failed!", status: true });
+    setAlert({ message: message, status: status });
   };
   const clearAlert = () => {
     setAlert({});
@@ -191,11 +192,6 @@ export default function page() {
             </Link>
           </div>
         </form>
-
-        <button onClick={addAlert} className="mt-2 mb-4 _button">
-          <FontAwesomeIcon icon={faArrowRightToBracket} />
-          Add alert
-        </button>
       </div>
     </>
   );
