@@ -12,9 +12,15 @@ module.exports = {
           "0%, 20%, 40%, 60%, 80%, 100%": { transform: "translate(0, 2px)" },
           "10%, 30%, 50%, 70%, 90%": { transform: "translate(0px, 0)" },
         },
+        fade: {
+          "0%": { transform: "translate(6px, 0px)", opacity: 0 },
+          "20%": { opacity: 1 },
+          "100%": { transform: "translate(0px, 0px)" },
+        },
       },
       animation: {
         wiggle: "wiggle .5s ease-in-out",
+        fade: "fade .5s ease-in-out",
       },
     },
   },

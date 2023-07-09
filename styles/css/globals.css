@@ -48,3 +48,23 @@
 ._validation.show {
     @apply block animate-wiggle
 }
+
+._alerts_container {
+    @apply fixed top-0 p-4 z-50
+}
+
+._alerts_container ._alert {
+    @apply px-4 py-2 text-white mb-2 animate-fade block transition-all ease-in-out
+}
+
+._alert._success {
+    @apply bg-green-500
+}
+
+._alert._error {
+    @apply bg-red-500
+}
+
+._alert._hide {
+    @apply opacity-0 translate-x-2
+}
