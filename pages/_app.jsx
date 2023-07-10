@@ -1,4 +1,4 @@
-import "../styles/css/globals.css";
+import "@styles/globals.css";
 import { Inter } from "next/font/google";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
@@ -10,10 +10,10 @@ export const metadata = {
   title: "PPI Karabuk",
 };
 
-export default function RootLayout({ children }) {
+export default function MyApp({ Component, pageProps }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
+    <main className={inter.className}>
+      <Component {...pageProps} />
+    </main>
   );
 }

@@ -9,33 +9,70 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Validation from "@components/Validation";
+import Alert from "@components/Alert";
+import AuthLayout from "@components/AuthLayout";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export default function page() {
+  const router = useRouter();
   const [showPass, setShowPass] = useState(false);
-  const [validationProp, setValidationProp] = useState({
-    message: "",
-    style: "text-red-500",
-  });
   const [form, setForm] = useState({ email: "", pass: "" });
-
-  const formHandler = (e) => {
-    e.preventDefault();
-
-    if (form.pass.length < 8)
-      setValidationProp({
-        ...validationProp,
-        message: "Pass at least 8 characters!",
-      });
-    else setValidationProp({ ...validationProp, message: "" });
-  };
+  const [alert, setAlert] = useState({});
+  const [emailValidation, setEmailValidation] = useState({
+    message: "",
+    style: "",
+    ok: true,
+  });
+  const [passValidation, setPassValidation] = useState({
+    message: "",
+    style: "",
+    ok: true,
+  });
 
   useEffect(() => {
-    if (form.pass.length === 0)
-      setValidationProp({ ...validationProp, message: "" });
-  }, [form.pass]);
+    setEmailValidation({ message: "", style: "", ok: true });
+    setPassValidation({ message: "", style: "", ok: true });
+  }, [form]);
+
+  const formHandler = async (e) => {
+    e.preventDefault();
+
+    await axios
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
+        email: form.email,
+        password: form.pass,
+      })
+      .then((res) => {
+        console.log(res.data);
+        addAlert("Login successful", true);
+        router.push("/");
+      })
+      .catch((err) => {
+        addAlert("Incorrect email or password!", false);
+        setEmailValidation({
+          message: "",
+          style: "",
+          ok: false,
+        });
+        setPassValidation({
+          message: "Incorrect email or password!",
+          style: "text-red-500",
+          ok: false,
+        });
+      });
+  };
+
+  const addAlert = (message, status) => {
+    setAlert({ message: message, status: status });
+  };
+  const clearAlert = () => {
+    setAlert({});
+  };
 
   return (
-    <>
+    <AuthLayout>
+      <Alert alert={alert} clearAlert={clearAlert} />
       <div className="_card">
         <div className="text-2xl font-bold text-center">Login</div>
         <form onSubmit={formHandler}>
@@ -45,12 +82,16 @@ export default function page() {
             </label>
             <input
               type="email"
-              className="_input"
+              className={`_input ${emailValidation.ok ? "" : "_error"}`}
               id="email"
               placeholder="Enter email address"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
               required
+            />
+            <Validation
+              message={emailValidation.message}
+              style={emailValidation.style}
             />
           </div>
           <div className="_form-input">
@@ -59,7 +100,7 @@ export default function page() {
             </label>
             <input
               type={showPass ? "text" : "password"}
-              className="_input"
+              className={`_input ${passValidation.ok ? "" : "_error"}`}
               id="password"
               placeholder="Enter password"
               value={form.pass}
@@ -72,14 +113,14 @@ export default function page() {
               onClick={() => setShowPass(!showPass)}
             />
             <Validation
-              message={validationProp.message}
-              style={validationProp.style}
+              message={passValidation.message}
+              style={passValidation.style}
             />
           </div>
           <Link href="/auth/forgot" className=" _link">
             Forgot password
           </Link>
-          <button type="submit" className="mt-2 mb-4 _button">
+          <button type="submit" className="w-full mt-2 mb-4 _button">
             <FontAwesomeIcon icon={faArrowRightToBracket} />
             Login
           </button>
@@ -93,6 +134,6 @@ export default function page() {
           </div>
         </form>
       </div>
-    </>
+    </AuthLayout>
   );
 }

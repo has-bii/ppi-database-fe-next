@@ -12,6 +12,7 @@ import Validation from "@components/Validation";
 import axios from "axios";
 import Alert from "@components/Alert";
 import { useRouter } from "next/navigation";
+import AuthLayout from "@components/AuthLayout";
 
 export default function page() {
   const [showPass, setShowPass] = useState(false);
@@ -89,7 +90,7 @@ export default function page() {
           addAlert(res.data.meta.message, true);
           setForm({ name: "", email: "", pass: "" });
 
-          const t = setTimeout(() => router.push("/auth"), 3000);
+          const t = setTimeout(() => router.push("/auth"), 1000);
         })
         .catch((error) => {
           const { message } = error.response.data.meta;
@@ -106,7 +107,7 @@ export default function page() {
   };
 
   return (
-    <>
+    <AuthLayout>
       <Alert alert={alert} clearAlert={clearAlert} />
       <div className="_card">
         <div className="text-2xl font-bold text-center">Register</div>
@@ -179,7 +180,7 @@ export default function page() {
           <Link href="/auth/forgot" className=" _link">
             Forgot password?
           </Link>
-          <button type="submit" className="mt-2 mb-4 _button">
+          <button type="submit" className="w-full mt-2 mb-4 _button">
             <FontAwesomeIcon icon={faArrowRightToBracket} />
             Register
           </button>
@@ -193,6 +194,6 @@ export default function page() {
           </div>
         </form>
       </div>
-    </>
+    </AuthLayout>
   );
 }
