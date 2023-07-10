@@ -13,6 +13,7 @@ import Alert from "@components/Alert";
 import AuthLayout from "@components/AuthLayout";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { getCookie, getCookies, hasCookie, setCookie } from "cookies-next";
 
 export default function page() {
   const router = useRouter();
@@ -46,7 +47,15 @@ export default function page() {
       .then((res) => {
         console.log(res.data);
         addAlert("Login successful", true);
-        router.push("/");
+
+        setCookie("user_token", res.data.result.access_token, {
+          path: "/",
+          maxAge: 60 * 6 * 24,
+        });
+
+        const t = setTimeout(() => {
+          router.push("/"), clearTimeout(t);
+        }, 1000);
       })
       .catch((err) => {
         addAlert("Incorrect email or password!", false);
@@ -136,4 +145,19 @@ export default function page() {
       </div>
     </AuthLayout>
   );
+}
+
+export async function getServerSideProps({ req, res }) {
+  const cookie = hasCookie("user_token", { req, res });
+
+  if (cookie) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return { props: {} };
 }

@@ -68,3 +68,43 @@
 ._alert._hide {
     @apply opacity-0 translate-x-2
 }
+
+._navbar_container {
+    @apply flex flex-row items-center  justify-between w-full px-8 lg:px-20 py-4 border-b-2 border-black
+}
+
+._navbar_container ._brand {
+    @apply inline-flex items-center gap-4
+}
+
+._navbar_container ._logo {
+    @apply text-xl font-semibold 
+}
+
+._navbar_container ._navlist {
+    @apply flex flex-col fixed top-0 -right-full p-8 lg:p-0 bg-white h-full items-end w-full lg:static lg:flex-row lg:text-lg lg:w-fit gap-4 text-2xl  transition-all ease-in-out duration-300 lg:gap-12
+}
+
+._navbar_container ._button {
+    @apply hidden lg:block
+}
+
+._navbar_container button {
+    @apply block lg:hidden
+}
+
+a._active {
+    @apply underline font-semibold
+}
+
+._navlist li a{
+    @apply hover:text-sky-500 hover:underline transition delay-75 text-black
+}
+
+._button._list {
+    @apply block lg:hidden
+}
+
+._navlist._show {
+    @apply right-0
+}
