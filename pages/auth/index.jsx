@@ -54,7 +54,7 @@ export default function page() {
         });
 
         const t = setTimeout(() => {
-          router.push("/"), clearTimeout(t);
+          router.push("/my-app"), clearTimeout(t);
         }, 1000);
       })
       .catch((err) => {

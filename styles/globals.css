@@ -73,7 +73,7 @@
     @apply flex flex-row items-center  justify-between w-full px-8 lg:px-20 py-4 border-b-2 border-black
 }
 
-._navbar_container ._brand {
+._brand {
     @apply inline-flex items-center gap-4
 }
 
@@ -93,8 +93,8 @@
     @apply block lg:hidden
 }
 
-a._active {
-    @apply underline font-semibold
+._navlist li a._active {
+    @apply underline font-bold
 }
 
 ._navlist li a{
@@ -107,4 +107,23 @@ a._active {
 
 ._navlist._show {
     @apply right-0
+}
+
+._myapp_nav {
+    @apply flex flex-col bg-black p-6 gap-y-8
+}
+
+._mynavlist {
+    @apply flex gap-2 flex-col
+}
+
+._mynavlist li a, ._mynavlist li button {
+    @apply text-white/75 inline-flex gap-4 items-center text-lg hover:text-white w-full px-3 py-1
+}
+
+._mynavlist li a._active {
+    @apply text-white bg-gray-700
+}
+._head_navlist {
+    @apply font-semibold text-white/75
 }
