@@ -22,6 +22,10 @@ module.exports = {
         wiggle: "wiggle .5s ease-in-out",
         fade: "fade .5s ease-in-out",
       },
+      colors: {
+        "base-grey": "#EDEDED",
+        black: "#1D1D1D",
+      },
     },
   },
   plugins: [],

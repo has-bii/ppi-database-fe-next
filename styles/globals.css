@@ -127,3 +127,83 @@
 ._head_navlist {
     @apply font-semibold text-white/75
 }
+
+._myapp_header_container {
+    @apply flex flex-row w-full py-4 px-6 bg-white items-center justify-between rounded-xl
+}
+
+._myapp_header_container ._page_name {
+    @apply text-3xl font-bold
+}
+
+._myapp_header_container ._user_info_container {
+    @apply inline-flex gap-4 border-l border-base-grey pl-4
+}
+
+._user_info_container ._user_photo {
+    @apply rounded-md
+}
+
+._user_info {
+    @apply flex flex-col justify-center
+}
+
+._user_name {
+    @apply font-semibold capitalize
+}
+
+._card_myapp {
+    @apply bg-white p-4 rounded-xl flex flex-col
+}
+
+._overviews_container {
+    @apply flex flex-row gap-2
+}
+
+._overviews_container ._overview {
+    @apply flex px-8 py-6 border border-gray-300 rounded-md
+}
+
+table {
+    @apply w-full
+}
+
+thead {
+    @apply text-left text-white font-normal bg-black
+}
+
+th {
+    @apply font-semibold
+}
+
+th,td {
+    @apply px-4 py-3
+}
+
+tbody {
+    @apply text-gray-500
+}
+
+tbody tr {
+    @apply border-b
+}
+
+._pagination {
+    @apply flex justify-between px-4 py-3 items-center
+}
+
+._pagination_button {
+    @apply px-3 py-1 border rounded-md border-black hover:bg-black hover:text-white transition ease-in-out
+}
+
+._pill {
+    @apply text-sm px-2.5 py-2 rounded-2xl
+}
+
+._pill._success {
+    @apply bg-green-300 text-green-500
+}
+
+._pill._error {
+    @apply bg-rose-300 text-rose-500
+}

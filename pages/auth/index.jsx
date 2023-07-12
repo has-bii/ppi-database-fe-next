@@ -58,15 +58,15 @@ export default function page() {
         }, 1000);
       })
       .catch((err) => {
-        addAlert("Incorrect email or password!", false);
+        addAlert(err.response.data.meta.message, false);
         setEmailValidation({
           message: "",
           style: "",
           ok: false,
         });
         setPassValidation({
-          message: "Incorrect email or password!",
-          style: "text-red-500",
+          message: "",
+          style: "",
           ok: false,
         });
       });
