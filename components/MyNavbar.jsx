@@ -45,7 +45,7 @@ export default function MyNavbar({ role_id }) {
         </li>
       </ul>
 
-      <div>
+      <div className="_mynavlist">
         <p className="_head_navlist">User</p>
         <ul className="_mynavlist">
           <li>
@@ -72,7 +72,7 @@ export default function MyNavbar({ role_id }) {
       </div>
 
       {role_id === 2 && (
-        <div>
+        <div className="_mynavlist">
           <p className="_head_navlist">Admin</p>
           <ul className="_mynavlist">
             <li>

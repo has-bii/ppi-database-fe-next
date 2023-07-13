@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Hide scrollbar for Chrome, Safari and Opera */
+._hide_scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+._hide_scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
 ._card {
     @apply p-6 border-4 border-black w-fit
 }
@@ -114,7 +125,7 @@
 }
 
 ._mynavlist {
-    @apply flex gap-2 flex-col
+    @apply gap-2 flex-col hidden lg:flex
 }
 
 ._mynavlist li a, ._mynavlist li button {
@@ -173,11 +184,11 @@ thead {
 }
 
 th {
-    @apply font-semibold
+    @apply font-semibold 
 }
 
 th,td {
-    @apply px-4 py-3
+    @apply px-4 py-3 whitespace-nowrap
 }
 
 tbody {
@@ -193,7 +204,7 @@ tbody tr {
 }
 
 ._pagination_button {
-    @apply px-3 py-1 border rounded-md border-black hover:bg-black hover:text-white transition ease-in-out
+    @apply px-3 py-1 border rounded-md border-black hover:bg-black hover:text-white transition ease-in-out disabled:bg-gray-500 disabled:cursor-not-allowed disabled:text-black
 }
 
 ._pill {
@@ -206,4 +217,73 @@ tbody tr {
 
 ._pill._error {
     @apply bg-rose-300 text-rose-500
+}
+
+._filters_container {
+    @apply flex flex-row gap-2 flex-nowrap
+}
+
+._filters_input_group {
+    @apply border border-black rounded-lg px-3 py-1.5 gap-2 inline-flex items-center flex-nowrap
+}
+
+._filters_container ._filters_button {
+    @apply rounded-lg px-3 py-1.5 bg-black text-white inline-flex gap-2 items-center flex-nowrap
+}
+
+._filters_button._white {
+    @apply bg-white border border-black text-black hover:bg-black hover:text-white transition ease-in-out
+}
+
+._filters {
+    @apply flex flex-row items-center gap-2
+}
+
+._filters ._filter_value {
+    @apply px-3 py-1.5 rounded-lg inline-flex items-center gap-2
+}
+
+._green {
+    @apply bg-green-200 text-green-400
+}
+._red {
+    @apply bg-red-200 text-red-400
+}
+._yellow {
+    @apply bg-yellow-200 text-yellow-400
+}
+._blue {
+    @apply bg-blue-200 text-blue-400
+}
+
+input {
+    @apply focus:ring-0 focus:outline-none
+}
+
+._action_btn {
+    @apply px-3 py-1.5 rounded-lg
+}
+
+._dropdown_container {
+    @apply relative
+}
+
+._dropdown_container ._dropdown_list{
+    @apply absolute top-12 bg-white flex-col gap-1 px-4 py-2 hidden border border-black rounded-lg animate-fade
+}
+
+._dropdown_list._show {
+    @apply flex
+}
+
+._dropdown_list li {
+    @apply inline-flex items-center
+}
+
+._dropdown_list li label {
+    @apply pr-4
+}
+
+._dropdown_list li input {
+    @apply ml-auto
 }
