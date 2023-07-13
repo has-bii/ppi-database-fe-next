@@ -102,13 +102,10 @@ export default function page() {
   const addAlert = (message, status) => {
     setAlert({ message: message, status: status });
   };
-  const clearAlert = () => {
-    setAlert({});
-  };
 
   return (
     <AuthLayout>
-      <Alert alert={alert} clearAlert={clearAlert} />
+      <Alert alert={alert} setAlert={setAlert} />
       <div className="_card">
         <div className="text-2xl font-bold text-center">Register</div>
         <form onSubmit={submitHandler}>

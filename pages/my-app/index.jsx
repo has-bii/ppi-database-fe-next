@@ -45,14 +45,16 @@ export async function getServerSideProps({ req, res }) {
       return res.data.result;
     })
     .catch((err) => {
-      deleteCookie("user_token", { req, res });
-      return {
-        redirect: {
-          destination: "/auth",
-          permanent: false,
-        },
-      };
+      return null;
     });
+
+  if (!user)
+    return {
+      redirect: {
+        destination: "/500",
+        permanent: false,
+      },
+    };
 
   return { props: { user } };
 }

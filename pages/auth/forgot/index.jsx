@@ -34,9 +34,6 @@ export default function page() {
   const addAlert = (message, status) => {
     setAlert({ message: message, status: status });
   };
-  const clearAlert = () => {
-    setAlert({});
-  };
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -48,7 +45,7 @@ export default function page() {
 
   return (
     <AuthLayout>
-      <Alert alert={alert} clearAlert={clearAlert} />
+      <Alert alert={alert} setAlert={setAlert} />
       <div className="_card">
         <div className="mb-4 text-2xl font-bold text-center">
           Forgot Password?

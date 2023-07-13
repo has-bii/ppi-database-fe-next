@@ -3,11 +3,11 @@ import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 
-function Alert({ alert = {}, clearAlert }) {
+function Alert({ alert = {}, setAlert }) {
   const [hide, setHide] = useState(false);
 
   const clear = () => {
-    clearAlert();
+    setAlert({});
     setHide(false);
   };
 
@@ -49,7 +49,7 @@ function Alert({ alert = {}, clearAlert }) {
 
 Alert.propTypes = {
   alert: PropTypes.object.isRequired,
-  clearAlert: PropTypes.func.isRequired,
+  setAlert: PropTypes.func.isRequired,
 };
 
 export default Alert;

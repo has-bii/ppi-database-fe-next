@@ -200,7 +200,7 @@ tbody tr {
 }
 
 ._pagination {
-    @apply flex justify-between px-4 py-3 items-center
+    @apply flex justify-between px-3 py-1.5 items-center
 }
 
 ._pagination_button {
@@ -255,6 +255,10 @@ tbody tr {
 ._blue {
     @apply bg-blue-200 text-blue-400
 }
+._black {
+    @apply bg-gray-200 text-gray-400
+}
+
 
 input {
     @apply focus:ring-0 focus:outline-none
@@ -269,7 +273,7 @@ input {
 }
 
 ._dropdown_container ._dropdown_list{
-    @apply absolute top-12 bg-white flex-col gap-1 px-4 py-2 hidden border border-black rounded-lg animate-fade
+    @apply absolute top-12 bg-white flex-col gap-1 px-4 py-2 hidden border border-black rounded-lg animate-fade z-50
 }
 
 ._dropdown_list._show {
@@ -277,13 +281,53 @@ input {
 }
 
 ._dropdown_list li {
-    @apply inline-flex items-center
-}
-
-._dropdown_list li label {
-    @apply pr-4
+    @apply inline-flex items-center gap-4
 }
 
 ._dropdown_list li input {
     @apply ml-auto
+}
+
+._skeleton {
+    @apply relative h-5 w-full inline-flex bg-gray-300 animate-pulse rounded-lg
+}
+
+._label_select {
+    @apply inline-flex gap-4 w-full
+}
+
+._label_select select {
+    @apply focus:outline-none ml-auto
+}
+
+th span {
+    @apply inline-flex gap-2 items-center
+}
+
+._modal_container {
+    @apply fixed h-screen w-screen justify-center items-center bg-black/75 z-50 hidden
+}
+
+._modal_container._show {
+    @apply flex
+}
+
+._modal_container ._modal {
+    @apply bg-white flex flex-col rounded-xl gap-2
+}
+
+._modal ._modal_header {
+    @apply text-2xl font-semibold px-5 py-2.5 border-b border-gray-300 inline-flex items-center justify-between
+}
+
+._modal ._modal_body {
+    @apply px-5 py-2.5
+}
+
+._modal ._modal_buttons {
+    @apply px-5 py-2.5 border-t border-gray-300 flex flex-row justify-end items-center gap-2
+}
+
+._modal_buttons button {
+    @apply px-3 py-1.5 rounded-lg
 }

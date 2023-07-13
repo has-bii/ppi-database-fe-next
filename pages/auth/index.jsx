@@ -53,9 +53,7 @@ export default function page() {
           maxAge: 60 * 6 * 24,
         });
 
-        const t = setTimeout(() => {
-          router.push("/my-app"), clearTimeout(t);
-        }, 1000);
+        router.push("/my-app");
       })
       .catch((err) => {
         addAlert(err.response.data.meta.message, false);
@@ -75,13 +73,10 @@ export default function page() {
   const addAlert = (message, status) => {
     setAlert({ message: message, status: status });
   };
-  const clearAlert = () => {
-    setAlert({});
-  };
 
   return (
     <AuthLayout>
-      <Alert alert={alert} clearAlert={clearAlert} />
+      <Alert alert={alert} setAlert={setAlert} />
       <div className="_card">
         <div className="text-2xl font-bold text-center">Login</div>
         <form onSubmit={formHandler}>

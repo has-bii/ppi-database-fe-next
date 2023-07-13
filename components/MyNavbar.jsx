@@ -50,15 +50,6 @@ export default function MyNavbar({ role_id }) {
         <ul className="_mynavlist">
           <li>
             <Link
-              href="/my-app/bayar-kas"
-              className={router.asPath === "/my-app/bayar-kas" ? "_active" : ""}
-            >
-              <FontAwesomeIcon icon={faSackDollar} />
-              Bayar kas
-            </Link>
-          </li>
-          <li>
-            <Link
               href="/my-app/isi-database"
               className={
                 router.asPath === "/my-app/isi-database" ? "_active" : ""
