@@ -18,148 +18,110 @@ import { formatDate } from "@lib/formatDate";
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
 
+const rows = ["name", "email", "role_id", "is_verified", "created_at  "];
+
 export default function index({ user, data, cookie }) {
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [showDropdown2, setShowDropdown2] = useState(false);
-  const [users, setUsers] = useState(data);
-  const didMount = useRef(false);
-  const filterName = useRef();
-  const [filterAdmin, setFilterAdmin] = useState(false);
-  const [filterStudent, setFilterStudent] = useState(false);
-  const [filterVerified, setFilterVerified] = useState(false);
-  const [filterUnverified, setFilterUnverified] = useState(false);
+  const [datas, setDatas] = useState(data);
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState({});
-  const [sortBy, setSortBy] = useState({
+  const [modal, setModal] = useState({
+    modal1: false,
+    modal2: false,
+    modal3: false,
+  });
+  const [selected, setSelected] = useState([]);
+  const didMounted = useRef(false);
+  const roleValue = useRef();
+  const [filter, setFilter] = useState({
+    limit: 10,
     name: "",
     email: "",
-    role: "",
-    status: "",
-    created_at: "",
-  });
-  const [select, setSelect] = useState();
-  const [modal, setModal] = useState({
-    show: false,
-    header: "",
-    select: {},
-  });
-  const [modal2, setModal2] = useState({
-    show: false,
-    select: {},
+    role_id: "0",
+    is_verified: "0",
+    order_field: "",
+    order_by: "",
   });
 
   const fetchUsers = async (
     url = `${process.env.NEXT_PUBLIC_API_URL}/users`
   ) => {
     setLoading(true);
+    setSelected([]);
 
     const res = await axios
       .get(url, {
         headers: {
           Authorization: `Bearer ${cookie}`,
         },
-        params: {
-          limit: 10,
-          name: filterName.current.value,
-          is_verified:
-            filterUnverified == filterVerified ? "" : filterUnverified ? 1 : 2,
-          role_id:
-            filterStudent && filterAdmin
-              ? "1,2"
-              : filterStudent
-              ? 1
-              : filterAdmin
-              ? 2
-              : "",
-          order_by_name: sortBy.name,
-          order_by_email: sortBy.email,
-          order_by_role_id: sortBy.role,
-          order_by_is_verified: sortBy.status,
-          order_by_created_at: sortBy.created_at,
-        },
+        params: filter,
       })
       .then((res) => {
         return res.data.result;
       })
       .catch((err) => {
         console.error(err.response);
-
         return null;
       });
 
     if (res) {
-      setUsers(res);
+      setDatas(res);
       setLoading(false);
     } else setAlert({ message: "Server-side error occurred!", status: false });
   };
 
-  const searchHandler = () => {
+  const checkHandler = (e, id) => {
+    if (e.target.checked) setSelected((old) => [...old, id]);
+    else setSelected(selected.filter((prev) => prev !== id));
+  };
+
+  const checkAllHandler = (e) => {
+    if (e.target.checked) setSelected(datas.data.map((d) => d.id));
+    else setSelected([]);
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
     fetchUsers();
   };
 
-  const verify = async (id) => {
-    setLoading(true);
+  const orderHandler = (field) => {
+    if (filter.order_field === field)
+      filter.order_by === "asc"
+        ? setFilter({ ...filter, order_by: "desc" })
+        : filter.order_by === "desc"
+        ? setFilter({ ...filter, order_by: "", order_field: "" })
+        : setFilter({ ...filter, order_by: "asc" });
+    else setFilter({ ...filter, order_field: field, order_by: "asc" });
+  };
 
+  const updateUsersHandler = async (is_verified = 0, role_id = 0) => {
     await axios
       .post(
         `${process.env.NEXT_PUBLIC_API_URL}/update-users`,
         {
-          id: id,
-          is_verified: 1,
+          id: selected.toString(),
+          role_id: role_id,
+          is_verified: is_verified,
         },
         {
-          headers: {
-            Authorization: `Bearer ${cookie}`,
-          },
+          headers: { Authorization: `Bearer ${cookie}` },
         }
       )
       .then((res) => {
-        setAlert({ message: res.data.meta.message, status: true });
+        setAlert({ message: "Updated successfully", status: true });
         fetchUsers();
       })
       .catch((err) => {
-        setAlert({ message: err.response.data.meta.message, status: false });
+        setAlert({ message: "Server-side error occurred!", status: false });
       });
   };
 
-  const changeRole = async (id) => {
-    setModal2({ ...modal2, show: false });
-    setLoading(true);
-
-    await axios
-      .post(
-        `${process.env.NEXT_PUBLIC_API_URL}/update-users`,
-        {
-          id: id,
-          role_id: select,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${cookie}`,
-          },
-        }
-      )
-      .then((res) => {
-        setAlert({ message: res.data.meta.message, status: true });
-        fetchUsers();
-      })
-      .catch((err) => {
-        setAlert({ message: err.response.data.meta.message, status: false });
-      });
-  };
-
-  const deleteUser = async () => {
-    setModal({ ...modal, show: false });
-
-    setLoading(true);
-
+  const deleteUsersHandler = async () => {
     await axios
       .delete(`${process.env.NEXT_PUBLIC_API_URL}/delete`, {
-        headers: {
-          Authorization: `Bearer ${cookie}`,
-        },
+        headers: { Authorization: `Bearer ${cookie}` },
         data: {
-          id: modal.select.id,
+          id: selected.toString(),
         },
       })
       .then((res) => {
@@ -167,337 +129,288 @@ export default function index({ user, data, cookie }) {
         fetchUsers();
       })
       .catch((err) => {
-        console.log(err.response);
+        setAlert({ message: "Server-side error occurred!", status: false });
       });
   };
 
   useEffect(() => {
-    if (didMount.current) {
-      fetchUsers();
-      console.log("Fetching");
-    } else didMount.current = true;
-  }, [filterAdmin, filterStudent, filterVerified, filterUnverified, sortBy]);
+    if (didMounted.current) fetchUsers();
+    else didMounted.current = true;
+  }, [filter.is_verified, filter.role_id, filter.order_field, filter.order_by]);
 
   return (
     <>
       <Alert alert={alert} setAlert={setAlert} />
 
-      {/* Modal */}
-      <div className={`_modal_container ${modal.show ? "_show" : ""}`}>
+      {/* Modal verify */}
+      <div className={`_modal_container ${modal.modal1 ? "_show" : ""}`}>
         <div className="_modal">
           <div className="_modal_header">
-            {modal.header}
-            <button onClick={() => setModal({ ...modal, show: false })}>
-              <FontAwesomeIcon icon={faXmark} />
-            </button>
-          </div>
-          <div className="_modal_body">{`Are you sure to delete ${modal.select.name}`}</div>
-          <div className="_modal_buttons">
-            <button
-              className="_green"
-              onClick={() => setModal({ ...modal, show: false })}
-            >
-              Cancel
-            </button>
-            <button className="_red" onClick={deleteUser}>
-              Delete
-            </button>
-          </div>
-        </div>
-      </div>
-      {/* Modal End */}
-
-      {/* Modal */}
-      <div className={`_modal_container ${modal2.show ? "_show" : ""}`}>
-        <div className="_modal">
-          <div className="_modal_header">
-            Change Role
-            <button onClick={() => setModal2({ ...modal2, show: false })}>
+            Verify User
+            <button onClick={() => setModal({ ...modal, modal1: false })}>
               <FontAwesomeIcon icon={faXmark} />
             </button>
           </div>
           <div className="_modal_body">
-            <label>
-              Change role to be
-              <select
-                className="_label_select"
-                value={select}
-                onChange={(e) => setSelect(e.target.value)}
-              >
-                <option value="1">Student</option>
-                <option value="2">Admin</option>
-                <option value="3">User</option>
-              </select>
-            </label>
+            Are you sure to verify selected users
           </div>
           <div className="_modal_buttons">
             <button
               className="_green"
-              onClick={() => setModal2({ ...modal2, show: false })}
+              onClick={() => {
+                setModal({ ...modal, modal1: false });
+                setSelected([]);
+              }}
             >
               Cancel
             </button>
             <button
               className="_yellow"
-              onClick={() => changeRole(modal2.select.id)}
+              onClick={() => {
+                setModal({ ...modal, modal1: false });
+                updateUsersHandler(1);
+              }}
+            >
+              Verify
+            </button>
+          </div>
+        </div>
+      </div>
+      {/* Modal verify end */}
+
+      {/* Modal change role */}
+      <div className={`_modal_container ${modal.modal2 ? "_show" : ""}`}>
+        <div className="_modal">
+          <div className="_modal_header">
+            Change Role User
+            <button onClick={() => setModal({ ...modal, modal2: false })}>
+              <FontAwesomeIcon icon={faXmark} />
+            </button>
+          </div>
+          <div className="_modal_body">
+            <label htmlFor="change-role" className="block mb-1">
+              Change users role to be
+            </label>
+            <select
+              className="w-full _select_button"
+              defaultValue={2}
+              ref={roleValue}
+              name="change-role"
+            >
+              <option value="1">Admin</option>
+              <option value="2">Student</option>
+              <option value="3">User</option>
+            </select>
+          </div>
+          <div className="_modal_buttons">
+            <button
+              className="_green"
+              onClick={() => setModal({ ...modal, modal2: false })}
+            >
+              Cancel
+            </button>
+            <button
+              className="_yellow"
+              onClick={() => {
+                setModal({ ...modal, modal2: false });
+                updateUsersHandler(0, roleValue.current.value);
+              }}
             >
               Change
             </button>
           </div>
         </div>
       </div>
-      {/* Modal End */}
+      {/* Modal change role end */}
+
+      {/* Modal delete */}
+      <div className={`_modal_container ${modal.modal3 ? "_show" : ""}`}>
+        <div className="_modal">
+          <div className="_modal_header">
+            Delete User
+            <button onClick={() => setModal({ ...modal, modal3: false })}>
+              <FontAwesomeIcon icon={faXmark} />
+            </button>
+          </div>
+          <div className="_modal_body">
+            Are you sure to delete selected users
+          </div>
+          <div className="_modal_buttons">
+            <button
+              className="_green"
+              onClick={() => setModal({ ...modal, modal3: false })}
+            >
+              Cancel
+            </button>
+            <button
+              className="_red"
+              onClick={() => {
+                setModal({ ...modal, modal3: false });
+                deleteUsersHandler();
+              }}
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+      {/* Modal delete end */}
 
       <div className="bg-base-grey">
         <Head>
           <title>My App | PPI Karabük</title>
         </Head>
-        <div className="flex flex-col w-screen h-screen overflow-auto _hide_scrollbar lg:flex-row">
+        <div className="flex flex-col w-screen h-screen overflow-auto lg:flex-row _hide_scrollbar">
+          {/* Navbar */}
           <MyNavbar role_id={user.role_id} />
-          <div className="flex flex-col w-full gap-4 p-4">
-            <UserDashboard pageName="Users" user={user} />
-            <div className="w-full h-full gap-4 overflow-auto _hide_scrollbar _card_myapp">
-              {/* Contents */}
-              <div className="_filters_container _hide_scrollbar">
-                <div className="_filters_input_group ">
-                  <FontAwesomeIcon icon={faSearch} className="_filters_icon" />
-                  <input
-                    type="text"
-                    id="searchName"
-                    className="_filters_input"
-                    placeholder="Search by name"
-                    ref={filterName}
-                  />
-                </div>
-                <button onClick={searchHandler} className="_filters_button">
-                  Search
-                </button>
+          {/* Navbar End */}
 
-                {/* Filter */}
-                <div className="_dropdown_container">
-                  <button
-                    type="submit"
-                    className="_filters_button _white"
-                    onClick={() => setShowDropdown(!showDropdown)}
-                  >
-                    <FontAwesomeIcon icon={faFilter} />
-                    Filter
+          <div className="flex flex-col w-full gap-4 p-4">
+            {/* User info */}
+            <UserDashboard pageName="Users" user={user} />
+
+            {/* Contents */}
+            <div className="w-full h-full gap-4 overflow-auto _card_myapp _hide_scrollbar">
+              <div className="_filters_container">
+                {/* Search by name */}
+                <form
+                  className="inline-flex items-center gap-2"
+                  onSubmit={submitHandler}
+                >
+                  <div className="_filters_input_group ">
+                    <FontAwesomeIcon
+                      icon={faSearch}
+                      className="_filters_icon"
+                    />
+                    <input
+                      type="text"
+                      id="searchName"
+                      className="_filters_input"
+                      placeholder="Search by name"
+                      value={filter.name}
+                      onChange={(e) =>
+                        setFilter({ ...filter, name: e.target.value })
+                      }
+                    />
+                  </div>
+                  <button type="submit" className="_filters_button">
+                    Search
                   </button>
-                  <ul
-                    className={`_dropdown_list ${showDropdown ? "_show" : ""}`}
+                </form>
+                {/* Search by name End*/}
+
+                {/* Filter by property */}
+                <div className="_filters">
+                  <select
+                    className="_select_button"
+                    value={filter.role_id}
+                    onChange={(e) =>
+                      setFilter({ ...filter, role_id: e.target.value })
+                    }
                   >
-                    <li>
-                      <label htmlFor="admin">Admin</label>
-                      <input
-                        type="checkbox"
-                        checked={filterAdmin}
-                        id="admin"
-                        onChange={() => setFilterAdmin(!filterAdmin)}
-                      />
-                    </li>
-                    <li>
-                      <label htmlFor="student">Student</label>
-                      <input
-                        type="checkbox"
-                        checked={filterStudent}
-                        id="student"
-                        onChange={() => setFilterStudent(!filterStudent)}
-                      />
-                    </li>
-                    <li>
-                      <label htmlFor="verified">Verified</label>
-                      <input
-                        type="checkbox"
-                        checked={filterVerified}
-                        id="verified"
-                        onChange={() => setFilterVerified(!filterVerified)}
-                      />
-                    </li>
-                    <li>
-                      <label htmlFor="unverified">Unverified</label>
-                      <input
-                        type="checkbox"
-                        checked={filterUnverified}
-                        id="unverified"
-                        onChange={() => setFilterUnverified(!filterUnverified)}
-                      />
-                    </li>
-                  </ul>
+                    <option value="0">View all roles</option>
+                    <option value="1">Admin</option>
+                    <option value="2">Student</option>
+                    <option value="3">User</option>
+                  </select>
+
+                  <select
+                    className="_select_button"
+                    value={filter.is_verified}
+                    onChange={(e) =>
+                      setFilter({ ...filter, is_verified: e.target.value })
+                    }
+                  >
+                    <option value="0">View all statuses</option>
+                    <option value="1">Unverified</option>
+                    <option value="2">Verified</option>
+                  </select>
                 </div>
-                {/* Sort */}
-                <div className="_dropdown_container">
-                  <button
-                    type="submit"
-                    className="_filters_button _white"
-                    onClick={() => setShowDropdown2(!showDropdown2)}
-                  >
-                    <FontAwesomeIcon icon={faArrowDownWideShort} />
-                    Sort
-                  </button>
-                  <ul
-                    className={`_dropdown_list ${showDropdown2 ? "_show" : ""}`}
-                  >
-                    <li>
-                      <label className="_label_select">
-                        Name
-                        <select
-                          value={sortBy.name}
-                          onChange={(e) =>
-                            setSortBy({ ...sortBy, name: e.target.value })
-                          }
-                        >
-                          <option value="">None</option>
-                          <option value="asc">asc</option>
-                          <option value="desc">desc</option>
-                        </select>
-                      </label>
-                    </li>
-                    <li>
-                      <label className="_label_select">
-                        Email
-                        <select
-                          value={sortBy.email}
-                          onChange={(e) =>
-                            setSortBy({ ...sortBy, email: e.target.value })
-                          }
-                        >
-                          <option value="">None</option>
-                          <option value="asc">asc</option>
-                          <option value="desc">desc</option>
-                        </select>
-                      </label>
-                    </li>
-                    <li>
-                      <label className="_label_select">
-                        Role
-                        <select
-                          value={sortBy.role}
-                          onChange={(e) =>
-                            setSortBy({ ...sortBy, role: e.target.value })
-                          }
-                        >
-                          <option value="">None</option>
-                          <option value="asc">asc</option>
-                          <option value="desc">desc</option>
-                        </select>
-                      </label>
-                    </li>
-                    <li>
-                      <label className="_label_select">
-                        Status
-                        <select
-                          value={sortBy.status}
-                          onChange={(e) =>
-                            setSortBy({ ...sortBy, status: e.target.value })
-                          }
-                        >
-                          <option value="">None</option>
-                          <option value="asc">asc</option>
-                          <option value="desc">desc</option>
-                        </select>
-                      </label>
-                    </li>
-                    <li>
-                      <label className="_label_select">
-                        Enrolled
-                        <select
-                          value={sortBy.created_at}
-                          onChange={(e) =>
-                            setSortBy({ ...sortBy, created_at: e.target.value })
-                          }
-                        >
-                          <option value="">None</option>
-                          <option value="asc">asc</option>
-                          <option value="desc">desc</option>
-                        </select>
-                      </label>
-                    </li>
-                  </ul>
+                {/* Filter by property End */}
+
+                {/* Selected */}
+                <div className="_selected_container">
+                  <div className="_selected_action">
+                    <button
+                      className="_green"
+                      onClick={() => setModal({ ...modal, modal1: true })}
+                      disabled={selected.length === 0}
+                    >
+                      Verify
+                    </button>
+                    <button
+                      className="_yellow"
+                      disabled={selected.length === 0}
+                      onClick={() => setModal({ ...modal, modal2: true })}
+                    >
+                      Change role
+                    </button>
+                    <button
+                      className="_red"
+                      onClick={() => setModal({ ...modal, modal3: true })}
+                      disabled={selected.length === 0}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                  <p className="_selected_counter">
+                    {selected.length}
+                    {" selected"}
+                  </p>
                 </div>
+                {/* Selected End */}
               </div>
+              {/* Table */}
               {loading ? (
                 <SkeletonTable />
               ) : (
-                <div className="overflow-auto border border-black rounded-lg w-fit lg:w-full _hide_scrollbar">
+                <div className="_table_container">
                   <table className="table-auto">
                     <thead>
                       <tr>
                         <th scope="col">
-                          <span>
-                            Name
-                            {sortBy.name ? (
-                              sortBy.name === "asc" ? (
-                                <FontAwesomeIcon icon={faArrowUp} />
-                              ) : (
-                                <FontAwesomeIcon icon={faArrowDown} />
-                              )
-                            ) : (
-                              ""
-                            )}
-                          </span>
+                          <input type="checkbox" onChange={checkAllHandler} />
                         </th>
-                        <th scope="col">
-                          <span>
-                            Email
-                            {sortBy.email ? (
-                              sortBy.email === "asc" ? (
-                                <FontAwesomeIcon icon={faArrowUp} />
-                              ) : (
-                                <FontAwesomeIcon icon={faArrowDown} />
-                              )
-                            ) : (
-                              ""
-                            )}
-                          </span>
-                        </th>
-                        <th scope="col">
-                          <span>
-                            Role
-                            {sortBy.role ? (
-                              sortBy.role === "asc" ? (
-                                <FontAwesomeIcon icon={faArrowUp} />
-                              ) : (
-                                <FontAwesomeIcon icon={faArrowDown} />
-                              )
-                            ) : (
-                              ""
-                            )}
-                          </span>
-                        </th>
-                        <th scope="col">
-                          <span>
-                            Status
-                            {sortBy.status ? (
-                              sortBy.status === "asc" ? (
-                                <FontAwesomeIcon icon={faArrowUp} />
-                              ) : (
-                                <FontAwesomeIcon icon={faArrowDown} />
-                              )
-                            ) : (
-                              ""
-                            )}
-                          </span>
-                        </th>
-                        <th scope="col">
-                          <span>
-                            Enrolled
-                            {sortBy.created_at ? (
-                              sortBy.created_at === "asc" ? (
-                                <FontAwesomeIcon icon={faArrowUp} />
-                              ) : (
-                                <FontAwesomeIcon icon={faArrowDown} />
-                              )
-                            ) : (
-                              ""
-                            )}
-                          </span>
-                        </th>
-                        <th scope="col">Action</th>
+
+                        {/* Table Head */}
+                        {rows.map((r, i) => (
+                          <th key={i} scope="col">
+                            <button
+                              className="_button _clear_button"
+                              onClick={() => orderHandler(r)}
+                            >
+                              {i === 2
+                                ? "role"
+                                : i === 3
+                                ? "status"
+                                : i === 4
+                                ? "enrolled"
+                                : r}
+                              {filter.order_field === r && (
+                                <FontAwesomeIcon
+                                  icon={
+                                    filter.order_by === "asc"
+                                      ? faArrowDown
+                                      : faArrowUp
+                                  }
+                                />
+                              )}
+                            </button>
+                          </th>
+                        ))}
+                        {/* Table Head End */}
                       </tr>
                     </thead>
                     <tbody>
-                      {users.data.map((u, i) => (
-                        <tr key={i}>
+                      {datas.data.map((u) => (
+                        <tr key={u.id}>
+                          <td>
+                            <input
+                              type="checkbox"
+                              checked={selected.includes(u.id)}
+                              onChange={(e) => checkHandler(e, u.id)}
+                            />
+                          </td>
                           <td>{u.name}</td>
                           <td>{u.email}</td>
                           <td>{u.role.name}</td>
@@ -509,75 +422,63 @@ export default function index({ user, data, cookie }) {
                             )}
                           </td>
                           <td>{formatDate(u.created_at)}</td>
-                          <td className="flex gap-2">
-                            <button
-                              className="_action_btn _green"
-                              onClick={() => verify(u.id)}
-                            >
-                              Verify
-                            </button>
-                            <button
-                              className="_action_btn _yellow"
-                              onClick={() => {
-                                setModal2({ show: true, select: u });
-                                setSelect(u.role_id.toString());
-                              }}
-                            >
-                              Role
-                            </button>
-                            <button
-                              className="_action_btn _red"
-                              onClick={() =>
-                                setModal({
-                                  show: true,
-                                  header: "Delete User",
-                                  select: u,
-                                })
-                              }
-                            >
-                              Delete
-                            </button>
-                          </td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
               )}
-              <div className="_pagination">
-                {users.prev_page_url && !loading ? (
-                  <button
-                    className="_pagination_button"
-                    onClick={() => fetchUsers(users.prev_page_url)}
-                  >
-                    Prev
-                  </button>
-                ) : (
-                  <button className="_pagination_button" disabled>
-                    Prev
-                  </button>
-                )}
+              {/* Table End */}
 
-                {!loading && (
-                  <div className="text-gray-500 ">
-                    {`Page ${users.current_page} of ${users.last_page} | Number of users is `}
-                    <b>{users.total}</b>
-                  </div>
-                )}
-                {users.next_page_url && !loading ? (
-                  <button
-                    className="_pagination_button"
-                    onClick={() => fetchUsers(users.next_page_url)}
-                  >
-                    Next
+              {/* Pagination */}
+              {loading ? (
+                <div className="_pagination">
+                  <button className="_pagination_button" disabled>
+                    Prev
                   </button>
-                ) : (
                   <button className="_pagination_button" disabled>
                     Next
                   </button>
-                )}
-              </div>
+                </div>
+              ) : (
+                <div className="_pagination">
+                  {datas.prev_page_url ? (
+                    <button
+                      className="_pagination_button"
+                      onClick={() => fetchUsers(datas.prev_page_url)}
+                    >
+                      Prev
+                    </button>
+                  ) : (
+                    <button className="_pagination_button" disabled>
+                      Prev
+                    </button>
+                  )}
+
+                  {!loading && (
+                    <div className="text-gray-500 ">
+                      {`Page ${datas.current_page} of ${datas.last_page}`}
+                    </div>
+                  )}
+
+                  {datas.next_page_url ? (
+                    <button
+                      className="_pagination_button"
+                      onClick={() => fetchUsers(datas.next_page_url)}
+                    >
+                      Next
+                    </button>
+                  ) : (
+                    <button className="_pagination_button" disabled>
+                      Next
+                    </button>
+                  )}
+                </div>
+              )}
+              {/* Pagination End */}
             </div>
+
+            {/* Contents End */}
           </div>
         </div>
       </div>

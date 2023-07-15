@@ -45,7 +45,11 @@
 }
 
 ._button {
-    @apply inline-flex bg-black text-white px-4 py-2 items-center gap-2 justify-center hover:font-bold transition-all ease-in-out delay-100
+    @apply inline-flex bg-black text-white px-4 py-2 items-center gap-2 justify-center hover:font-bold transition-all ease-in-out delay-100 capitalize
+}
+
+._button._clear_button {
+    @apply bg-transparent px-0 py-0 hover:font-semibold
 }
 
 ._link {
@@ -133,7 +137,7 @@
 }
 
 ._mynavlist li a._active {
-    @apply text-white bg-gray-700
+    @apply text-white bg-red-500 border border-red-800 rounded-lg
 }
 ._head_navlist {
     @apply font-semibold text-white/75
@@ -167,12 +171,8 @@
     @apply bg-white p-4 rounded-xl flex flex-col
 }
 
-._overviews_container {
-    @apply flex flex-row gap-2
-}
-
-._overviews_container ._overview {
-    @apply flex px-8 py-6 border border-gray-300 rounded-md
+._table_container {
+    @apply rounded-lg overflow-auto _hide_scrollbar border border-black
 }
 
 table {
@@ -200,7 +200,7 @@ tbody tr {
 }
 
 ._pagination {
-    @apply flex justify-between px-3 py-1.5 items-center
+    @apply flex justify-between items-center
 }
 
 ._pagination_button {
@@ -208,30 +208,30 @@ tbody tr {
 }
 
 ._pill {
-    @apply text-sm px-2.5 py-2 rounded-2xl
+    @apply text-sm px-2 py-1 rounded-2xl
 }
 
 ._pill._success {
-    @apply bg-green-300 text-green-500
+    @apply border border-green-500 text-green-500
 }
 
 ._pill._error {
-    @apply bg-rose-300 text-rose-500
+    @apply border border-rose-500 text-rose-500
 }
 
 ._filters_container {
-    @apply flex flex-row gap-2 flex-nowrap
+    @apply flex flex-row gap-2 _hide_scrollbar overflow-y-auto lg:overflow-visible
 }
 
 ._filters_input_group {
     @apply border border-black rounded-lg px-3 py-1.5 gap-2 inline-flex items-center flex-nowrap
 }
 
-._filters_container ._filters_button {
+._filters_button {
     @apply rounded-lg px-3 py-1.5 bg-black text-white inline-flex gap-2 items-center flex-nowrap
 }
 
-._filters_button._white {
+._filters_button._white, ._white {
     @apply bg-white border border-black text-black hover:bg-black hover:text-white transition ease-in-out
 }
 
@@ -244,21 +244,20 @@ tbody tr {
 }
 
 ._green {
-    @apply bg-green-200 text-green-400
+    @apply bg-green-200 text-green-400 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed
 }
 ._red {
-    @apply bg-red-200 text-red-400
+    @apply bg-red-200 text-red-400 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed
 }
 ._yellow {
-    @apply bg-yellow-200 text-yellow-400
+    @apply bg-yellow-200 text-yellow-400 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed
 }
 ._blue {
-    @apply bg-blue-200 text-blue-400
+    @apply bg-blue-200 text-blue-400 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed
 }
 ._black {
-    @apply bg-gray-200 text-gray-400
+    @apply bg-gray-200 text-gray-400 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed
 }
-
 
 input {
     @apply focus:ring-0 focus:outline-none
@@ -268,36 +267,8 @@ input {
     @apply px-3 py-1.5 rounded-lg
 }
 
-._dropdown_container {
-    @apply relative
-}
-
-._dropdown_container ._dropdown_list{
-    @apply absolute top-12 bg-white flex-col gap-1 px-4 py-2 hidden border border-black rounded-lg animate-fade z-50
-}
-
-._dropdown_list._show {
-    @apply flex
-}
-
-._dropdown_list li {
-    @apply inline-flex items-center gap-4
-}
-
-._dropdown_list li input {
-    @apply ml-auto
-}
-
 ._skeleton {
     @apply relative h-5 w-full inline-flex bg-gray-300 animate-pulse rounded-lg
-}
-
-._label_select {
-    @apply inline-flex gap-4 w-full
-}
-
-._label_select select {
-    @apply focus:outline-none ml-auto
 }
 
 th span {
@@ -330,4 +301,24 @@ th span {
 
 ._modal_buttons button {
     @apply px-3 py-1.5 rounded-lg
+}
+
+._select_button {
+    @apply border border-black rounded-lg py-1.5 pl-3 bg-white focus:outline-none
+}
+
+._selected_container {
+    @apply flex flex-row items-center gap-2 border-l border-gray-300 pl-2
+}
+
+._selected_counter {
+    @apply truncate
+}
+
+._selected_action {
+    @apply flex flex-row gap-2
+}
+
+._selected_action button {
+    @apply px-3 py-1.5 rounded-lg truncate
 }
