@@ -1,4 +1,5 @@
 import MyNavbar from "@components/MyNavbar";
+import UserDashboard from "@components/UserDashboard";
 import axios from "axios";
 import { deleteCookie, getCookie, hasCookie } from "cookies-next";
 import Head from "next/head";
@@ -6,15 +7,26 @@ import { useEffect } from "react";
 
 export default function index({ user }) {
   return (
-    <>
+    <div className="bg-base-grey">
       <Head>
         <title>My App | PPI Karabük</title>
       </Head>
-      <div className="flex flex-col w-screen h-screen overflow-hidden lg:flex-row">
+      <div className="flex flex-col w-screen h-screen overflow-auto lg:flex-row _hide_scrollbar">
+        {/* Navbar */}
         <MyNavbar role_id={user.role_id} />
-        <div className="flex w-full">Isi Database</div>
+        {/* Navbar End */}
+
+        <div className="flex flex-col w-full gap-4 p-4">
+          {/* User Info */}
+          <UserDashboard pageName="Isi Database" user={user} />
+          {/* User Info End */}
+
+          {/* Contents */}
+          <div className="w-full h-full gap-4 overflow-auto _card_myapp _hide_scrollbar"></div>
+          {/* Contents end */}
+        </div>
       </div>
-    </>
+    </div>
   );
 }
 
