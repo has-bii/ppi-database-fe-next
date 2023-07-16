@@ -258,8 +258,11 @@ tbody tr {
 ._black {
     @apply bg-gray-200 text-gray-400 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed
 }
+._gray {
+    @apply bg-gray-300 text-gray-500
+}
 
-input {
+input, select, textarea {
     @apply focus:ring-0 focus:outline-none
 }
 
@@ -321,4 +324,40 @@ th span {
 
 ._selected_action button {
     @apply px-3 py-1.5 rounded-lg truncate
+}
+
+._progress_bar {
+    @apply w-full h-4 bg-gray-300 rounded-lg overflow-hidden flex
+}
+
+._form_container {
+    @apply flex flex-col gap-4
+}
+
+._form_container ._form_header {
+    @apply text-2xl font-semibold
+}
+
+._form_container ._form {
+    @apply flex flex-col lg:flex-row gap-2 lg:gap-8 border-2 border-gray-200 rounded-lg p-5
+}
+
+._form_container ._form_col {
+    @apply flex flex-col gap-1 w-full
+}
+
+._form_container input, ._form_container select, ._form_container textarea {
+    @apply px-3 py-1.5 border border-black rounded-md mb-2
+}
+
+._form_container button {
+    @apply px-4 py-2 w-fit rounded-lg
+}
+
+._form_container input._file_input {
+    @apply border-0 file:border  file:rounded-lg px-0 py-0 file:px-3 file:py-1.5 file:bg-black file:text-white file:border-black file:cursor-pointer file:mr-4 file:hover:bg-white file:hover:text-black file:hover:border-black
+}
+
+._form_container img {
+    @apply border-2 border-black
 }

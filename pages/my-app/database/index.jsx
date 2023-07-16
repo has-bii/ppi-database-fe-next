@@ -33,7 +33,7 @@ export async function getServerSideProps({ req, res }) {
   cookie = getCookie("user_token", { req, res });
 
   const user = await axios
-    .get(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
+    .get(`${process.env.NEXT_PUBLIC_API_URL}/api/user`, {
       headers: {
         Authorization: `Bearer ${cookie}`,
       },

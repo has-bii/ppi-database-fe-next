@@ -81,7 +81,7 @@ export default function page() {
       addAlert("All fields are required!");
     } else {
       await axios
-        .post(`${process.env.NEXT_PUBLIC_API_URL}/register`, {
+        .post(`${process.env.NEXT_PUBLIC_API_URL}/api/register`, {
           name: form.name,
           email: form.email,
           password: form.pass,

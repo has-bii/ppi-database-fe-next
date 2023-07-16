@@ -43,7 +43,7 @@ export default function index({ user, data, cookie }) {
   });
 
   const fetchUsers = async (
-    url = `${process.env.NEXT_PUBLIC_API_URL}/users`
+    url = `${process.env.NEXT_PUBLIC_API_URL}/api/users`
   ) => {
     setLoading(true);
     setSelected([]);
@@ -97,7 +97,7 @@ export default function index({ user, data, cookie }) {
   const updateUsersHandler = async (is_verified = 0, role_id = 0) => {
     await axios
       .post(
-        `${process.env.NEXT_PUBLIC_API_URL}/update-users`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/update-users`,
         {
           id: selected.toString(),
           role_id: role_id,
@@ -118,7 +118,7 @@ export default function index({ user, data, cookie }) {
 
   const deleteUsersHandler = async () => {
     await axios
-      .delete(`${process.env.NEXT_PUBLIC_API_URL}/delete`, {
+      .delete(`${process.env.NEXT_PUBLIC_API_URL}/api/delete`, {
         headers: { Authorization: `Bearer ${cookie}` },
         data: {
           id: selected.toString(),
@@ -457,7 +457,7 @@ export default function index({ user, data, cookie }) {
 
                   {!loading && (
                     <div className="text-gray-500 ">
-                      {`Page ${datas.current_page} of ${datas.last_page}`}
+                      {`Page ${datas.current_page} of ${datas.last_page} | Total ${datas.total}`}
                     </div>
                   )}
 
@@ -502,7 +502,7 @@ export async function getServerSideProps({ req, res }) {
 
   // Fetching user data
   const user = await axios
-    .get(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
+    .get(`${process.env.NEXT_PUBLIC_API_URL}/api/user`, {
       headers: {
         Authorization: `Bearer ${cookie}`,
       },
@@ -532,7 +532,7 @@ export async function getServerSideProps({ req, res }) {
     };
 
   const data = await axios
-    .get(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
+    .get(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, {
       headers: {
         Authorization: `Bearer ${cookie}`,
       },

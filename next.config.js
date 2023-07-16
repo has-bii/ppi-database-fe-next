@@ -8,6 +8,12 @@ const nextConfig = {
         port: "",
         pathname: "/api/**",
       },
+      {
+        protocol: process.env.NEXT_API_URL_PROTOCOL,
+        hostname: process.env.NEXT_API_HOSTNAME,
+        port: "",
+        pathname: "/storage/photos/**",
+      },
     ],
   },
 };

@@ -40,7 +40,7 @@ export default function page() {
     e.preventDefault();
 
     await axios
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/api/login`, {
         email: form.email,
         password: form.pass,
       })
