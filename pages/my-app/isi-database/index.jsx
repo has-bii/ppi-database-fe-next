@@ -18,11 +18,11 @@ export default function index({ user, student, jurusans, cookie }) {
     no_aktif: student.no_aktif || "",
     whatsapp: student.whatsapp || "",
     jenis_kelamin: student.jenis_kelamin || "",
-    tempat_lahir: student.tempat_lahir || "",
     tanggal_lahir: student.tanggal_lahir || "",
     no_paspor: student.no_paspor || "",
     paspor_exp: student.paspor_exp || "",
     tc_kimlik: student.tc_kimlik || "",
+    kimlik_exp: student.kimlik_exp || "",
     provinsi_indonesia: student.provinsi_indonesia || "",
     kota_asal_indonesia: student.kota_asal_indonesia || "",
     alamat_lengkap_indonesia: student.alamat_lengkap_indonesia || "",
@@ -237,17 +237,6 @@ export default function index({ user, student, jurusans, cookie }) {
                     </select>
                   </div>
                   <div className="_form_col">
-                    <label htmlFor="kota-lahir">Kota lahir</label>
-                    <input
-                      type="text"
-                      placeholder="Nama kota lahir"
-                      id="kota-lahir"
-                      value={form.tempat_lahir}
-                      onChange={(e) =>
-                        setForm({ ...form, tempat_lahir: e.target.value })
-                      }
-                      required
-                    />
                     <label htmlFor="tanggal-lahir">Tanggal lahir</label>
                     <input
                       type="date"
@@ -287,6 +276,16 @@ export default function index({ user, student, jurusans, cookie }) {
                       value={form.tc_kimlik}
                       onChange={(e) =>
                         setForm({ ...form, tc_kimlik: e.target.value })
+                      }
+                      required
+                    />
+                    <label htmlFor="kimlik-exp">Masa berlaku Ikamet</label>
+                    <input
+                      type="date"
+                      id="kimlik-exp"
+                      value={form.kimlik_exp}
+                      onChange={(e) =>
+                        setForm({ ...form, kimlik_exp: e.target.value })
                       }
                       required
                     />
@@ -552,11 +551,11 @@ export default function index({ user, student, jurusans, cookie }) {
             )}
 
             {step === 3 && (
-              <div className="flex flex-col items-center justify-center h-full gap-4">
+              <div className="flex flex-col items-center justify-center h-full gap-4 my-4">
                 <div className="text-green-500">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    height={200}
+                    height="8rem"
                     viewBox="0 0 576 512"
                     className=" fill-green-500"
                   >
@@ -564,7 +563,7 @@ export default function index({ user, student, jurusans, cookie }) {
                   </svg>
                 </div>
                 <h1 className="text-5xl font-bold">Thank you!</h1>
-                <p className="text-lg text-gray-400">
+                <p className="text-lg text-center text-gray-400">
                   Your form was successfully submitted!
                 </p>
               </div>

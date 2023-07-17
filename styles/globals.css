@@ -148,7 +148,7 @@
 }
 
 ._myapp_header_container ._page_name {
-    @apply text-3xl font-bold
+    @apply text-3xl font-bold truncate
 }
 
 ._myapp_header_container ._user_info_container {
@@ -160,11 +160,11 @@
 }
 
 ._user_info {
-    @apply flex flex-col justify-center
+    @apply flex flex-col justify-center truncate
 }
 
 ._user_name {
-    @apply font-semibold capitalize
+    @apply font-semibold capitalize truncate
 }
 
 ._card_myapp {
@@ -184,11 +184,15 @@ thead {
 }
 
 th {
-    @apply font-semibold 
+    @apply font-semibold capitalize
 }
 
 th,td {
     @apply px-4 py-3 whitespace-nowrap
+}
+
+._wider_col {
+    @apply whitespace-normal min-w-[24rem]
 }
 
 tbody {
@@ -199,8 +203,16 @@ tbody tr {
     @apply border-b
 }
 
+._pagination_container {
+    @apply flex lg:flex-row flex-col justify-center items-center gap-4
+}
+
+._pagination_info {
+    @apply lg:w-1/2 text-center
+}
+
 ._pagination {
-    @apply flex justify-between items-center
+    @apply inline-flex justify-between items-center lg:w-1/2 w-full
 }
 
 ._pagination_button {
@@ -360,4 +372,8 @@ th span {
 
 ._form_container img {
     @apply border-2 border-black
+}
+
+._myapp_content {
+    @apply w-full h-full gap-4 overflow-hidden _card_myapp _hide_scrollbar
 }

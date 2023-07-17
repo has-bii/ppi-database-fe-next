@@ -200,6 +200,7 @@ export default function index({ user, data, cookie }) {
               <option value="1">Admin</option>
               <option value="2">Student</option>
               <option value="3">User</option>
+              <option value="4">Passive</option>
             </select>
           </div>
           <div className="_modal_buttons">
@@ -270,7 +271,7 @@ export default function index({ user, data, cookie }) {
             <UserDashboard pageName="Users" user={user} />
 
             {/* Contents */}
-            <div className="w-full h-full gap-4 overflow-auto _card_myapp _hide_scrollbar">
+            <div className="_myapp_content">
               <div className="_filters_container">
                 {/* Search by name */}
                 <form
@@ -284,7 +285,6 @@ export default function index({ user, data, cookie }) {
                     />
                     <input
                       type="text"
-                      id="searchName"
                       className="_filters_input"
                       placeholder="Search by name"
                       value={filter.name}
