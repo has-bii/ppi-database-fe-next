@@ -207,12 +207,12 @@ tbody tr {
     @apply flex lg:flex-row flex-col justify-center items-center gap-4
 }
 
-._pagination_info {
-    @apply lg:w-1/2 text-center
+._pagination {
+    @apply inline-flex justify-between items-center w-full gap-2
 }
 
-._pagination {
-    @apply inline-flex justify-between items-center lg:w-1/2 w-full
+._pagination_info {
+    @apply text-base text-gray-400
 }
 
 ._pagination_button {
@@ -232,7 +232,7 @@ tbody tr {
 }
 
 ._filters_container {
-    @apply flex flex-row gap-2 _hide_scrollbar overflow-y-auto lg:overflow-visible
+    @apply flex flex-row gap-2 _hide_scrollbar overflow-x-auto lg:overflow-visible
 }
 
 ._filters_input_group {
@@ -319,7 +319,7 @@ th span {
 }
 
 ._select_button {
-    @apply border border-black rounded-lg py-1.5 pl-3 bg-white focus:outline-none
+    @apply border border-black rounded-lg py-1.5 pl-2 bg-white focus:outline-none
 }
 
 ._selected_container {
@@ -375,5 +375,29 @@ th span {
 }
 
 ._myapp_content {
-    @apply w-full h-full gap-4 overflow-hidden _card_myapp _hide_scrollbar
+    @apply w-full h-full gap-4 overflow-auto _card_myapp _hide_scrollbar
+}
+
+._dropdown_container {
+    @apply static
+}
+
+._dropdown_button {
+    @apply px-3 py-1.5 border border-black truncate rounded-lg hover:text-white hover:bg-black transition ease-in-out
+}
+
+._dropdown_list {
+    @apply absolute top-16 -right-full hidden bg-white p-4 border border-black rounded-lg z-40 transition-all animate-fade
+}
+
+._dropdown_list ul {
+    @apply grid-cols-2 w-72 gap-x-2 gap-y-1 grid
+}
+
+._dropdown_list li{
+    @apply flex flex-row justify-between
+}
+
+._dropdown_list._show {
+    @apply block right-4
 }

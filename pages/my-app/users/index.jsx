@@ -136,7 +136,13 @@ export default function index({ user, data, cookie }) {
   useEffect(() => {
     if (didMounted.current) fetchUsers();
     else didMounted.current = true;
-  }, [filter.is_verified, filter.role_id, filter.order_field, filter.order_by]);
+  }, [
+    filter.is_verified,
+    filter.role_id,
+    filter.order_field,
+    filter.order_by,
+    filter.limit,
+  ]);
 
   return (
     <>
@@ -200,7 +206,6 @@ export default function index({ user, data, cookie }) {
               <option value="1">Admin</option>
               <option value="2">Student</option>
               <option value="3">User</option>
-              <option value="4">Passive</option>
             </select>
           </div>
           <div className="_modal_buttons">
@@ -325,6 +330,19 @@ export default function index({ user, data, cookie }) {
                     <option value="1">Unverified</option>
                     <option value="2">Verified</option>
                   </select>
+
+                  <select
+                    className="_select_button"
+                    value={filter.limit}
+                    onChange={(e) =>
+                      setFilter({ ...filter, limit: e.target.value })
+                    }
+                  >
+                    <option value="10">Rows: 10</option>
+                    <option value="25">Rows: 25</option>
+                    <option value="50">Rows: 50</option>
+                    <option value="100">Rows: 100</option>
+                  </select>
                 </div>
                 {/* Filter by property End */}
 
@@ -431,50 +449,25 @@ export default function index({ user, data, cookie }) {
               {/* Table End */}
 
               {/* Pagination */}
-              {loading ? (
+              <div className="_pagination_container">
                 <div className="_pagination">
-                  <button className="_pagination_button" disabled>
+                  <button
+                    className="_pagination_button"
+                    disabled={loading || (datas.prev_page_url ? false : true)}
+                    onClick={() => fetchUsers(datas.prev_page_url)}
+                  >
                     Prev
                   </button>
-                  <button className="_pagination_button" disabled>
+                  <div className="_pagination_info">{`${datas.current_page} of ${datas.last_page} | Total ${datas.total}`}</div>
+                  <button
+                    className="_pagination_button"
+                    disabled={loading || (datas.next_page_url ? false : true)}
+                    onClick={() => fetchUsers(datas.next_page_url)}
+                  >
                     Next
                   </button>
                 </div>
-              ) : (
-                <div className="_pagination">
-                  {datas.prev_page_url ? (
-                    <button
-                      className="_pagination_button"
-                      onClick={() => fetchUsers(datas.prev_page_url)}
-                    >
-                      Prev
-                    </button>
-                  ) : (
-                    <button className="_pagination_button" disabled>
-                      Prev
-                    </button>
-                  )}
-
-                  {!loading && (
-                    <div className="text-gray-500 ">
-                      {`Page ${datas.current_page} of ${datas.last_page} | Total ${datas.total}`}
-                    </div>
-                  )}
-
-                  {datas.next_page_url ? (
-                    <button
-                      className="_pagination_button"
-                      onClick={() => fetchUsers(datas.next_page_url)}
-                    >
-                      Next
-                    </button>
-                  ) : (
-                    <button className="_pagination_button" disabled>
-                      Next
-                    </button>
-                  )}
-                </div>
-              )}
+              </div>
               {/* Pagination End */}
             </div>
 
