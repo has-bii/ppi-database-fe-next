@@ -13,12 +13,12 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { isAdmin } from "@lib/isAdmin";
 import axios from "axios";
-import { getCookie, hasCookie } from "cookies-next";
+import { getCookie, hasCookie, setCookie } from "cookies-next";
 import { formatDate } from "@lib/formatDate";
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
 
-const rows = ["name", "email", "role_id", "is_verified", "created_at  "];
+const rows = ["name", "email", "role_id", "is_verified", "created_at"];
 
 export default function index({ user, data, cookie }) {
   const [datas, setDatas] = useState(data);
@@ -38,8 +38,8 @@ export default function index({ user, data, cookie }) {
     email: "",
     role_id: "0",
     is_verified: "0",
-    order_field: "",
-    order_by: "",
+    order_field: "created_at",
+    order_by: "desc",
   });
 
   const fetchUsers = async (
@@ -201,7 +201,7 @@ export default function index({ user, data, cookie }) {
               className="w-full _select_button"
               defaultValue={2}
               ref={roleValue}
-              name="change-role"
+              id="change-role"
             >
               <option value="1">Admin</option>
               <option value="2">Student</option>
@@ -408,8 +408,8 @@ export default function index({ user, data, cookie }) {
                                 <FontAwesomeIcon
                                   icon={
                                     filter.order_by === "asc"
-                                      ? faArrowDown
-                                      : faArrowUp
+                                      ? faArrowUp
+                                      : faArrowDown
                                   }
                                 />
                               )}
@@ -492,6 +492,7 @@ export async function getServerSideProps({ req, res }) {
   }
 
   cookie = getCookie("user_token", { req, res });
+  setCookie("user_token", cookie, { req, res, maxAge: 60 * 6 * 24 * 24 });
 
   // Fetching user data
   const user = await axios
@@ -531,6 +532,8 @@ export async function getServerSideProps({ req, res }) {
       },
       params: {
         limit: 10,
+        order_field: "created_at",
+        order_by: "desc",
       },
     })
     .then((res) => {

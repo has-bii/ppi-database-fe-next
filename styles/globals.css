@@ -144,7 +144,7 @@
 }
 
 ._myapp_header_container {
-    @apply flex flex-row w-full py-4 px-6 bg-white items-center justify-between rounded-xl
+    @apply flex flex-row w-full py-4 px-6 bg-white items-center justify-between rounded-xl overflow-hidden
 }
 
 ._myapp_header_container ._page_name {
@@ -160,11 +160,11 @@
 }
 
 ._user_info {
-    @apply flex flex-col justify-center truncate
+    @apply md:flex flex-col justify-center hidden
 }
 
 ._user_name {
-    @apply font-semibold capitalize truncate
+    @apply font-semibold capitalize truncate max-w-lg
 }
 
 ._card_myapp {
@@ -229,6 +229,10 @@ tbody tr {
 
 ._pill._error {
     @apply border border-rose-500 text-rose-500
+}
+
+._pill._sky {
+    @apply border border-sky-500 text-sky-500
 }
 
 ._filters_container {
@@ -383,15 +387,11 @@ th span {
 }
 
 ._dropdown_button {
-    @apply px-3 py-1.5 border border-black truncate rounded-lg hover:text-white hover:bg-black transition ease-in-out
+    @apply px-3 py-1.5 border border-black truncate rounded-lg hover:text-white hover:bg-black transition ease-in-out inline-flex justify-center items-center gap-1
 }
 
 ._dropdown_list {
-    @apply absolute top-16 -right-full hidden bg-white p-4 border border-black rounded-lg z-40 transition-all animate-fade
-}
-
-._dropdown_list ul {
-    @apply grid-cols-2 w-72 gap-x-2 gap-y-1 grid
+    @apply absolute top-16 right-4 bg-white px-4 py-2 border border-black rounded-lg z-40 animate-fade
 }
 
 ._dropdown_list li{
@@ -399,5 +399,24 @@ th span {
 }
 
 ._dropdown_list._show {
-    @apply block right-4
+    @apply block
 }
+
+._dropdown_list._hidden {
+    @apply hidden
+}
+
+._filters_dropdown {
+    @apply flex flex-col gap-2
+}
+
+._filters_dropdown div{
+    @apply flex flex-row gap-2 justify-between items-center w-72
+}
+._filters_dropdown div label{
+    @apply flex w-2/5   
+}
+._filters_dropdown div select, ._filters_dropdown div input{
+    @apply flex w-3/5 border border-gray-300 rounded-md px-1 py-0.5
+}
+

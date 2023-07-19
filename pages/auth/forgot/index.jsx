@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import Validation from "@components/Validation";
 import Alert from "@components/Alert";
 import AuthLayout from "@components/AuthLayout";
+import { hasCookie } from "cookies-next";
 
 export default function page() {
   const [form, setForm] = useState({ email: "" });
@@ -87,4 +88,19 @@ export default function page() {
       </div>
     </AuthLayout>
   );
+}
+
+export async function getServerSideProps({ req, res }) {
+  const cookie = hasCookie("user_token", { req, res });
+
+  if (cookie) {
+    return {
+      redirect: {
+        destination: "/my-app",
+        permanent: false,
+      },
+    };
+  }
+
+  return { props: {} };
 }

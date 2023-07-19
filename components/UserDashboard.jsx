@@ -3,8 +3,6 @@ import PropTypes from "prop-types";
 import Image from "next/image";
 
 function UserDashboard({ pageName, user }) {
-  const name = user.name.split(" ");
-
   return (
     <div className="_myapp_header_container">
       <div className="_page_name">{pageName}</div>
@@ -17,7 +15,7 @@ function UserDashboard({ pageName, user }) {
           className="_user_photo"
         />
         <div className="_user_info">
-          <p className="_user_name">{`${name[0]} ${name[1]}`}</p>
+          <p className="_user_name">{user.name}</p>
           <span className="_user_role">{user.role.name}</span>
         </div>
       </div>

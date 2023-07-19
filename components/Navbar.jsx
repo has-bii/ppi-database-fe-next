@@ -67,18 +67,12 @@ export default function Navbar({ isLogged }) {
           </Link>
         </li>
         <li>
-          {isLogged ? (
-            <button className="_button _list" onClick={logoutHandler}>
-              Logout
-            </button>
-          ) : (
-            <button
-              className="_button _list"
-              onClick={() => router.push("/auth")}
-            >
-              Login
-            </button>
-          )}
+          <button
+            className="_button _list"
+            onClick={() => router.push("/auth")}
+          >
+            Login
+          </button>
         </li>
       </ul>
 
@@ -86,15 +80,9 @@ export default function Navbar({ isLogged }) {
         <FontAwesomeIcon icon={faBars} size="2xl" />
       </button>
 
-      {isLogged ? (
-        <button className="_button" onClick={logoutHandler}>
-          Logout
-        </button>
-      ) : (
-        <button className="_button" onClick={() => router.push("/auth")}>
-          Login
-        </button>
-      )}
+      <button className="_button" onClick={() => router.push("/auth")}>
+        Login
+      </button>
     </nav>
   );
 }

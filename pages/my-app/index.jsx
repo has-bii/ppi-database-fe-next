@@ -1,7 +1,7 @@
 import MyNavbar from "@components/MyNavbar";
 import UserDashboard from "@components/UserDashboard";
 import axios from "axios";
-import { deleteCookie, getCookie, hasCookie } from "cookies-next";
+import { deleteCookie, getCookie, hasCookie, setCookie } from "cookies-next";
 import Head from "next/head";
 
 export default function index({ user }) {
@@ -34,6 +34,7 @@ export async function getServerSideProps({ req, res }) {
   }
 
   cookie = getCookie("user_token", { req, res });
+  setCookie("user_token", cookie, { req, res, maxAge: 60 * 6 * 24 * 24 });
 
   const user = await axios
     .get(`${process.env.NEXT_PUBLIC_API_URL}/api/user`, {

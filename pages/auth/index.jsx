@@ -45,7 +45,6 @@ export default function page() {
         password: form.pass,
       })
       .then((res) => {
-        console.log(res.data);
         addAlert("Login successful", true);
 
         setCookie("user_token", res.data.result.access_token, {
@@ -148,7 +147,7 @@ export async function getServerSideProps({ req, res }) {
   if (cookie) {
     return {
       redirect: {
-        destination: "/",
+        destination: "/my-app",
         permanent: false,
       },
     };

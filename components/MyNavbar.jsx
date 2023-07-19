@@ -45,22 +45,24 @@ export default function MyNavbar({ role_id }) {
         </li>
       </ul>
 
-      <div className="_mynavlist">
-        <p className="_head_navlist">User</p>
-        <ul className="_mynavlist">
-          <li>
-            <Link
-              href="/my-app/isi-database"
-              className={
-                router.asPath === "/my-app/isi-database" ? "_active" : ""
-              }
-            >
-              <FontAwesomeIcon icon={faFilePen} />
-              Database
-            </Link>
-          </li>
-        </ul>
-      </div>
+      {role_id !== 1 && (
+        <div className="_mynavlist">
+          <p className="_head_navlist">User</p>
+          <ul className="_mynavlist">
+            <li>
+              <Link
+                href="/my-app/isi-database"
+                className={
+                  router.asPath === "/my-app/isi-database" ? "_active" : ""
+                }
+              >
+                <FontAwesomeIcon icon={faFilePen} />
+                Database
+              </Link>
+            </li>
+          </ul>
+        </div>
+      )}
 
       {role_id === 1 && (
         <div className="_mynavlist">

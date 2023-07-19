@@ -3,13 +3,14 @@ import UserDashboard from "@components/UserDashboard";
 import { faCheckToSlot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
-import { deleteCookie, getCookie, hasCookie } from "cookies-next";
+import { deleteCookie, getCookie, hasCookie, setCookie } from "cookies-next";
 import Head from "next/head";
 import Image from "next/image";
 import { useRef, useState } from "react";
 
 export default function index({ user, student, jurusans, cookie }) {
   const [step, setStep] = useState(0);
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     id: student.id,
     user_id: student.user_id,
@@ -45,6 +46,7 @@ export default function index({ user, student, jurusans, cookie }) {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const formData = new FormData();
 
@@ -68,8 +70,8 @@ export default function index({ user, student, jurusans, cookie }) {
         },
       })
       .then((res) => {
-        console.log(res.data);
         setStep(3);
+        setLoading(false);
       })
       .catch((err) => console.log(err.response));
   };
@@ -114,6 +116,7 @@ export default function index({ user, student, jurusans, cookie }) {
 
   const changeForm = async (e, i) => {
     e.preventDefault();
+    setLoading(true);
 
     await axios
       .post(`${process.env.NEXT_PUBLIC_API_URL}/api/student/update`, form, {
@@ -122,6 +125,7 @@ export default function index({ user, student, jurusans, cookie }) {
         },
       })
       .then((res) => {
+        setLoading(false);
         setStep(i);
       })
       .catch((err) => console.log(err.response));
@@ -291,7 +295,11 @@ export default function index({ user, student, jurusans, cookie }) {
                     />
                   </div>
                 </div>
-                <button type="submit" className="ml-auto _blue">
+                <button
+                  type="submit"
+                  className="ml-auto _blue"
+                  disabled={loading}
+                >
                   Next
                 </button>
               </form>
@@ -397,7 +405,7 @@ export default function index({ user, student, jurusans, cookie }) {
                   <button className="_gray" onClick={() => setStep(0)}>
                     Prev
                   </button>
-                  <button type="submit" className="_blue">
+                  <button type="submit" className="_blue" disabled={loading}>
                     Next
                   </button>
                 </div>
@@ -543,7 +551,7 @@ export default function index({ user, student, jurusans, cookie }) {
                   <button className="_gray" onClick={() => setStep(1)}>
                     Prev
                   </button>
-                  <button type="submit" className="_blue">
+                  <button type="submit" className="_blue" disabled={loading}>
                     Submit
                   </button>
                 </div>
@@ -592,6 +600,8 @@ export async function getServerSideProps({ req, res }) {
 
   cookie = getCookie("user_token", { req, res });
 
+  setCookie("user_token", cookie, { req, res, maxAge: 60 * 6 * 24 * 24 });
+
   const user = await axios
     .get(`${process.env.NEXT_PUBLIC_API_URL}/api/user`, {
       headers: {
@@ -621,14 +631,19 @@ export async function getServerSideProps({ req, res }) {
       return res.data.result;
     })
     .catch((err) => {
+      console.log(err.response);
+
       deleteCookie("user_token", { req, res });
-      return {
-        redirect: {
-          destination: "/auth",
-          permanent: false,
-        },
-      };
+      return null;
     });
+
+  if (!student)
+    return {
+      redirect: {
+        destination: "/auth",
+        permanent: false,
+      },
+    };
 
   const jurusans = await axios
     .get(`${process.env.NEXT_PUBLIC_API_URL}/api/jurusan`, {
@@ -641,13 +656,16 @@ export async function getServerSideProps({ req, res }) {
     })
     .catch((err) => {
       deleteCookie("user_token", { req, res });
-      return {
-        redirect: {
-          destination: "/auth",
-          permanent: false,
-        },
-      };
+      return null;
     });
+
+  if (!jurusans)
+    return {
+      redirect: {
+        destination: "/auth",
+        permanent: false,
+      },
+    };
 
   return { props: { user, student, jurusans, cookie } };
 }
