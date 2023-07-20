@@ -14,7 +14,10 @@ export default function index({ user }) {
         <MyNavbar role_id={user.role_id} />
         <div className="flex flex-col w-full gap-4 p-4">
           <UserDashboard pageName="Dashboard" user={user} />
-          <div className="flex w-full h-full bg-white">index</div>
+
+          {/* Content */}
+          <div className="_myapp_content"></div>
+          {/* Content End */}
         </div>
       </div>
     </div>
