@@ -60,8 +60,8 @@ export default function index({ user, students, cookie }) {
   const [filter, setFilter] = useState({
     limit: "10",
     name: "",
-    order_field: "",
-    order_by: "",
+    order_field: "updated_at",
+    order_by: "desc",
     status_id: "",
     jenis_kelamin: "",
     kota_turki_id: "",
@@ -595,8 +595,8 @@ export default function index({ user, students, cookie }) {
                                     (data.photo ? (
                                       <Image
                                         src={`${process.env.NEXT_PUBLIC_API_URL}/${data.photo}`}
-                                        width={50}
-                                        height={50}
+                                        width={100}
+                                        height={100}
                                         className="border border-black hover:scale-150"
                                         alt="pas photo"
                                       />

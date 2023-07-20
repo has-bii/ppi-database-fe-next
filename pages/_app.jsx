@@ -12,7 +12,7 @@ export const metadata = {
 
 export default function MyApp({ Component, pageProps }) {
   return (
-    <main className={inter.className}>
+    <main>
       <Component {...pageProps} />
     </main>
   );

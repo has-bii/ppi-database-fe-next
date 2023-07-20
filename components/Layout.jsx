@@ -16,7 +16,7 @@ export default function Layout({ children }) {
         <title>PPI Karabük</title>
       </Head>
       <Navbar isLogged={cookie} />
-      <div className="flex w-full h-full bg-sky-300">{children}</div>
+      <div className="flex w-full h-full">{children}</div>
     </>
   );
 }
