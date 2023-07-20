@@ -4,7 +4,7 @@ import axios from "axios";
 import { deleteCookie, getCookie, hasCookie, setCookie } from "cookies-next";
 import Head from "next/head";
 
-export default function index({ user }) {
+export default function index({ user, analytics }) {
   return (
     <div className="bg-base-grey">
       <Head>
@@ -16,7 +16,41 @@ export default function index({ user }) {
           <UserDashboard pageName="Dashboard" user={user} />
 
           {/* Content */}
-          <div className="_myapp_content"></div>
+          <div className="_myapp_content">
+            {/* Analytics overview */}
+            <div>
+              <p className="mb-3 text-xl font-semibold">Analytics overview</p>
+              <div className="flex flex-row w-full gap-2 overflow-x-auto _hide_scrollbar">
+                <div className="_overview_card">
+                  <h4 className="_overview_amount">
+                    {analytics.active_student}
+                  </h4>
+                  <span className="_overview_info">Active Students</span>
+                </div>
+                {analytics.kota.map((kota, index) => (
+                  <div key={index} className="_overview_card">
+                    <h4 className="_overview_amount">{kota.count}</h4>
+                    <span className="_overview_info">{`${kota.kota_turki.name} Students`}</span>
+                  </div>
+                ))}
+                {analytics.gender.map((gender, index) => (
+                  <div key={index} className="_overview_card">
+                    <h4 className="_overview_amount">{gender.count}</h4>
+                    <span className="_overview_info">
+                      {gender.jenis_kelamin}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            {/* Analytics overview end */}
+
+            {/* Charts */}
+            <div className="flex flex-row w-full h-full">
+              <div className="flex w-3/4 border-2 border-black rounded-lg"></div>
+            </div>
+            {/* Charts end */}
+          </div>
           {/* Content End */}
         </div>
       </div>
@@ -60,5 +94,26 @@ export async function getServerSideProps({ req, res }) {
       },
     };
 
-  return { props: { user } };
+  const analytics = await axios
+    .get(`${process.env.NEXT_PUBLIC_API_URL}/api/student/statistic`, {
+      headers: {
+        Authorization: `Bearer ${cookie}`,
+      },
+    })
+    .then((res) => {
+      return res.data.result;
+    })
+    .catch((err) => {
+      return null;
+    });
+
+  if (!analytics)
+    return {
+      redirect: {
+        destination: "/500",
+        permanent: false,
+      },
+    };
+
+  return { props: { user, analytics } };
 }

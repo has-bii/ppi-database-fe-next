@@ -428,3 +428,14 @@ th span {
     @apply flex w-3/5 border border-gray-300 rounded-md px-1 py-0.5
 }
 
+._overview_card {
+    @apply px-6 py-4 gap-y-1 w-full flex flex-col justify-center items-center rounded-lg text-black border-2 border-black
+}
+
+._overview_card ._overview_amount {
+    @apply text-4xl font-bold
+}
+
+._overview_card ._overview_info {
+    @apply text-sm text-gray-500 truncate
+}
