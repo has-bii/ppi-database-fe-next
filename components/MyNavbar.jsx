@@ -21,7 +21,7 @@ export default function MyNavbar({ role_id }) {
 
   const logoutHandler = () => {
     deleteCookie("user_token");
-    router.push("/auth");
+    router.push("/");
   };
 
   return (
@@ -53,10 +53,10 @@ export default function MyNavbar({ role_id }) {
           </li>
         </ul>
 
-        {/* User */}
-        {role_id !== 1 && (
+        {/* Student */}
+        {role_id === 2 && (
           <div className="_mynavlist">
-            <p className="_head_navlist">User</p>
+            <p className="_head_navlist">Student</p>
             <ul className="_mynavlist">
               <li>
                 <Link

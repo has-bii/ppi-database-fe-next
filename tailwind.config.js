@@ -26,6 +26,12 @@ module.exports = {
         "base-grey": "#EDEDED",
         black: "#1D1D1D",
       },
+      backgroundImage: {
+        mobile: "url('/image/mobile.svg')",
+      },
+      height: {
+        "9/16": "56.25%",
+      },
     },
   },
   plugins: [],

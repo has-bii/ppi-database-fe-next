@@ -45,11 +45,15 @@
 }
 
 ._button {
-    @apply inline-flex bg-black text-white px-4 py-2 items-center gap-2 justify-center hover:font-bold transition-all ease-in-out delay-100 capitalize
+    @apply inline-flex bg-black border text-white px-4 py-2 items-center gap-2 justify-center transition-all ease-in-out delay-100 capitalize hover:bg-white hover:text-black hover:border-black
 }
 
 ._button._clear_button {
     @apply bg-transparent px-0 py-0 hover:font-semibold
+}
+
+._button._white  {
+    @apply border border-black text-black bg-white
 }
 
 ._link {
@@ -85,7 +89,7 @@
 }
 
 ._navbar_container {
-    @apply flex flex-row items-center  justify-between w-full px-8 lg:px-20 py-4 border-b-2 border-black
+    @apply flex flex-row items-center z-30 relative justify-between w-full px-8 lg:px-20 py-4 border-b-2 border-black bg-white
 }
 
 ._brand {
@@ -93,7 +97,7 @@
 }
 
 ._navbar_container ._logo {
-    @apply text-xl font-semibold 
+    @apply text-2xl font-extrabold leading-6
 }
 
 ._navbar_container ._navlist {
@@ -164,7 +168,7 @@
 }
 
 ._user_info_container ._user_photo {
-    @apply rounded-md
+    @apply rounded-md border border-black
 }
 
 ._user_info {
@@ -446,4 +450,20 @@ th span {
 
 ._select_analytics._selected {
     @apply bg-black text-white
+}
+
+._row_table {
+    @apply inline-flex items-center gap-2 capitalize
+}
+
+._heading2 {
+    @apply text-4xl font-bold text-white
+}
+
+._youtube_wrapper {
+    @apply bg-white relative z-10 lg:w-1/2  lg:h-9/16 md:w-3/4 md:h-96
+}
+
+._youtube_bg {
+    @apply absolute w-full h-full bg-white border-2 border-black -z-10 -top-5 -right-5
 }

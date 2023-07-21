@@ -6,7 +6,7 @@ export default function Document() {
       <Head>
         <link rel="shortcut icon" href="/icon/icon.png" />
       </Head>
-      <body>
+      <body className="_hide_scrollbar">
         <Main />
         <NextScript />
       </body>

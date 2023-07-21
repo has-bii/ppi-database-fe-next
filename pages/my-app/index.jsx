@@ -12,6 +12,8 @@ export const selectAnalytics = [
   "Perkembangan perdaerah",
   "Jumlah mahasiswa",
   "Jurusan favorit",
+  "Asal daerah Indonesia",
+  "Status",
 ];
 
 export default function index({ user, analytics }) {
@@ -87,6 +89,48 @@ export default function index({ user, analytics }) {
     ],
   };
 
+  const dataAsal = {
+    labels: analytics.asal_kota.map((a) => a.kota_asal_indonesia),
+    datasets: [
+      {
+        label: "# of students",
+        data: analytics.asal_kota.map((a) => a.count),
+        backgroundColor: [
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(54, 162, 235, 0.2)",
+          "rgba(255, 159, 64, 0.2)",
+        ],
+        borderColor: [
+          "rgba(255, 99, 132, 1)",
+          "rgba(54, 162, 235, 1)",
+          "rgba(255, 159, 64, 1)",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const dataStatus = {
+    labels: analytics.status.map((s) => s.status.name),
+    datasets: [
+      {
+        label: "# of students",
+        data: analytics.status.map((s) => s.count),
+        backgroundColor: [
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(54, 162, 235, 0.2)",
+          "rgba(255, 159, 64, 0.2)",
+        ],
+        borderColor: [
+          "rgba(255, 99, 132, 1)",
+          "rgba(54, 162, 235, 1)",
+          "rgba(255, 159, 64, 1)",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
   return (
     <div className="bg-base-grey">
       <Head>
@@ -136,6 +180,18 @@ export default function index({ user, analytics }) {
                 )}
                 {selectedChart === 3 && (
                   <BarChart data={dataJurusan} title="Jurusan Favorit" />
+                )}
+                {selectedChart === 4 && (
+                  <BarChart
+                    data={dataAsal}
+                    title="Asal daerah Indonesia terbanyak"
+                  />
+                )}
+                {selectedChart === 5 && (
+                  <BarChart
+                    data={dataStatus}
+                    title="Jumlah mahasiswa perstatus"
+                  />
                 )}
               </div>
               <div className="flex flex-col gap-2 p-4 overflow-hidden border-2 border-black rounded-lg md:w-1/4">

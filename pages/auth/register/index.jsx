@@ -91,7 +91,7 @@ export default function page() {
           addAlert(res.data.meta.message, true);
           setForm({ name: "", email: "", pass: "" });
 
-          const t = setTimeout(() => router.push("/auth"), 1000);
+          router.push("/auth");
         })
         .catch((error) => {
           const { message } = error.response.data.meta;

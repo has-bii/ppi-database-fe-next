@@ -8,7 +8,7 @@ function UserDashboard({ pageName, user }) {
       <div className="_page_name">{pageName}</div>
       <div className="_user_info_container">
         <Image
-          src={user.profile_photo_url}
+          src="/image/dummy-pp.jpeg"
           width={50}
           height={50}
           alt="user photo"

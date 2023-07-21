@@ -18,10 +18,12 @@ export default function Navbar({ isLogged }) {
 
   return (
     <nav className="_navbar_container">
-      <div className="_brand">
+      <Link href="/" className="_brand">
         <Image src={logo} width="50" height="50" alt="PPI Karabuk" priority />
-        <p className="_logo">PPI KARABÜK</p>
-      </div>
+        <div className="_logo">
+          <span className="block">PPI</span>KARABÜK
+        </div>
+      </Link>
 
       <ul className={`_navlist ${navShow ? "_show" : ""}`}>
         <li>

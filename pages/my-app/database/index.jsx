@@ -536,7 +536,7 @@ export default function index({ user, students, cookie }) {
                             col.show && (
                               <th key={index}>
                                 <button
-                                  className="_button _clear_button"
+                                  className="_row_table"
                                   onClick={() => orderHandler(col.db)}
                                 >
                                   {col.name}

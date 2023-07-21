@@ -394,7 +394,7 @@ export default function index({ user, data, cookie }) {
                         {rows.map((r, i) => (
                           <th key={i} scope="col">
                             <button
-                              className="_button _clear_button"
+                              className="_row_table"
                               onClick={() => orderHandler(r)}
                             >
                               {i === 2
