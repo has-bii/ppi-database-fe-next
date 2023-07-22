@@ -58,7 +58,7 @@ export default function Home() {
               sizes="(max-width: 768px) 100vw"
               className="object-cover"
               placeholder="blur"
-              blurDataURL=""
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=="
             />
           </div>
         </div>
