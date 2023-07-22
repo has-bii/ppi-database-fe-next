@@ -55,7 +55,7 @@ export default function page() {
         router.push("/my-app");
       })
       .catch((err) => {
-        addAlert(err.response.data.meta.message, false);
+        addAlert(err.response?.data.meta.message, false);
         setEmailValidation({
           message: "",
           style: "",

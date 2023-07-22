@@ -2,6 +2,7 @@ import Head from "next/head";
 import Navbar from "./Navbar";
 import { hasCookie } from "cookies-next";
 import { useEffect, useState } from "react";
+import Footer from "./Footer";
 
 export default function Layout({ children }) {
   const [cookie, setCookie] = useState();
@@ -17,6 +18,7 @@ export default function Layout({ children }) {
       </Head>
       <Navbar isLogged={cookie} />
       {children}
+      <Footer />
     </>
   );
 }
