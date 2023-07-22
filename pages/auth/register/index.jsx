@@ -94,13 +94,13 @@ export default function page() {
           router.push("/auth");
         })
         .catch((error) => {
-          const { message } = error.response.data.meta;
+          const message = error.response?.data.meta.message;
           addAlert(message, false);
         });
     }
   };
 
-  const addAlert = (message, status) => {
+  const addAlert = (message = "Error", status) => {
     setAlert({ message: message, status: status });
   };
 
