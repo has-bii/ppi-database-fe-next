@@ -1,6 +1,6 @@
 import { deleteCookie } from "cookies-next";
 import Image from "next/image";
-import logo from "@public/Logo.png";
+import logo from "@public/logo.png";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faBars } from "@fortawesome/free-solid-svg-icons";
