@@ -1,6 +1,7 @@
 import Layout from "@components/Layout";
 import Image from "next/image";
 import Link from "next/link";
+import Hero from '../public/image/hero.jpg'
 
 export const album = [
   "photo_1.jpg",
@@ -50,12 +51,14 @@ export default function Home() {
           </div>
           <div className="relative hidden w-3/5 h-full lg:flex">
             <Image
-              src="/image/hero-2.jpg"
-              alt=""
+              src={Hero}
+              alt="hero"
               fill
               priority
               sizes="(max-width: 768px) 100vw"
               className="object-cover"
+              placeholder="blur"
+              blurDataURL=""
             />
           </div>
         </div>
