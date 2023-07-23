@@ -1,7 +1,7 @@
 import Layout from "@components/Layout";
 import Image from "next/image";
 import Link from "next/link";
-import Hero from '../public/image/hero.jpg'
+import Hero from "../public/image/hero.jpg";
 
 export const album = [
   "photo_1.jpg",
@@ -57,8 +57,6 @@ export default function Home() {
               priority
               sizes="(max-width: 768px) 100vw"
               className="object-cover"
-              placeholder="blur"
-              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=="
             />
           </div>
         </div>
@@ -71,7 +69,7 @@ export default function Home() {
             <iframe
               src="https://www.youtube.com/embed/GwlJz_sn_RQ?controls=0"
               title="YouTube video player"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;"
               allowFullScreen
               className="w-full h-full border-2 border-black"
             ></iframe>
@@ -100,9 +98,10 @@ export default function Home() {
                   src={`/album/${photo}`}
                   fill
                   className="object-cover"
-                  priority
-                  alt=""
+                  alt="photo album"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  placeholder="blur"
+                  blurDataURL={`/album/${photo}`}
                 />
               </div>
             ))}
