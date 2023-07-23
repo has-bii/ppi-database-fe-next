@@ -13,14 +13,17 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { isAdmin } from "@lib/isAdmin";
 import axios from "axios";
-import { getCookie, hasCookie, setCookie } from "cookies-next";
 import { formatDate } from "@lib/formatDate";
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
+import { fetchUser } from "@lib/fetchUser";
+import { fetchData } from "@lib/fetchData";
+import { getCookie } from "cookies-next";
 
 const rows = ["name", "email", "role_id", "is_verified", "created_at"];
 
-export default function index({ user, data, cookie }) {
+export default function index({ user, data }) {
+  const cookie = getCookie("user_token");
   const [datas, setDatas] = useState(data);
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState({});
@@ -479,39 +482,13 @@ export default function index({ user, data, cookie }) {
   );
 }
 
-export async function getServerSideProps({ req, res }) {
-  let cookie = hasCookie("user_token", { req, res });
-
-  if (!cookie) {
-    return {
-      redirect: {
-        destination: "/auth",
-        permanent: false,
-      },
-    };
-  }
-
-  cookie = getCookie("user_token", { req, res });
-  setCookie("user_token", cookie, { req, res, maxAge: 60 * 6 * 24 * 24 });
-
-  // Fetching user data
-  const user = await axios
-    .get(`${process.env.NEXT_PUBLIC_API_URL}/api/user`, {
-      headers: {
-        Authorization: `Bearer ${cookie}`,
-      },
-    })
-    .then((res) => {
-      return res.data.result;
-    })
-    .catch((err) => {
-      return null;
-    });
+export async function getServerSideProps({ req, res, resolvedUrl }) {
+  const user = await fetchUser(req, res);
 
   if (!user)
     return {
       redirect: {
-        destination: "/500",
+        destination: "/auth",
         permanent: false,
       },
     };
@@ -525,23 +502,13 @@ export async function getServerSideProps({ req, res }) {
       },
     };
 
-  const data = await axios
-    .get(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, {
-      headers: {
-        Authorization: `Bearer ${cookie}`,
-      },
-      params: {
-        limit: 10,
-        order_field: "created_at",
-        order_by: "desc",
-      },
-    })
-    .then((res) => {
-      return res.data.result;
-    })
-    .catch((err) => {
-      return null;
-    });
+  const params = {
+    limit: 10,
+    order_field: "created_at",
+    order_by: "desc",
+  };
 
-  return { props: { user, data, cookie } };
+  const data = await fetchData("/users", req, res, params);
+
+  return { props: { user, data } };
 }

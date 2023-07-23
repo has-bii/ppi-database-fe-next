@@ -9,11 +9,53 @@ import {
   faUserGroup,
   faFilePen,
   faBars,
+  faGraduationCap,
 } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { deleteCookie } from "cookies-next";
+
+const navMenuList = [
+  {
+    label: "Student",
+    role_id: 2,
+    list: [
+      {
+        name: "Database",
+        url: "/my-app/student/isi-database",
+        icon: faFilePen,
+      },
+    ],
+  },
+  {
+    label: "Admin",
+    role_id: 1,
+    list: [
+      {
+        name: "Users",
+        url: "/my-app/admin/users",
+        icon: faUserGroup,
+      },
+      {
+        name: "Students",
+        url: "/my-app/admin/database",
+        icon: faDatabase,
+      },
+    ],
+  },
+  {
+    label: "User",
+    role_id: 3,
+    list: [
+      {
+        name: "Daftar",
+        url: "/my-app/user/daftar-kampus",
+        icon: faGraduationCap,
+      },
+    ],
+  },
+];
 
 export default function MyNavbar({ role_id }) {
   const router = useRouter();
@@ -39,6 +81,7 @@ export default function MyNavbar({ role_id }) {
         </button>
       </div>
 
+      {/* Dashboard */}
       <div className={`_myapp_navlist_container ${show ? "_show" : ""}`}>
         {/* Dashboard */}
         <ul className="_mynavlist">
@@ -53,53 +96,26 @@ export default function MyNavbar({ role_id }) {
           </li>
         </ul>
 
-        {/* Student */}
-        {role_id === 2 && (
-          <div className="_mynavlist">
-            <p className="_head_navlist">Student</p>
-            <ul className="_mynavlist">
-              <li>
-                <Link
-                  href="/my-app/isi-database"
-                  className={
-                    router.asPath === "/my-app/isi-database" ? "_active" : ""
-                  }
-                >
-                  <FontAwesomeIcon icon={faFilePen} />
-                  Database
-                </Link>
-              </li>
-            </ul>
-          </div>
-        )}
-
-        {/* Admin */}
-        {role_id === 1 && (
-          <div className="_mynavlist">
-            <p className="_head_navlist">Admin</p>
-            <ul className="_mynavlist">
-              <li>
-                <Link
-                  href="/my-app/users"
-                  className={router.asPath === "/my-app/users" ? "_active" : ""}
-                >
-                  <FontAwesomeIcon icon={faUserGroup} />
-                  Users
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/my-app/database"
-                  className={
-                    router.asPath === "/my-app/database" ? "_active" : ""
-                  }
-                >
-                  <FontAwesomeIcon icon={faDatabase} />
-                  Database
-                </Link>
-              </li>
-            </ul>
-          </div>
+        {navMenuList.map(
+          (nav, index) =>
+            nav.role_id === role_id && (
+              <div key={index} className="_mynavlist">
+                <p className="_head_navlist">{nav.label}</p>
+                <ul className="_mynavlist">
+                  {nav.list.map((l, index) => (
+                    <li key={index}>
+                      <Link
+                        href={l.url}
+                        className={router.asPath === l.url ? "_active" : ""}
+                      >
+                        <FontAwesomeIcon icon={l.icon} />
+                        {l.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
         )}
 
         {/* Logout */}

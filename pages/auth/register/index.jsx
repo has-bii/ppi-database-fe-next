@@ -75,6 +75,10 @@ export default function page() {
     }
   }, [form.pass]);
 
+  const addAlert = (message = "Error", status) => {
+    setAlert({ message: message, status: status });
+  };
+
   const submitHandler = async (e) => {
     e.preventDefault();
 
@@ -98,10 +102,6 @@ export default function page() {
           addAlert(message, false);
         });
     }
-  };
-
-  const addAlert = (message = "Error", status) => {
-    setAlert({ message: message, status: status });
   };
 
   return (

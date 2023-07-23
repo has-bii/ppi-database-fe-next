@@ -1,14 +1,15 @@
 import MyNavbar from "@components/MyNavbar";
 import UserDashboard from "@components/UserDashboard";
-import { faCheckToSlot } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { fetchData } from "@lib/fetchData";
+import { fetchUser } from "@lib/fetchUser";
 import axios from "axios";
-import { deleteCookie, getCookie, hasCookie, setCookie } from "cookies-next";
+import { getCookie } from "cookies-next";
 import Head from "next/head";
 import Image from "next/image";
 import { useRef, useState } from "react";
 
-export default function index({ user, student, jurusans, cookie }) {
+export default function index({ user, student, jurusans }) {
+  const cookie = getCookie("user_token");
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
@@ -587,85 +588,35 @@ export default function index({ user, student, jurusans, cookie }) {
 }
 
 export async function getServerSideProps({ req, res }) {
-  let cookie = hasCookie("user_token", { req, res });
+  const user = await fetchUser(req, res);
 
-  if (!cookie) {
+  if (!user)
     return {
       redirect: {
         destination: "/auth",
         permanent: false,
       },
     };
-  }
 
-  cookie = getCookie("user_token", { req, res });
-
-  setCookie("user_token", cookie, { req, res, maxAge: 60 * 6 * 24 * 24 });
-
-  const user = await axios
-    .get(`${process.env.NEXT_PUBLIC_API_URL}/api/user`, {
-      headers: {
-        Authorization: `Bearer ${cookie}`,
-      },
-    })
-    .then((res) => {
-      return res.data.result;
-    })
-    .catch((err) => {
-      deleteCookie("user_token", { req, res });
-      return {
-        redirect: {
-          destination: "/auth",
-          permanent: false,
-        },
-      };
-    });
-
-  const student = await axios
-    .get(`${process.env.NEXT_PUBLIC_API_URL}/api/student`, {
-      headers: {
-        Authorization: `Bearer ${cookie}`,
-      },
-    })
-    .then((res) => {
-      return res.data.result;
-    })
-    .catch((err) => {
-      console.log(err.response);
-
-      deleteCookie("user_token", { req, res });
-      return null;
-    });
+  const student = await fetchData("/student", req, res);
 
   if (!student)
     return {
       redirect: {
-        destination: "/auth",
+        destination: "/500",
         permanent: false,
       },
     };
 
-  const jurusans = await axios
-    .get(`${process.env.NEXT_PUBLIC_API_URL}/api/jurusan`, {
-      headers: {
-        Authorization: `Bearer ${cookie}`,
-      },
-    })
-    .then((res) => {
-      return res.data.result;
-    })
-    .catch((err) => {
-      deleteCookie("user_token", { req, res });
-      return null;
-    });
+  const jurusans = await fetchData("/jurusan", req, res);
 
   if (!jurusans)
     return {
       redirect: {
-        destination: "/auth",
+        destination: "/500",
         permanent: false,
       },
     };
 
-  return { props: { user, student, jurusans, cookie } };
+  return { props: { user, student, jurusans } };
 }

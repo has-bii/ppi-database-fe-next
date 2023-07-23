@@ -2,6 +2,7 @@ import Layout from "@components/Layout";
 import Image from "next/image";
 import Link from "next/link";
 import Hero from "../public/image/hero.jpg";
+import Head from "next/head";
 
 export const album = [
   "photo_1.jpg",
@@ -25,6 +26,9 @@ export const album = [
 export default function Home() {
   return (
     <Layout>
+      <Head>
+        <title>Home | PPI Karabük</title>
+      </Head>
       <div className="flex flex-wrap">
         {/* Hero */}
         <div className="w-full flex divide-x-2 divide-black h-[calc(100vh-84px)]">

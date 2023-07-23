@@ -13,7 +13,13 @@ import Alert from "@components/Alert";
 import AuthLayout from "@components/AuthLayout";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { getCookie, getCookies, hasCookie, setCookie } from "cookies-next";
+import {
+  deleteCookie,
+  getCookie,
+  getCookies,
+  hasCookie,
+  setCookie,
+} from "cookies-next";
 
 export default function page() {
   const router = useRouter();
@@ -36,6 +42,10 @@ export default function page() {
     setPassValidation({ message: "", style: "", ok: true });
   }, [form]);
 
+  const addAlert = (message = "Error", status) => {
+    setAlert({ message: message, status: status });
+  };
+
   const formHandler = async (e) => {
     e.preventDefault();
 
@@ -52,7 +62,12 @@ export default function page() {
           maxAge: 60 * 6 * 24,
         });
 
-        router.push("/my-app");
+        const callback_url = getCookie("callback_url");
+
+        if (callback_url) {
+          deleteCookie("callback_url");
+          router.push(callback_url);
+        } else router.push("/my-app");
       })
       .catch((err) => {
         addAlert(err.response?.data.meta.message, false);
@@ -67,10 +82,6 @@ export default function page() {
           ok: false,
         });
       });
-  };
-
-  const addAlert = (message, status) => {
-    setAlert({ message: message, status: status });
   };
 
   return (

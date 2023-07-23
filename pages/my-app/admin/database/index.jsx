@@ -11,16 +11,20 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { fetchData } from "@lib/fetchData";
+import { fetchUser } from "@lib/fetchUser";
 import { formatDate } from "@lib/formatDate";
+import { isAdmin } from "@lib/isAdmin";
 import axios from "axios";
-import { deleteCookie, getCookie, hasCookie, setCookie } from "cookies-next";
+import { getCookie } from "cookies-next";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 
-export default function index({ user, students, cookie }) {
+export default function index({ user, students }) {
   const router = useRouter();
+  const cookie = getCookie("user_token");
   const [loading, setLoading] = useState(false);
   const didMounted = useRef(false);
   const didMounted2 = useRef(false);
@@ -703,34 +707,7 @@ export default function index({ user, students, cookie }) {
 }
 
 export async function getServerSideProps({ req, res }) {
-  let cookie = hasCookie("user_token", { req, res });
-
-  if (!cookie) {
-    return {
-      redirect: {
-        destination: "/auth",
-        permanent: false,
-      },
-    };
-  }
-
-  cookie = getCookie("user_token", { req, res });
-
-  setCookie("user_token", cookie, { req, res, maxAge: 60 * 6 * 24 * 24 });
-
-  const user = await axios
-    .get(`${process.env.NEXT_PUBLIC_API_URL}/api/user`, {
-      headers: {
-        Authorization: `Bearer ${cookie}`,
-      },
-    })
-    .then((res) => {
-      return res.data.result;
-    })
-    .catch((err) => {
-      deleteCookie("user_token", { req, res });
-      return null;
-    });
+  const user = await fetchUser(req, res);
 
   if (!user)
     return {
@@ -740,24 +717,22 @@ export async function getServerSideProps({ req, res }) {
       },
     };
 
-  const students = await axios
-    .get(`${process.env.NEXT_PUBLIC_API_URL}/api/student/fetch_students`, {
-      headers: {
-        Authorization: `Bearer ${cookie}`,
+  // Check if the role is admin
+  if (!isAdmin(user))
+    return {
+      redirect: {
+        destination: "/my-app",
+        permanent: false,
       },
-      params: {
-        limit: 10,
-        order_field: "updated_at",
-        order_by: "desc",
-      },
-    })
-    .then((res) => {
-      return res.data.result;
-    })
-    .catch((err) => {
-      deleteCookie("user_token", { req, res });
-      return null;
-    });
+    };
+
+  const params = {
+    limit: 10,
+    order_field: "updated_at",
+    order_by: "desc",
+  };
+
+  const students = await fetchData("/student/fetch_students", req, res, params);
 
   if (!students)
     return {
@@ -767,5 +742,5 @@ export async function getServerSideProps({ req, res }) {
       },
     };
 
-  return { props: { user, students, cookie } };
+  return { props: { user, students } };
 }

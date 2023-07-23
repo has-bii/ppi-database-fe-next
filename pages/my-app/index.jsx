@@ -1,8 +1,9 @@
 import BarChart from "@components/BarChart";
 import LineChart from "@components/LineChart";
 import MyNavbar from "@components/MyNavbar";
-import PieChart from "@components/PieChart";
 import UserDashboard from "@components/UserDashboard";
+import { fetchData } from "@lib/fetchData";
+import { fetchUser } from "@lib/fetchUser";
 import axios from "axios";
 import { getCookie, hasCookie, setCookie } from "cookies-next";
 import Head from "next/head";
@@ -14,6 +15,7 @@ export const selectAnalytics = [
   "Jurusan favorit",
   "Asal daerah Indonesia",
   "Status",
+  "Jenjang pendidikan",
 ];
 
 export default function index({ user, analytics }) {
@@ -131,6 +133,29 @@ export default function index({ user, analytics }) {
     ],
   };
 
+  const dataPendidikan = {
+    labels: analytics.jenjang_pendidikan.map((j) => j.jenjang_pendidikan),
+    datasets: [
+      {
+        label: "# of students",
+        data: analytics.jenjang_pendidikan.map((j) => j.count),
+        backgroundColor: [
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(54, 162, 235, 0.2)",
+          "rgba(255, 159, 64, 0.2)",
+          "rgba(75, 192, 192, 0.2)",
+        ],
+        borderColor: [
+          "rgba(255, 99, 132, 1)",
+          "rgba(54, 162, 235, 1)",
+          "rgba(255, 159, 64, 1)",
+          "rgba(75, 192, 192, 1)",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
   return (
     <div className="bg-base-grey">
       <Head>
@@ -193,6 +218,12 @@ export default function index({ user, analytics }) {
                     title="Jumlah mahasiswa perstatus"
                   />
                 )}
+                {selectedChart === 6 && (
+                  <BarChart
+                    data={dataPendidikan}
+                    title="Jumlah mahasiswa perstatus"
+                  />
+                )}
               </div>
               <div className="flex flex-col gap-2 p-4 overflow-hidden border-2 border-black rounded-lg md:w-1/4">
                 <h4 className="text-2xl font-semibold">Select analytics</h4>
@@ -220,10 +251,11 @@ export default function index({ user, analytics }) {
   );
 }
 
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ req, res, resolvedUrl }) {
   let cookie = hasCookie("user_token", { req, res });
 
   if (!cookie) {
+    setCookie("callback_url", resolvedUrl, { req, res });
     return {
       redirect: {
         destination: "/auth",
@@ -232,42 +264,17 @@ export async function getServerSideProps({ req, res }) {
     };
   }
 
-  cookie = getCookie("user_token", { req, res });
-  setCookie("user_token", cookie, { req, res, maxAge: 60 * 6 * 24 * 24 });
-
-  const user = await axios
-    .get(`${process.env.NEXT_PUBLIC_API_URL}/api/user`, {
-      headers: {
-        Authorization: `Bearer ${cookie}`,
-      },
-    })
-    .then((res) => {
-      return res.data.result;
-    })
-    .catch((err) => {
-      return null;
-    });
+  const user = await fetchUser(req, res);
 
   if (!user)
     return {
       redirect: {
-        destination: "/500",
+        destination: "/auth",
         permanent: false,
       },
     };
 
-  const analytics = await axios
-    .get(`${process.env.NEXT_PUBLIC_API_URL}/api/student/statistic`, {
-      headers: {
-        Authorization: `Bearer ${cookie}`,
-      },
-    })
-    .then((res) => {
-      return res.data.result;
-    })
-    .catch((err) => {
-      return null;
-    });
+  const analytics = await fetchData("/student/statistic", req, res);
 
   if (!analytics)
     return {
