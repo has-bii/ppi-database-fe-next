@@ -7,14 +7,9 @@ import { faXmark, faBars } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { useRouter } from "next/router";
 
-export default function Navbar({ isLogged }) {
+export default function Navbar() {
   const [navShow, setNavShow] = useState(false);
   const router = useRouter();
-
-  const logoutHandler = () => {
-    deleteCookie("user_token");
-    router.reload();
-  };
 
   return (
     <nav className="_navbar_container">

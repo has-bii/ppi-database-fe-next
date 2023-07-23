@@ -89,11 +89,11 @@
 }
 
 ._navbar_container {
-    @apply flex flex-row items-center z-30 relative justify-between w-full px-8 lg:px-20 py-4 border-b-2 border-black bg-white
+    @apply flex flex-row items-center z-30 relative justify-between w-full px-8 lg:px-36 py-4 border-b-2 border-black bg-white
 }
 
 ._brand {
-    @apply inline-flex items-center gap-4
+    @apply inline-flex items-center gap-4 relative z-30
 }
 
 ._navbar_container ._logo {
@@ -456,8 +456,20 @@ th span {
     @apply inline-flex items-center gap-2 capitalize
 }
 
+._heading1 {
+    @apply text-3xl lg:text-5xl font-bold capitalize pb-4
+}
+
 ._heading2 {
-    @apply lg:text-4xl font-bold text-2xl
+    @apply lg:text-4xl font-bold text-2xl left-4 pt-6 pb-4
+}
+
+._paragraph {
+    @apply lg:text-2xl text-gray-800 pb-2 lg:leading-relaxed text-justify indent-10
+}
+
+ol._paragraph {
+    @apply list-decimal list-inside my-2 leading-7 lg:leading-10 indent-0
 }
 
 ._youtube_wrapper {
