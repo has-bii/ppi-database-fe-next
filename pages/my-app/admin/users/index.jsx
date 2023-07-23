@@ -18,7 +18,7 @@ import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
 import { fetchUser } from "@lib/fetchUser";
 import { fetchData } from "@lib/fetchData";
-import { getCookie } from "cookies-next";
+import { getCookie, hasCookie, setCookie } from "cookies-next";
 
 const rows = ["name", "email", "role_id", "is_verified", "created_at"];
 
@@ -483,6 +483,18 @@ export default function index({ user, data }) {
 }
 
 export async function getServerSideProps({ req, res, resolvedUrl }) {
+  let cookie = hasCookie("user_token", { req, res });
+
+  if (!cookie) {
+    setCookie("callback_url", resolvedUrl, { req, res });
+    return {
+      redirect: {
+        destination: "/auth",
+        permanent: false,
+      },
+    };
+  }
+
   const user = await fetchUser(req, res);
 
   if (!user)

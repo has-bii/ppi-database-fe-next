@@ -2,7 +2,7 @@ import MyNavbar from "@components/MyNavbar";
 import UserDashboard from "@components/UserDashboard";
 import { fetchUser } from "@lib/fetchUser";
 import axios from "axios";
-import { deleteCookie, getCookie, hasCookie } from "cookies-next";
+import { deleteCookie, getCookie, hasCookie, setCookie } from "cookies-next";
 import Head from "next/head";
 import { useEffect } from "react";
 
@@ -34,7 +34,19 @@ export default function index({ user }) {
   );
 }
 
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ req, res, resolvedUrl }) {
+  let cookie = hasCookie("user_token", { req, res });
+
+  if (!cookie) {
+    setCookie("callback_url", resolvedUrl, { req, res });
+    return {
+      redirect: {
+        destination: "/auth",
+        permanent: false,
+      },
+    };
+  }
+
   const user = await fetchUser(req, res);
 
   if (!user)

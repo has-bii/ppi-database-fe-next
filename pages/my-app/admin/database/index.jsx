@@ -16,7 +16,7 @@ import { fetchUser } from "@lib/fetchUser";
 import { formatDate } from "@lib/formatDate";
 import { isAdmin } from "@lib/isAdmin";
 import axios from "axios";
-import { getCookie } from "cookies-next";
+import { getCookie, hasCookie, setCookie } from "cookies-next";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -706,7 +706,19 @@ export default function index({ user, students }) {
   );
 }
 
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ req, res, resolvedUrl }) {
+  let cookie = hasCookie("user_token", { req, res });
+
+  if (!cookie) {
+    setCookie("callback_url", resolvedUrl, { req, res });
+    return {
+      redirect: {
+        destination: "/auth",
+        permanent: false,
+      },
+    };
+  }
+
   const user = await fetchUser(req, res);
 
   if (!user)
