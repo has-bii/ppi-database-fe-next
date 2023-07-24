@@ -16,7 +16,9 @@ export const About = [
 
 export const Kuliah = [
   { link: "/kuliah#pendaftaran", name: "Pendaftaran" },
-  { link: "/kuliah#list", name: "List Jurusan" },
+  { link: "/kuliah#jalur-berkas", name: "Jalur Berkas" },
+  { link: "/kuliah#jalur-yos", name: "Jalur YÖS" },
+  { link: "/kuliah#list-jurusan", name: "List Jurusan" },
 ];
 
 export const SocialMedia = [

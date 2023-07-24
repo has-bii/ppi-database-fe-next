@@ -483,3 +483,11 @@ ol._paragraph {
 ._footer_list li {
     @apply mb-2 font-light hover:text-sky-300 hover:underline text-white/75
 }
+
+._myapp_form_group ._myapp_form_label {
+    @apply block capitalize mb-1
+}
+
+._myapp_form_group ._myapp_form_input {
+    @apply px-3 py-1.5 border border-black rounded-lg
+}

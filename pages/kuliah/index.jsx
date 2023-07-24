@@ -13,7 +13,9 @@ export default function index() {
         <title>Kuliah | PPI Karabük</title>
       </Head>
       <div className="container px-6 mx-auto py-14 lg:px-20 lg:py-14">
-        <h1 className="text-center _heading1">Jalur Pendaftaran</h1>
+        <h1 className="text-center _heading1" id="pendaftaran">
+          Jalur Pendaftaran
+        </h1>
         <p className="_paragraph ">
           Untuk pendaftaran masuk perguruan tinggi negeri bagi calon mahasiswa
           asing di Turki terdapat beberapa cara. Pada umumnya terdapat dua cara,
@@ -23,34 +25,42 @@ export default function index() {
 
         {/* Image */}
         <div className="flex my-8 flex-col lg:flex-row w-full gap-2 h-[32rem]">
-          <div className="relative w-full h-full overflow-hidden group">
+          <a
+            href="#jalur-berkas"
+            className="relative w-full h-full overflow-hidden group"
+          >
             <Image
               src={JalurBerkas}
               fill
               alt="jalur berkas"
               sizes="50vw"
-              className="object-cover transition-all duration-150 ease-in group-hover:scale-125 group-hover:grayscale-0 grayscale"
+              className="object-cover transition-all duration-300 ease-in group-hover:scale-125 group-hover:grayscale-0 grayscale"
             />
             <span className="absolute inline-flex items-center justify-center w-full h-full text-3xl font-bold text-white">
               Jalur Berkas
             </span>
-          </div>
-          <div className="relative w-full h-full overflow-hidden group">
+          </a>
+          <a
+            href="#jalur-yos"
+            className="relative w-full h-full overflow-hidden group"
+          >
             <Image
               src={JalurYos}
               fill
               alt="jalur berkas"
               sizes="50vw"
-              className="object-cover transition-all duration-150 ease-in group-hover:scale-125 group-hover:grayscale-0 grayscale"
+              className="object-cover transition-all duration-300 ease-in group-hover:scale-125 group-hover:grayscale-0 grayscale"
             />
             <span className="absolute inline-flex items-center justify-center w-full h-full text-3xl font-bold text-white">
               Jalur YÖS
             </span>
-          </div>
+          </a>
         </div>
         {/* Image End */}
 
-        <h2 className="_heading2">Jalur Berkas</h2>
+        <h2 className="_heading2" id="jalur-berkas">
+          Jalur Berkas
+        </h2>
         <p className=" _paragraph">
           <b>Jalur berkas</b> merupakan jalur yang paling mudah dan paling
           banyak diminati oleh para calon mahasiswa Turki, karena kita hanya
@@ -64,7 +74,9 @@ export default function index() {
           <li>Translate bahasa Inggris ijazah.</li>
           <li>Foto biometrik.</li>
         </ol>
-        <h2 className="_heading2">Jalur YÖS</h2>
+        <h2 className="_heading2" id="jalur-yos">
+          Jalur YÖS
+        </h2>
         <p className=" _paragraph">
           Jika kalian ingin kuliah di jurusan seperti teknik, kedokteran dan
           sebagainya, kalian dapat mendaftar lewat ujian YÖS karena tidak semua
@@ -80,7 +92,9 @@ export default function index() {
           Universitas-Universitas yang menyelenggarakan ujian YÖS di Jakarta,
           seperti Istanbul University.
         </p>
-        <h2 className="_heading2">List Jurusan & Biaya Kuliah</h2>
+        <h2 className="_heading2" id="list-jurusan">
+          List Jurusan & Biaya Kuliah
+        </h2>
         <p className="_paragraph">
           Lingkungan perkuliahan di Karabük Üniversitesi terkenal dengan
           beragamnya ras dan agama. Bahkan setiap programnya tersedia dari

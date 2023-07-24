@@ -1,10 +1,8 @@
 import MyNavbar from "@components/MyNavbar";
 import UserDashboard from "@components/UserDashboard";
 import { fetchUser } from "@lib/fetchUser";
-import axios from "axios";
-import { deleteCookie, getCookie, hasCookie, setCookie } from "cookies-next";
+import { hasCookie, setCookie } from "cookies-next";
 import Head from "next/head";
-import { useEffect } from "react";
 
 export default function index({ user }) {
   return (
