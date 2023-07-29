@@ -491,3 +491,31 @@ ol._paragraph {
 ._myapp_form_group ._myapp_form_input {
     @apply px-3 py-1.5 border border-black rounded-lg
 }
+
+._toast_container {
+    @apply fixed flex flex-col gap-2 p-2 z-50
+}
+
+._toast_container ._toast{
+    @apply px-4 py-2 border rounded-md shadow-lg min-w-[10rem] animate-fade border-sky-300 bg-sky-200 text-sky-500
+}
+
+._toast ._toast_title {
+    @apply text-base font-semibold
+}
+
+._toast ._toast_body {
+    @apply text-sm font-light
+}
+
+._toast._success {
+    @apply border-green-300 bg-green-200 text-green-500
+}
+
+._toast._warning {
+    @apply border-yellow-300 bg-yellow-200 text-yellow-500
+}
+
+._toast._danger {
+    @apply border-red-300 bg-red-200 text-red-500
+}

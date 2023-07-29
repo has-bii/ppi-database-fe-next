@@ -1,14 +1,17 @@
 import MyNavbar from "@components/MyNavbar";
+import Toast from "@components/Toast";
 import UserDashboard from "@components/UserDashboard";
 import { fetchData } from "@lib/fetchData";
 import { fetchUser } from "@lib/fetchUser";
 import axios from "axios";
 import { getCookie, hasCookie, setCookie } from "cookies-next";
 import Head from "next/head";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 export default function index({ user, jurusans, new_student }) {
   const cookie = getCookie("user_token");
+  const [loading, setLoading] = useState(false);
+  const [toastData, setToastData] = useState([]);
   const [form, setForm] = useState({
     jenis_kelamin: new_student.jenis_kelamin,
     tanggal_lahir: new_student.tanggal_lahir,
@@ -24,6 +27,12 @@ export default function index({ user, jurusans, new_student }) {
   const submitHandler = async (e) => {
     e.preventDefault();
 
+    setLoading(true);
+    setToastData((prev) => [
+      ...prev,
+      { title: "Loading", body: "Sending data to the server" },
+    ]);
+
     const response = await axios
       .post(`${process.env.NEXT_PUBLIC_API_URL}/api/newstudents/update`, form, {
         headers: {
@@ -31,18 +40,31 @@ export default function index({ user, jurusans, new_student }) {
         },
       })
       .then((res) => {
+        setLoading(false);
         return "Data submitted successfully";
       })
       .catch((err) => {
+        setLoading(false);
         console.error(err);
         return null;
       });
 
-    console.log(response);
+    setToastData((prev) => [
+      ...prev,
+      { title: "Success", body: response, style: "_success" },
+    ]);
   };
 
   return (
     <>
+      {/* Toast */}
+      <Toast
+        toastData={toastData}
+        setToastData={setToastData}
+        position="top-0 right-0"
+      />
+      {/* Toast end */}
+
       <div className="bg-base-grey">
         <Head>
           <title>My App | PPI Karabük</title>
@@ -205,7 +227,11 @@ export default function index({ user, jurusans, new_student }) {
                     />
                   </div>
                 </div>
-                <button type="submit" className="ml-auto _green">
+                <button
+                  type="submit"
+                  className="ml-auto _green"
+                  disabled={loading}
+                >
                   Submit
                 </button>
               </form>
