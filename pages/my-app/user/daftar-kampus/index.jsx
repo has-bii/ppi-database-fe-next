@@ -3,6 +3,8 @@ import Toast from "@components/Toast";
 import UserDashboard from "@components/UserDashboard";
 import { fetchData } from "@lib/fetchData";
 import { fetchUser } from "@lib/fetchUser";
+import { isUser } from "@lib/isRole";
+import { useToastContext } from "@pages/ToastContext";
 import axios from "axios";
 import { getCookie, hasCookie, setCookie } from "cookies-next";
 import Head from "next/head";
@@ -11,7 +13,7 @@ import { useState } from "react";
 export default function index({ user, jurusans, new_student }) {
   const cookie = getCookie("user_token");
   const [loading, setLoading] = useState(false);
-  const [toastData, setToastData] = useState([]);
+  const { setToastData } = useToastContext();
   const [form, setForm] = useState({
     jenis_kelamin: new_student.jenis_kelamin,
     tanggal_lahir: new_student.tanggal_lahir,
@@ -49,22 +51,20 @@ export default function index({ user, jurusans, new_student }) {
         return null;
       });
 
-    setToastData((prev) => [
-      ...prev,
-      { title: "Success", body: response, style: "_success" },
-    ]);
+    if (response)
+      setToastData((prev) => [
+        ...prev,
+        { title: "Success", body: response, style: "_success" },
+      ]);
+    else
+      setToastData((prev) => [
+        ...prev,
+        { title: "Error", body: "Server Error occurred!", style: "_danger" },
+      ]);
   };
 
   return (
     <>
-      {/* Toast */}
-      <Toast
-        toastData={toastData}
-        setToastData={setToastData}
-        position="top-0 right-0"
-      />
-      {/* Toast end */}
-
       <div className="bg-base-grey">
         <Head>
           <title>My App | PPI Karabük</title>
@@ -262,6 +262,15 @@ export async function getServerSideProps({ req, res, resolvedUrl }) {
     return {
       redirect: {
         destination: "/auth",
+        permanent: false,
+      },
+    };
+
+  // Check if the role is user
+  if (!isUser(user))
+    return {
+      redirect: {
+        destination: "/my-app",
         permanent: false,
       },
     };

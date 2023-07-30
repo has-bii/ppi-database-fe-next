@@ -9,23 +9,19 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Validation from "@components/Validation";
-import Alert from "@components/Alert";
 import AuthLayout from "@components/AuthLayout";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import {
-  deleteCookie,
-  getCookie,
-  getCookies,
-  hasCookie,
-  setCookie,
-} from "cookies-next";
+import { deleteCookie, getCookie, hasCookie, setCookie } from "cookies-next";
+import { useToastContext } from "@pages/ToastContext";
 
 export default function page() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const { setToastLoading, setToastFailed, setToastSuccess } =
+    useToastContext();
   const [showPass, setShowPass] = useState(false);
   const [form, setForm] = useState({ email: "", pass: "" });
-  const [alert, setAlert] = useState({});
   const [emailValidation, setEmailValidation] = useState({
     message: "",
     style: "",
@@ -42,12 +38,11 @@ export default function page() {
     setPassValidation({ message: "", style: "", ok: true });
   }, [form]);
 
-  const addAlert = (message = "Error", status) => {
-    setAlert({ message: message, status: status });
-  };
-
   const formHandler = async (e) => {
     e.preventDefault();
+
+    setLoading(true);
+    setToastLoading();
 
     await axios
       .post(`${process.env.NEXT_PUBLIC_API_URL}/api/login`, {
@@ -55,7 +50,7 @@ export default function page() {
         password: form.pass,
       })
       .then((res) => {
-        addAlert("Login successful", true);
+        setToastSuccess(res.data.meta.message);
 
         setCookie("user_token", res.data.result.access_token, {
           path: "/",
@@ -66,11 +61,12 @@ export default function page() {
 
         if (callback_url) {
           deleteCookie("callback_url");
+          setToastLoading(`Redirecting to ${callback_url}`);
           router.push(callback_url);
         } else router.push("/my-app");
       })
       .catch((err) => {
-        addAlert(err.response?.data.meta.message, false);
+        setToastFailed(err?.response.data.meta.message);
         setEmailValidation({
           message: "",
           style: "",
@@ -81,12 +77,12 @@ export default function page() {
           style: "",
           ok: false,
         });
+        setLoading(false);
       });
   };
 
   return (
     <AuthLayout>
-      <Alert alert={alert} setAlert={setAlert} />
       <div className="_card">
         <div className="text-2xl font-bold text-center">Login</div>
         <form onSubmit={formHandler}>
@@ -134,7 +130,11 @@ export default function page() {
           <Link href="/auth/forgot" className=" _link">
             Forgot password
           </Link>
-          <button type="submit" className="w-full mt-2 mb-4 _button">
+          <button
+            type="submit"
+            className="w-full mt-2 mb-4 _button"
+            disabled={loading}
+          >
             <FontAwesomeIcon icon={faArrowRightToBracket} />
             Login
           </button>

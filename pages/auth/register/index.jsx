@@ -10,13 +10,16 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Validation from "@components/Validation";
 import axios from "axios";
-import Alert from "@components/Alert";
 import { useRouter } from "next/navigation";
 import AuthLayout from "@components/AuthLayout";
 import { hasCookie } from "cookies-next";
+import { useToastContext } from "@pages/ToastContext";
 
 export default function page() {
   const [showPass, setShowPass] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { setToastLoading, setToastFailed, setToastSuccess } =
+    useToastContext();
   const [form, setForm] = useState({ name: "", email: "", pass: "" });
   const [nameValidation, setNameValidation] = useState({
     message: "",
@@ -82,6 +85,9 @@ export default function page() {
   const submitHandler = async (e) => {
     e.preventDefault();
 
+    setToastLoading();
+    setLoading(true);
+
     if (!nameValidation.ok || !emailValidation.ok || !passValidation.ok) {
       addAlert("All fields are required!");
     } else {
@@ -92,21 +98,21 @@ export default function page() {
           password: form.pass,
         })
         .then((res) => {
-          addAlert(res.data.meta.message, true);
+          setToastSuccess(res.data.meta.message);
           setForm({ name: "", email: "", pass: "" });
 
+          setToastLoading("Redirecting to Login page...");
           router.push("/auth");
         })
         .catch((error) => {
-          const message = error.response?.data.meta.message;
-          addAlert(message, false);
+          setToastFailed(error?.response.data.meta.message);
+          setLoading(false);
         });
     }
   };
 
   return (
     <AuthLayout>
-      <Alert alert={alert} setAlert={setAlert} />
       <div className="_card">
         <div className="text-2xl font-bold text-center">Register</div>
         <form onSubmit={submitHandler}>
@@ -178,7 +184,11 @@ export default function page() {
           <Link href="/auth/forgot" className=" _link">
             Forgot password?
           </Link>
-          <button type="submit" className="w-full mt-2 mb-4 _button">
+          <button
+            type="submit"
+            className="w-full mt-2 mb-4 _button"
+            disabled={loading}
+          >
             <FontAwesomeIcon icon={faArrowRightToBracket} />
             Register
           </button>

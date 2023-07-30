@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 
-function Toast({ toastData, setToastData, position = "bottom-0 right-0" }) {
+function Toast({ toastData, setToastData }) {
   useEffect(() => {
     const shiftToast = () => {
       if (toastData.length) setToastData(toastData.slice(1));
@@ -13,7 +13,7 @@ function Toast({ toastData, setToastData, position = "bottom-0 right-0" }) {
   }, [toastData]);
 
   return (
-    <div className={`_toast_container ${position}`}>
+    <div className={`_toast_container`}>
       {toastData.map((t, index) => (
         <div key={index} className={`_toast ${t.style}`}>
           <div className="_toast_title">{t.title}</div>

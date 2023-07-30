@@ -45,7 +45,7 @@
 }
 
 ._button {
-    @apply inline-flex bg-black border text-white px-4 py-2 items-center gap-2 justify-center transition-all ease-in-out delay-100 capitalize hover:bg-white hover:text-black hover:border-black
+    @apply inline-flex bg-black border text-white px-4 py-2 items-center gap-2 justify-center transition-all ease-in-out delay-100 capitalize hover:bg-white hover:text-black hover:border-black disabled:bg-gray-500 disabled:cursor-not-allowed
 }
 
 ._button._clear_button {
@@ -493,7 +493,7 @@ ol._paragraph {
 }
 
 ._toast_container {
-    @apply fixed flex flex-col gap-2 p-2 z-50
+    @apply fixed flex flex-col gap-2 p-2 z-50 top-0 right-0
 }
 
 ._toast_container ._toast{

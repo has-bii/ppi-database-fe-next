@@ -14,7 +14,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { fetchData } from "@lib/fetchData";
 import { fetchUser } from "@lib/fetchUser";
 import { formatDate } from "@lib/formatDate";
-import { isAdmin } from "@lib/isAdmin";
+import { isAdmin } from "@lib/isRole";
+
 import axios from "axios";
 import { getCookie, hasCookie, setCookie } from "cookies-next";
 import Head from "next/head";

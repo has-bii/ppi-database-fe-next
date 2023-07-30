@@ -11,7 +11,6 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { isAdmin } from "@lib/isAdmin";
 import axios from "axios";
 import { formatDate } from "@lib/formatDate";
 import Head from "next/head";
@@ -19,6 +18,7 @@ import { useEffect, useRef, useState } from "react";
 import { fetchUser } from "@lib/fetchUser";
 import { fetchData } from "@lib/fetchData";
 import { getCookie, hasCookie, setCookie } from "cookies-next";
+import { isAdmin } from "@lib/isRole";
 
 const rows = ["name", "email", "role_id", "is_verified", "created_at"];
 
