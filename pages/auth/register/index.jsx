@@ -10,12 +10,15 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Validation from "@components/Validation";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import waButton from "@public/image/waButtonBig.png";
 import AuthLayout from "@components/AuthLayout";
 import { hasCookie } from "cookies-next";
 import { useToastContext } from "@pages/ToastContext";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function page() {
+  const router = useRouter();
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
   const { setToastLoading, setToastFailed, setToastSuccess } =
@@ -36,8 +39,8 @@ export default function page() {
     style: "",
     ok: false,
   });
-  const [alert, setAlert] = useState({});
-  const router = useRouter();
+  const [purpose, setPurpose] = useState();
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     const regex = /^[A-Za-z\s]*$/;
@@ -78,8 +81,21 @@ export default function page() {
     }
   }, [form.pass]);
 
-  const addAlert = (message = "Error", status) => {
-    setAlert({ message: message, status: status });
+  const openWaLink = (i) => {
+    const link = `https://wa.me/${process.env.NEXT_PUBLIC_ADMIN_CONTACT}?`;
+    let message = "";
+
+    if (i === "1")
+      message = `text=Hi admin, Saya ${form.name} telah membuat akun di website PPI Karabük untuk "DAFTAR KULIAH" di Karabük University. Saya meminta untuk aktifkan akun saya.`;
+    else if (i === "2")
+      message = `text=Hi admin, Saya ${form.name} telah membuat akun di website PPI Karabük sebagai "ANGGOTA" di PPI Karabük. Saya meminta untuk aktifkan akun saya.`;
+
+    message = encodeURI(message);
+
+    window.open(link.concat(message), "_blank");
+
+    setToastLoading("Redirecting to Login page...");
+    router.push("/auth");
   };
 
   const submitHandler = async (e) => {
@@ -99,10 +115,8 @@ export default function page() {
         })
         .then((res) => {
           setToastSuccess(res.data.meta.message);
-          setForm({ name: "", email: "", pass: "" });
 
-          setToastLoading("Redirecting to Login page...");
-          router.push("/auth");
+          setSubmitted(true);
         })
         .catch((error) => {
           setToastFailed(error?.response.data.meta.message);
@@ -114,93 +128,134 @@ export default function page() {
   return (
     <AuthLayout>
       <div className="_card">
-        <div className="text-2xl font-bold text-center">Register</div>
-        <form onSubmit={submitHandler}>
-          <div className="_form-input">
-            <label htmlFor="name" className="_label-input">
-              name
-            </label>
-            <input
-              type="text"
-              className={`_input ${
-                form.name ? (nameValidation.ok ? "_success" : "_error") : ""
-              }`}
-              id="name"
-              placeholder="Enter full name"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              required
-            />
-            <Validation
-              message={nameValidation.message}
-              style={nameValidation.style}
-            />
+        {!submitted ? (
+          <>
+            <div className="text-2xl font-bold text-center">Register</div>
+            <form onSubmit={submitHandler}>
+              <div className="_form-input">
+                <label htmlFor="name" className="_label-input">
+                  name
+                </label>
+                <input
+                  type="text"
+                  className={`_input ${
+                    form.name ? (nameValidation.ok ? "_success" : "_error") : ""
+                  }`}
+                  id="name"
+                  placeholder="Enter full name"
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  required
+                />
+                <Validation
+                  message={nameValidation.message}
+                  style={nameValidation.style}
+                />
+              </div>
+              <div className="_form-input">
+                <label htmlFor="email" className="_label-input">
+                  email
+                </label>
+                <input
+                  type="email"
+                  className={`_input ${
+                    form.email
+                      ? emailValidation.ok
+                        ? "_success"
+                        : "_error"
+                      : ""
+                  }`}
+                  id="email"
+                  placeholder="Enter email address"
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  required
+                />
+                <Validation
+                  message={emailValidation.message}
+                  style={emailValidation.style}
+                />
+              </div>
+              <div className="_form-input">
+                <label htmlFor="password" className="_label-input">
+                  password
+                </label>
+                <input
+                  type={showPass ? "text" : "password"}
+                  id="password"
+                  placeholder="At least 8 characters"
+                  className={`_input ${
+                    form.pass ? (passValidation.ok ? "_success" : "_error") : ""
+                  }`}
+                  value={form.pass}
+                  onChange={(e) => setForm({ ...form, pass: e.target.value })}
+                  required
+                />
+                <Validation
+                  message={passValidation.message}
+                  style={passValidation.style}
+                />
+                <FontAwesomeIcon
+                  icon={showPass ? faEyeSlash : faEye}
+                  className="_input_icon"
+                  onClick={() => setShowPass(!showPass)}
+                />
+              </div>
+              <div className="_form-input">
+                <label htmlFor="purpose" className="_label-input">
+                  Tujuan
+                </label>
+                <select
+                  id="purpose"
+                  className="_input"
+                  required
+                  value={purpose}
+                  onChange={(e) => setPurpose(e.target.value)}
+                >
+                  <option value="">Mendaftar sebagai</option>
+                  <option value="1">Anggota PPI Karabük</option>
+                  <option value="2">Daftar kuliah</option>
+                </select>
+              </div>
+              <Link href="/auth/forgot" className=" _link">
+                Forgot password?
+              </Link>
+              <button
+                type="submit"
+                className="w-full mt-2 mb-4 _button"
+                disabled={loading}
+              >
+                <FontAwesomeIcon icon={faArrowRightToBracket} />
+                Register
+              </button>
+              <div className="text-sm text-center text-gray-400">
+                Already have an account?
+              </div>
+              <div className="flex justify-center w-full">
+                <Link href="/auth" className="_link">
+                  Sign in
+                </Link>
+              </div>
+            </form>
+          </>
+        ) : (
+          <div className="flex flex-col justify-center">
+            <div className="mb-2 text-2xl font-bold text-center">
+              Hi {form.name},
+            </div>
+            <div className="mb-4 text-center text-gray-500">
+              Terima kasih sudah mendaftar, <br />
+              kirim permintaan verifikasi ke admin lewat Whatsapp untuk
+              mengaktifkan akun
+            </div>
+            <button
+              className="mx-auto w-fit"
+              onClick={() => openWaLink(purpose)}
+            >
+              <Image src={waButton} height="auto" width="200" alt="" priority />
+            </button>
           </div>
-          <div className="_form-input">
-            <label htmlFor="email" className="_label-input">
-              email
-            </label>
-            <input
-              type="email"
-              className={`_input ${
-                form.email ? (emailValidation.ok ? "_success" : "_error") : ""
-              }`}
-              id="email"
-              placeholder="Enter email address"
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-              required
-            />
-            <Validation
-              message={emailValidation.message}
-              style={emailValidation.style}
-            />
-          </div>
-          <div className="_form-input">
-            <label htmlFor="password" className="_label-input">
-              password
-            </label>
-            <input
-              type={showPass ? "text" : "password"}
-              id="password"
-              placeholder="At least 8 characters"
-              className={`_input ${
-                form.pass ? (passValidation.ok ? "_success" : "_error") : ""
-              }`}
-              value={form.pass}
-              onChange={(e) => setForm({ ...form, pass: e.target.value })}
-              required
-            />
-            <Validation
-              message={passValidation.message}
-              style={passValidation.style}
-            />
-            <FontAwesomeIcon
-              icon={showPass ? faEyeSlash : faEye}
-              className="_input_icon"
-              onClick={() => setShowPass(!showPass)}
-            />
-          </div>
-          <Link href="/auth/forgot" className=" _link">
-            Forgot password?
-          </Link>
-          <button
-            type="submit"
-            className="w-full mt-2 mb-4 _button"
-            disabled={loading}
-          >
-            <FontAwesomeIcon icon={faArrowRightToBracket} />
-            Register
-          </button>
-          <div className="text-sm text-center text-gray-400">
-            Already have an account?
-          </div>
-          <div className="flex justify-center w-full">
-            <Link href="/auth" className="_link">
-              Sign in
-            </Link>
-          </div>
-        </form>
+        )}
       </div>
     </AuthLayout>
   );

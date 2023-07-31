@@ -74,8 +74,10 @@ export default function Footer() {
           </ul>
         </div>
       </div>
-      <span className="w-3/4 h-[1px] bg-white mb-2 mt-6"></span>
-      <p className="text-xs">© 2023 PPI Karabük. All rights reserved.</p>
+      <span className="w-3/4 h-[1px] bg-white/20 mb-2 mt-6"></span>
+      <p className="text-xs text-white/20">
+        © 2023 PPI Karabük. All rights reserved.
+      </p>
     </div>
   );
 }

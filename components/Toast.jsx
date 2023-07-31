@@ -7,7 +7,7 @@ function Toast({ toastData, setToastData }) {
       if (toastData.length) setToastData(toastData.slice(1));
     };
 
-    const timeoutID = setTimeout(() => shiftToast(), 1500);
+    const timeoutID = setTimeout(() => shiftToast(), 2000);
 
     return () => clearTimeout(timeoutID);
   }, [toastData]);

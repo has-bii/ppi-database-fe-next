@@ -5,13 +5,13 @@ import { faArrowRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import Validation from "@components/Validation";
-import Alert from "@components/Alert";
 import AuthLayout from "@components/AuthLayout";
 import { hasCookie } from "cookies-next";
+import { useToastContext } from "@pages/ToastContext";
 
 export default function page() {
   const [form, setForm] = useState({ email: "" });
-  const [alert, setAlert] = useState({});
+  const { setToastFailed } = useToastContext();
   const [emailValidation, setEmailValidation] = useState({
     message: "",
     style: "",
@@ -32,21 +32,16 @@ export default function page() {
     }
   }, [form.email]);
 
-  const addAlert = (message, status) => {
-    setAlert({ message: message, status: status });
-  };
-
   const submitHandler = (e) => {
     e.preventDefault();
 
     if (!emailValidation.ok) return;
 
-    addAlert("This feature is not available yet!", false);
+    setToastFailed("This feature is not available yet!");
   };
 
   return (
     <AuthLayout>
-      <Alert alert={alert} setAlert={setAlert} />
       <div className="_card">
         <div className="mb-4 text-2xl font-bold text-center">
           Forgot Password?
