@@ -265,7 +265,7 @@ export default function index({ user, data }) {
       </div>
       {/* Modal delete end */}
 
-      <div className="bg-base-grey">
+      <div className="min-h-screen bg-base-grey">
         <Head>
           <title>My App | PPI Karabük</title>
         </Head>

@@ -10,6 +10,7 @@ import {
   faFilePen,
   faBars,
   faGraduationCap,
+  faFileLines,
 } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
 import Link from "next/link";
@@ -41,6 +42,11 @@ const navMenuList = [
         name: "Students",
         url: "/my-app/admin/database",
         icon: faDatabase,
+      },
+      {
+        name: "Forms",
+        url: "/my-app/admin/forms",
+        icon: faFileLines,
       },
     ],
   },

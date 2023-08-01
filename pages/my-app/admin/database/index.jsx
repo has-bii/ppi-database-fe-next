@@ -260,7 +260,7 @@ export default function index({ user, students }) {
       </div>
       {/* Modal change role end */}
 
-      <div className="bg-base-grey">
+      <div className="min-h-screen bg-base-grey">
         <Head>
           <title>My App | PPI Karabük</title>
         </Head>

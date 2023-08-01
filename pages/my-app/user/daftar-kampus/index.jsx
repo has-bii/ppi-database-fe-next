@@ -14,16 +14,14 @@ import { useEffect, useState } from "react";
 const maxFileSize = 1024 * 1024;
 const applications = [
   {
-    title: "Pendaftaran S1 Karabük University Jalur Berkas 2023/2024",
-    status: true,
-    start_date: "10-10-2023",
-    end_date: "1-11-2023",
+    name: "Pendaftaran S1 Karabük University Jalur Berkas 2023/2024",
+    status: { id: 1, name: "open", style: "success" },
+    desc: "10 Nov 2023 - 25 Nov 2023",
   },
   {
-    title: "Ganti Jurusan",
-    status: false,
-    start_date: "25-12-2023",
-    end_date: "1-1-2024",
+    name: "Ganti Jurusan",
+    status: { id: 2, name: "closed", style: "danger" },
+    desc: "10 Nov 2023 - 25 Nov 2023",
   },
 ];
 
@@ -154,21 +152,21 @@ export default function index({ user, jurusans, user_info }) {
                           >
                             <div className="flex-col w-4/5">
                               <div className="text-lg font-semibold">
-                                {app.title}
+                                {app.name}
                               </div>
                               <div className="text-sm text-gray-400 truncate font-base">
-                                Tanggal: {app.start_date} {app.end_date}
+                                Deskripsi: {app.desc}
                               </div>
                             </div>
                             <button
-                              className={`px-3 py-1.5 border rounded-md ${
-                                app.status
+                              className={`px-3 py-1.5 border rounded-md capitalize ${
+                                app.status.id === 1
                                   ? "border-green-400 bg-green-300 text-green-500"
                                   : "border-red-400 bg-red-300 text-red-500"
                               }`}
-                              disabled={!app.status}
+                              disabled={app.status.id === 2}
                             >
-                              Apply
+                              {app.status.name}
                             </button>
                           </div>
                         ))}
