@@ -310,6 +310,30 @@ th span {
     @apply inline-flex gap-2 items-center
 }
 
+.modal_container {
+    @apply fixed z-50 items-center justify-center hidden w-screen h-screen bg-black/75;
+}
+
+.modal {
+    @apply flex flex-col gap-2 bg-white rounded-xl w-fit min-w-[20rem] animate-fade;
+}
+
+.show {
+    @apply flex opacity-100;
+}
+
+.modal_header {
+    @apply text-2xl font-semibold px-5 py-2.5 border-b border-gray-300 inline-flex items-center justify-between;
+}
+
+.modal .modal_buttons {
+    @apply px-5 py-2.5 border-t border-gray-300 flex flex-row justify-end items-center gap-2
+}
+
+.modal_buttons button {
+    @apply px-3 py-1.5 rounded-lg
+}
+
 ._modal_container {
     @apply fixed h-screen w-screen justify-center items-center bg-black/75 z-50 hidden
 }

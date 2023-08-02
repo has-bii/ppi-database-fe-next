@@ -25,7 +25,7 @@ const applications = [
   },
 ];
 
-export default function index({ user, jurusans, user_info }) {
+export default function index({ user, forms, user_info }) {
   const router = useRouter();
   const cookie = getCookie("user_token");
   const [loading, setLoading] = useState(false);
@@ -145,7 +145,7 @@ export default function index({ user, jurusans, user_info }) {
                         Pendaftaran
                       </div>
                       <div className="flex flex-col gap-2 divide-y divide-gray-200">
-                        {applications.map((app, index) => (
+                        {forms.map((app, index) => (
                           <div
                             key={index}
                             className="flex flex-row items-center justify-between w-full px-4 py-2"
@@ -500,19 +500,13 @@ export async function getServerSideProps({ req, res, resolvedUrl }) {
       },
     };
 
-  const jurusans = await fetchData("/jurusan", req, res);
-
-  if (!jurusans)
-    return {
-      redirect: {
-        destination: "/500",
-        permanent: false,
-      },
-    };
-
   const user_info = await fetchData("/user-info", req, res, {
     user_id: user.id,
   });
 
-  return { props: { user, jurusans, user_info } };
+  const { cols } = await fetchData("/form", req, res);
+
+  const forms = cols?.data || null;
+
+  return { props: { user, user_info, forms } };
 }
