@@ -18,69 +18,17 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { deleteCookie } from "cookies-next";
 
-const navMenuList = [
-  {
-    label: "Student",
-    role_id: 2,
-    list: [
-      {
-        name: "Database",
-        url: "/my-app/student/isi-database",
-        icon: faFilePen,
-      },
-    ],
-  },
-  {
-    label: "Admin",
-    role_id: 1,
-    list: [
-      {
-        active: true,
-        name: "Users",
-        url: "/my-app/admin/users",
-        icon: faUserGroup,
-      },
-      {
-        active: true,
-        name: "Students",
-        url: "/my-app/admin/database",
-        icon: faDatabase,
-      },
-      {
-        active: false,
-        name: "Forms",
-        url: "/my-app/admin/forms",
-        icon: faFileLines,
-      },
-    ],
-  },
-  {
-    label: "User",
-    role_id: 3,
-    list: [
-      {
-        active: true,
-        name: "Daftar",
-        url: "/my-app/user/daftar-kampus",
-        icon: faGraduationCap,
-      },
-    ],
-  },
-  {
-    label: "Super User",
-    role_id: 4,
-    list: [
-      {
-        active: true,
-        name: "Menu",
-        url: "/my-app/su/menu",
-        icon: faList,
-      },
-    ],
-  },
-];
+const iconList = {
+  faFilePen: faFilePen,
+  faUserGroup: faUserGroup,
+  faDatabase: faDatabase,
+  faFileLines: faFileLines,
+  faGraduationCap: faGraduationCap,
+  faList: faList,
+  faUserPen: faUserPen,
+};
 
-export default function MyNavbar({ role_id }) {
+export default function MyNavbar({ role_id, data }) {
   const router = useRouter();
   const [show, setShow] = useState(false);
 
@@ -119,29 +67,31 @@ export default function MyNavbar({ role_id }) {
           </li>
         </ul>
 
-        {navMenuList.map(
+        {data.map(
           (nav, index) =>
-            nav.role_id === role_id && (
+            nav.role_id === role_id &&
+            nav.active && (
               <div key={index} className="_mynavlist">
                 <p className="_head_navlist">{nav.label}</p>
                 <ul className="_mynavlist">
-                  {nav.list.map(
-                    (l, index) =>
-                      l.active && (
-                        <li key={index}>
-                          <Link
-                            href={l.url}
-                            className={
-                              router.pathname.replace("/[id]", "") === l.url
-                                ? "_active"
-                                : ""
-                            }
-                          >
-                            <FontAwesomeIcon icon={l.icon} />
-                            {l.name}
-                          </Link>
-                        </li>
-                      )
+                  {nav.link.map((l, index) =>
+                    l.active ? (
+                      <li key={index}>
+                        <Link
+                          href={l.url}
+                          className={
+                            router.pathname.replace("/[id]", "") === l.url
+                              ? "_active"
+                              : ""
+                          }
+                        >
+                          <FontAwesomeIcon icon={iconList[l.icon]} />
+                          {l.name}
+                        </Link>
+                      </li>
+                    ) : (
+                      ""
+                    )
                   )}
                 </ul>
               </div>

@@ -4,6 +4,7 @@ import MyNavbar from "@components/MyNavbar";
 import UserDashboard from "@components/UserDashboard";
 import { fetchData } from "@lib/fetchData";
 import { fetchUser } from "@lib/fetchUser";
+import { getNavbarData } from "@lib/getNavbarData";
 import axios from "axios";
 import { getCookie, hasCookie, setCookie } from "cookies-next";
 import Head from "next/head";
@@ -18,7 +19,7 @@ export const selectAnalytics = [
   "Jenjang pendidikan",
 ];
 
-export default function index({ user, analytics }) {
+export default function index({ user, analytics, navbarData }) {
   const [selectedChart, setSelectedChart] = useState(1);
 
   const dataStudent = {
@@ -162,7 +163,7 @@ export default function index({ user, analytics }) {
         <title>My App | PPI Karabük</title>
       </Head>
       <div className="flex flex-col w-screen h-screen overflow-auto _hide_scrollbar lg:overflow-hidden lg:flex-row">
-        <MyNavbar role_id={user.role_id} />
+        <MyNavbar role_id={user.role_id} data={navbarData} />
         <div className="flex flex-col w-full gap-4 p-4">
           <UserDashboard pageName="Dashboard" user={user} />
 
@@ -284,5 +285,7 @@ export async function getServerSideProps({ req, res, resolvedUrl }) {
       },
     };
 
-  return { props: { user, analytics } };
+  const navbarData = await getNavbarData({ req, res });
+
+  return { props: { user, analytics, navbarData } };
 }

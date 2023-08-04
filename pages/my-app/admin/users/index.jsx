@@ -19,10 +19,11 @@ import { fetchData } from "@lib/fetchData";
 import { getCookie, hasCookie, setCookie } from "cookies-next";
 import { isAdmin } from "@lib/isRole";
 import { useToastContext } from "@components/ToastContext";
+import { getNavbarData } from "@lib/getNavbarData";
 
 const rows = ["name", "email", "role_id", "is_verified", "created_at"];
 
-export default function index({ user, data }) {
+export default function index({ user, data, navbarData }) {
   const { setToastLoading, setToastFailed, setToastSuccess } =
     useToastContext();
   const cookie = getCookie("user_token");
@@ -274,7 +275,7 @@ export default function index({ user, data }) {
         </Head>
         <div className="flex flex-col w-screen h-screen overflow-auto lg:flex-row _hide_scrollbar">
           {/* Navbar */}
-          <MyNavbar role_id={user.role_id} />
+          <MyNavbar role_id={user.role_id} data={navbarData} />
           {/* Navbar End */}
 
           <div className="flex flex-col w-full gap-4 p-4">
@@ -525,5 +526,7 @@ export async function getServerSideProps({ req, res, resolvedUrl }) {
 
   const data = await fetchData("/users", req, res, params);
 
-  return { props: { user, data } };
+  const navbarData = await getNavbarData({ req, res });
+
+  return { props: { user, data, navbarData } };
 }

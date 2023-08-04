@@ -6,6 +6,7 @@ import { deleteData } from "@lib/deleteData";
 import { fetchData } from "@lib/fetchData";
 import { fetchDataClient } from "@lib/fetchDataClient";
 import { fetchUser } from "@lib/fetchUser";
+import { getNavbarData } from "@lib/getNavbarData";
 import { isSU } from "@lib/isRole";
 import { sendData } from "@lib/sendData";
 import { hasCookie, setCookie } from "cookies-next";
@@ -13,7 +14,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 
-export default function index({ user }) {
+export default function index({ user, navbarData }) {
   const { setToastLoading, setToastFailed, setToastSuccess } =
     useToastContext();
   const router = useRouter();
@@ -127,7 +128,7 @@ export default function index({ user }) {
           <title>My App | PPI Karabük</title>
         </Head>
         <div className="flex flex-col w-screen h-screen overflow-auto _hide_scrollbar lg:flex-row">
-          <MyNavbar role_id={user.role_id} />
+          <MyNavbar role_id={user.role_id} data={navbarData} />
           <div className="flex flex-col w-full gap-4 p-4">
             {/* User info */}
             <UserDashboard pageName="Manage Menu" user={user} />
@@ -391,5 +392,7 @@ export async function getServerSideProps({ req, res, resolvedUrl }) {
       },
     };
 
-  return { props: { user } };
+  const navbarData = await getNavbarData({ req, res });
+
+  return { props: { user, navbarData } };
 }

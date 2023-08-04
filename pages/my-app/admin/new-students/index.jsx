@@ -1,8 +1,9 @@
+import { getNavbarData } from "@lib/getNavbarData";
 import { isAdmin } from "@lib/isRole";
 import { hasCookie, setCookie } from "cookies-next";
 import React from "react";
 
-export default function index({ user }) {
+export default function index({ user, navbarData }) {
   return (
     <>
       <div className="bg-base-grey">
@@ -11,7 +12,7 @@ export default function index({ user }) {
         </Head>
         <div className="flex flex-col w-screen h-full overflow-hidden lg:h-screen _hide_scrollbar lg:flex-row">
           {/* Navbar */}
-          <MyNavbar role_id={user.role_id} />
+          <MyNavbar role_id={user.role_id} data={navbarData} />
           {/* Navbar End */}
 
           <div className="flex flex-col w-full h-full gap-4 p-4 overflow-auto"></div>
@@ -53,5 +54,7 @@ export async function getServerSideProps({ req, res, resolvedUrl }) {
       },
     };
 
-  return { props: { user } };
+  const navbarData = await getNavbarData({ req, res });
+
+  return { props: { user, navbarData } };
 }

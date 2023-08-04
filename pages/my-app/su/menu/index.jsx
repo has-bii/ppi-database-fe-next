@@ -4,6 +4,7 @@ import UserDashboard from "@components/UserDashboard";
 import { deleteData } from "@lib/deleteData";
 import { fetchData } from "@lib/fetchData";
 import { fetchUser } from "@lib/fetchUser";
+import { getNavbarData } from "@lib/getNavbarData";
 import { isSU } from "@lib/isRole";
 import { sendData } from "@lib/sendData";
 import { hasCookie, setCookie } from "cookies-next";
@@ -11,7 +12,7 @@ import Head from "next/head";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 
-export default function index({ user, data }) {
+export default function index({ user, data, navbarData }) {
   const router = useRouter();
   const { setToastLoading, setToastFailed, setToastSuccess } =
     useToastContext();
@@ -97,7 +98,7 @@ export default function index({ user, data }) {
           <title>My App | PPI Karabük</title>
         </Head>
         <div className="flex flex-col w-screen h-screen overflow-auto _hide_scrollbar lg:flex-row">
-          <MyNavbar role_id={user.role_id} />
+          <MyNavbar role_id={user.role_id} data={navbarData} />
           <div className="flex flex-col w-full gap-4 p-4">
             {/* User info */}
             <UserDashboard pageName="Manage Menu" user={user} />
@@ -297,5 +298,7 @@ export async function getServerSideProps({ req, res, resolvedUrl }) {
 
   const data = await fetchData("/my-menu", req, res);
 
-  return { props: { user, data } };
+  const navbarData = await getNavbarData({ req, res });
+
+  return { props: { user, data, navbarData } };
 }

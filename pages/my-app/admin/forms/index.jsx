@@ -21,8 +21,9 @@ import axios from "axios";
 import { getCookie, hasCookie, setCookie } from "cookies-next";
 import Head from "next/head";
 import React, { useEffect, useRef, useState } from "react";
+import { getNavbarData } from "@lib/getNavbarData";
 
-export default function index({ user, data }) {
+export default function index({ user, data, navbarData }) {
   const { setToastLoading, setToastFailed, setToastSuccess } =
     useToastContext();
   const [dataForm, setDataForm] = useState(data?.cols?.data);
@@ -344,7 +345,7 @@ export default function index({ user, data }) {
         </Head>
         <div className="flex flex-col w-screen h-full overflow-hidden lg:h-screen _hide_scrollbar lg:flex-row">
           {/* Navbar */}
-          <MyNavbar role_id={user.role_id} />
+          <MyNavbar role_id={user.role_id} data={navbarData} />
           {/* Navbar End */}
 
           <div className="flex flex-col w-full h-full gap-4 p-4 overflow-auto">
@@ -773,5 +774,7 @@ export async function getServerSideProps({ req, res, resolvedUrl }) {
       form.question = JSON.parse(form.question);
     });
 
-  return { props: { user, data } };
+  const navbarData = await getNavbarData({ req, res });
+
+  return { props: { user, data, navbarData } };
 }

@@ -2,13 +2,14 @@ import MyNavbar from "@components/MyNavbar";
 import UserDashboard from "@components/UserDashboard";
 import { fetchData } from "@lib/fetchData";
 import { fetchUser } from "@lib/fetchUser";
+import { getNavbarData } from "@lib/getNavbarData";
 import axios from "axios";
 import { getCookie, hasCookie, setCookie } from "cookies-next";
 import Head from "next/head";
 import Image from "next/image";
 import { useRef, useState } from "react";
 
-export default function index({ user, student, jurusans }) {
+export default function index({ user, student, jurusans, navbarData }) {
   const cookie = getCookie("user_token");
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -139,7 +140,7 @@ export default function index({ user, student, jurusans }) {
       </Head>
       <div className="flex flex-col w-screen h-screen overflow-auto lg:flex-row _hide_scrollbar">
         {/* Navbar */}
-        <MyNavbar role_id={user.role_id} />
+        <MyNavbar role_id={user.role_id} data={navbarData} />
         {/* Navbar End */}
 
         <div className="flex flex-col w-full gap-4 p-4">
@@ -629,5 +630,7 @@ export async function getServerSideProps({ req, res, resolvedUrl }) {
       },
     };
 
-  return { props: { user, student, jurusans } };
+  const navbarData = await getNavbarData({ req, res });
+
+  return { props: { user, student, jurusans, navbarData } };
 }

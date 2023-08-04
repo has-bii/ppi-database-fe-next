@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { fetchData } from "@lib/fetchData";
 import { fetchUser } from "@lib/fetchUser";
 import { formatDate } from "@lib/formatDate";
+import { getNavbarData } from "@lib/getNavbarData";
 import { isAdmin } from "@lib/isRole";
 
 import axios from "axios";
@@ -23,7 +24,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 
-export default function index({ user, students }) {
+export default function index({ user, students, navbarData }) {
   const { setToastLoading, setToastFailed, setToastSuccess } =
     useToastContext();
   const router = useRouter();
@@ -253,7 +254,7 @@ export default function index({ user, students }) {
         </Head>
         <div className="flex flex-col w-screen h-full overflow-hidden lg:h-screen _hide_scrollbar lg:flex-row">
           {/* Navbar */}
-          <MyNavbar role_id={user.role_id} />
+          <MyNavbar role_id={user.role_id} data={navbarData} />
           {/* Navbar End */}
 
           <div className="flex flex-col w-full h-full gap-4 p-4 overflow-auto">
@@ -742,5 +743,7 @@ export async function getServerSideProps({ req, res, resolvedUrl }) {
       },
     };
 
-  return { props: { user, students } };
+  const navbarData = await getNavbarData({ req, res });
+
+  return { props: { user, students, navbarData } };
 }
