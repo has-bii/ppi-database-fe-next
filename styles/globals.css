@@ -129,7 +129,7 @@
 }
 
 ._myapp_nav {
-    @apply flex flex-col bg-black p-6 gap-y-8
+    @apply  flex flex-col p-6 bg-black gap-y-8 lg:h-screen;
 }
 
 ._myapp_navlist_container {
@@ -419,7 +419,7 @@ th span {
 }
 
 ._myapp_content {
-    @apply w-full h-full gap-4 overflow-auto _card_myapp _hide_scrollbar
+    @apply w-full h-full gap-4 px-6 py-3 overflow-auto bg-white rounded-xl _hide_scrollbar;
 }
 
 ._dropdown_container {
@@ -547,3 +547,20 @@ ol._paragraph {
 ._toast._danger {
     @apply border-red-300 bg-red-200 text-red-500
 }
+
+.form {
+    @apply border border-gray-300 rounded-lg;
+}
+
+.form label {
+    @apply block mb-1 first-letter:uppercase w-fit;
+}
+
+.form input, .form select, .form textarea {
+    @apply px-3 py-1.5 border border-gray-300 placeholder:text-gray-300 rounded-md w-full;
+}
+
+.form input.file-input {
+    @apply border-0 file:border  file:rounded-lg px-0 py-0 file:px-3 file:py-1.5 file:bg-black file:text-white file:border-black file:cursor-pointer file:mr-4 file:hover:bg-white file:hover:text-black file:hover:border-black text-gray-400 w-fit file:transition-all;
+}
+
