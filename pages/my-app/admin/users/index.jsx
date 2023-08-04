@@ -1,4 +1,3 @@
-import Alert from "@components/Alert";
 import MyNavbar from "@components/MyNavbar";
 import SkeletonTable from "@components/SkeletonTable";
 import UserDashboard from "@components/UserDashboard";
@@ -19,14 +18,16 @@ import { fetchUser } from "@lib/fetchUser";
 import { fetchData } from "@lib/fetchData";
 import { getCookie, hasCookie, setCookie } from "cookies-next";
 import { isAdmin } from "@lib/isRole";
+import { useToastContext } from "@components/ToastContext";
 
 const rows = ["name", "email", "role_id", "is_verified", "created_at"];
 
 export default function index({ user, data }) {
+  const { setToastLoading, setToastFailed, setToastSuccess } =
+    useToastContext();
   const cookie = getCookie("user_token");
   const [datas, setDatas] = useState(data);
   const [loading, setLoading] = useState(false);
-  const [alert, setAlert] = useState({});
   const [modal, setModal] = useState({
     modal1: false,
     modal2: false,
@@ -69,7 +70,7 @@ export default function index({ user, data }) {
     if (res) {
       setDatas(res);
       setLoading(false);
-    } else setAlert({ message: "Server-side error occurred!", status: false });
+    } else setToastFailed("Server-side error occurred!");
   };
 
   const checkHandler = (e, id) => {
@@ -98,6 +99,8 @@ export default function index({ user, data }) {
   };
 
   const updateUsersHandler = async (is_verified = 0, role_id = 0) => {
+    setToastLoading("Sending data to the server...");
+
     await axios
       .post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/update-users`,
@@ -111,11 +114,12 @@ export default function index({ user, data }) {
         }
       )
       .then((res) => {
-        setAlert({ message: "Updated successfully", status: true });
+        setToastSuccess("Updated successfully");
         fetchUsers();
       })
       .catch((err) => {
-        setAlert({ message: "Server-side error occurred!", status: false });
+        console.error(err);
+        setToastFailed("Server-side error occurred!");
       });
   };
 
@@ -128,11 +132,12 @@ export default function index({ user, data }) {
         },
       })
       .then((res) => {
-        setAlert({ message: res.data.meta.message, status: true });
+        setToastSuccess(res.data.meta.message);
         fetchUsers();
       })
       .catch((err) => {
-        setAlert({ message: "Server-side error occurred!", status: false });
+        console.error(err);
+        setToastFailed("Server-side error occurred!");
       });
   };
 
@@ -149,8 +154,6 @@ export default function index({ user, data }) {
 
   return (
     <>
-      <Alert alert={alert} setAlert={setAlert} />
-
       {/* Modal verify */}
       <div className={`_modal_container ${modal.modal1 ? "_show" : ""}`}>
         <div className="_modal">

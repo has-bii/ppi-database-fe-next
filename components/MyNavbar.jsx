@@ -11,6 +11,7 @@ import {
   faBars,
   faGraduationCap,
   faFileLines,
+  faList,
 } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
 import Link from "next/link";
@@ -34,16 +35,19 @@ const navMenuList = [
     role_id: 1,
     list: [
       {
+        active: true,
         name: "Users",
         url: "/my-app/admin/users",
         icon: faUserGroup,
       },
       {
+        active: true,
         name: "Students",
         url: "/my-app/admin/database",
         icon: faDatabase,
       },
       {
+        active: false,
         name: "Forms",
         url: "/my-app/admin/forms",
         icon: faFileLines,
@@ -55,9 +59,22 @@ const navMenuList = [
     role_id: 3,
     list: [
       {
+        active: true,
         name: "Daftar",
         url: "/my-app/user/daftar-kampus",
         icon: faGraduationCap,
+      },
+    ],
+  },
+  {
+    label: "Super User",
+    role_id: 4,
+    list: [
+      {
+        active: true,
+        name: "Menu",
+        url: "/my-app/su/menu",
+        icon: faList,
       },
     ],
   },
@@ -77,7 +94,7 @@ export default function MyNavbar({ role_id }) {
       <div className="flex flex-row items-center justify-between w-full">
         <Image
           src={logowithtext}
-          width="200"
+          width="auto"
           height="50"
           alt="PPI Karabuk"
           priority
@@ -108,17 +125,24 @@ export default function MyNavbar({ role_id }) {
               <div key={index} className="_mynavlist">
                 <p className="_head_navlist">{nav.label}</p>
                 <ul className="_mynavlist">
-                  {nav.list.map((l, index) => (
-                    <li key={index}>
-                      <Link
-                        href={l.url}
-                        className={router.asPath === l.url ? "_active" : ""}
-                      >
-                        <FontAwesomeIcon icon={l.icon} />
-                        {l.name}
-                      </Link>
-                    </li>
-                  ))}
+                  {nav.list.map(
+                    (l, index) =>
+                      l.active && (
+                        <li key={index}>
+                          <Link
+                            href={l.url}
+                            className={
+                              router.pathname.replace("/[id]", "") === l.url
+                                ? "_active"
+                                : ""
+                            }
+                          >
+                            <FontAwesomeIcon icon={l.icon} />
+                            {l.name}
+                          </Link>
+                        </li>
+                      )
+                  )}
                 </ul>
               </div>
             )

@@ -1,6 +1,6 @@
-import Alert from "@components/Alert";
 import MyNavbar from "@components/MyNavbar";
 import SkeletonTable from "@components/SkeletonTable";
+import { useToastContext } from "@components/ToastContext";
 import UserDashboard from "@components/UserDashboard";
 import {
   faArrowDown,
@@ -24,6 +24,8 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 
 export default function index({ user, students }) {
+  const { setToastLoading, setToastFailed, setToastSuccess } =
+    useToastContext();
   const router = useRouter();
   const cookie = getCookie("user_token");
   const [loading, setLoading] = useState(false);
@@ -33,7 +35,6 @@ export default function index({ user, students }) {
   const [selected, setSelected] = useState([]);
   const statusRef = useRef();
   const [modal, setModal] = useState({ modal1: false });
-  const [alert, setAlert] = useState({});
   const [cols, setCols] = useState([
     { name: "name", db: "name", show: true },
     { name: "status", db: "status_id", show: true },
@@ -80,19 +81,6 @@ export default function index({ user, students }) {
     dd1: false,
     dd2: false,
   });
-  // useEffect(() => {
-  //   const handler = (e) => {
-  //     const dropdown = document.getElementById("shown-cols");
-
-  //     if (!dropdown.contains(e.target)) setDropdown(false);
-  //   };
-
-  //   if (dropdown) {
-  //     document.addEventListener("mousedown", handler);
-  //   }
-
-  //   return () => document.removeEventListener("mousedown", handler);
-  // }, [dropdown]);
 
   const checkHandler = (e, id) => {
     if (e.target.checked) setSelected((old) => [...old, id]);
@@ -128,7 +116,7 @@ export default function index({ user, students }) {
     if (res) {
       setDatas(res);
       setLoading(false);
-    } else setAlert({ message: "Server-side error occurred!", status: false });
+    } else setToastFailed("Server-side error occurred!");
   };
 
   const checkColHandler = (index) => {
@@ -174,11 +162,12 @@ export default function index({ user, students }) {
         }
       )
       .then((res) => {
-        setAlert({ message: "Updated successfully", status: true });
+        setToastSuccess("Updated successfully");
         fetchStudents();
       })
       .catch((err) => {
-        setAlert({ message: "Server-side error occurred!", status: false });
+        console.error(err);
+        setToastFailed("Server-side error occurred!");
       });
   };
 
@@ -213,8 +202,6 @@ export default function index({ user, students }) {
 
   return (
     <>
-      <Alert alert={alert} setAlert={setAlert} />
-
       {/* Modal change role */}
       <div className={`_modal_container ${modal.modal1 ? "_show" : ""}`}>
         <div className="_modal">

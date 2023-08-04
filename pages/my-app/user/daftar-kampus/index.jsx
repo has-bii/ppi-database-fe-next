@@ -3,7 +3,7 @@ import UserDashboard from "@components/UserDashboard";
 import { fetchData } from "@lib/fetchData";
 import { fetchUser } from "@lib/fetchUser";
 import { isUser } from "@lib/isRole";
-import { useToastContext } from "@pages/ToastContext";
+import { useToastContext } from "@components/ToastContext";
 import axios from "axios";
 import { getCookie, hasCookie, setCookie } from "cookies-next";
 import Head from "next/head";

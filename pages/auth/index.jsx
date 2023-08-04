@@ -13,7 +13,7 @@ import AuthLayout from "@components/AuthLayout";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { deleteCookie, getCookie, hasCookie, setCookie } from "cookies-next";
-import { useToastContext } from "@pages/ToastContext";
+import { useToastContext } from "@components/ToastContext";
 
 export default function page() {
   const router = useRouter();

@@ -13,7 +13,7 @@ import axios from "axios";
 import waButton from "@public/image/waButtonBig.png";
 import AuthLayout from "@components/AuthLayout";
 import { hasCookie } from "cookies-next";
-import { useToastContext } from "@pages/ToastContext";
+import { useToastContext } from "@components/ToastContext";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 

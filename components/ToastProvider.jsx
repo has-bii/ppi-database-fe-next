@@ -1,4 +1,4 @@
-import { ToastContext } from "@pages/ToastContext";
+import { ToastContext } from "@components/ToastContext";
 import { useState } from "react";
 import Toast from "./Toast";
 
