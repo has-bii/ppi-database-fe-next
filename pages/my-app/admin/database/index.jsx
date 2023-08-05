@@ -257,13 +257,13 @@ export default function index({ user, students, navbarData }) {
           <MyNavbar role_id={user.role_id} data={navbarData} />
           {/* Navbar End */}
 
-          <div className="flex flex-col w-full h-full gap-4 p-4 overflow-auto">
+          <div className="flex flex-col w-full h-full gap-4 p-4 overflow-auto _hide_scrollbar">
             {/* User info */}
             <UserDashboard pageName="Students Database" user={user} />
             {/* User info end */}
 
             {/* Content */}
-            <div className="relative _myapp_content">
+            <div className="relative myapp_content">
               {/* Filter container */}
               <div className="_filters_container">
                 {/* Search by name */}

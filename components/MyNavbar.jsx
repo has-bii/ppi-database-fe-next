@@ -12,6 +12,7 @@ import {
   faGraduationCap,
   faFileLines,
   faList,
+  faFileCirclePlus,
 } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
 import Link from "next/link";
@@ -26,6 +27,7 @@ const iconList = {
   faGraduationCap: faGraduationCap,
   faList: faList,
   faUserPen: faUserPen,
+  faFileCirclePlus: faFileCirclePlus,
 };
 
 export default function MyNavbar({ role_id, data }) {

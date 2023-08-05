@@ -1,12 +1,19 @@
 import MyNavbar from "@components/MyNavbar";
+import { useToastContext } from "@components/ToastContext";
 import UserDashboard from "@components/UserDashboard";
+import { fetchData } from "@lib/fetchData";
 import { fetchUser } from "@lib/fetchUser";
 import { getNavbarData } from "@lib/getNavbarData";
+import { sendData } from "@lib/sendData";
 import { hasCookie, setCookie } from "cookies-next";
 import Head from "next/head";
-import { useState } from "react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 
-export default function index({ user, navbarData }) {
+export default function index({ user, navbarData, userInfo }) {
+  const { setToastLoading, setToastFailed, setToastSuccess } =
+    useToastContext();
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     nama_depan: "",
     nama_belakang: "",
@@ -30,6 +37,78 @@ export default function index({ user, navbarData }) {
     surat_rekomendasi: "",
     surat_izin: "",
   });
+  const [files, setFiles] = useState({
+    pas_photo: null,
+    ijazah: null,
+    transkrip: null,
+    paspor: null,
+    surat_rekomendasi: null,
+    surat_izin: null,
+  });
+
+  const uploadFileHandler = (e, property, type) => {
+    if (e.target.files[0]) {
+      if (e.target.files[0].size > 1024 * 1024) {
+        alert("File size exceeds maximum limit 1 MB");
+        e.target.value = "";
+      } else if (!e.target.files[0].type.startsWith(type)) {
+        alert("File type does not support!");
+        e.target.value = "";
+      } else setFiles({ ...files, [property]: e.target.files[0] });
+    } else {
+      setFiles({ ...files, [property]: null });
+      e.target.value = "";
+    }
+  };
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+
+    let url;
+
+    if (userInfo) url = "/user-info/update";
+    else url = "/user-info/create";
+
+    const formData = new FormData();
+
+    formData.append("nama_depan", data.nama_depan);
+    formData.append("nama_belakang", data.nama_belakang);
+    formData.append("nama_bapak", data.nama_bapak);
+    formData.append("nama_ibu", data.nama_ibu);
+    formData.append("kelamin", data.kelamin);
+    formData.append("ttl", data.ttl);
+    formData.append("no_paspor", data.no_paspor);
+    formData.append("provinsi", data.provinsi);
+    formData.append("kota", data.kota);
+    formData.append("alamat", data.alamat);
+    formData.append("email", data.email);
+    formData.append("no_hp", data.no_hp);
+    formData.append("no_hp_lain", data.no_hp_lain);
+    formData.append("nama_sekolah", data.nama_sekolah);
+    formData.append("kota_sekolah", data.kota_sekolah);
+
+    if (files.pas_photo) formData.append("pas_photo", files.pas_photo);
+    if (files.ijazah) formData.append("ijazah", files.ijazah);
+    if (files.transkrip) formData.append("transkrip", files.transkrip);
+    if (files.paspor) formData.append("paspor", files.paspor);
+    if (files.surat_rekomendasi)
+      formData.append("surat_rekomendasi", files.surat_rekomendasi);
+    if (files.surat_izin) formData.append("surat_izin", files.surat_izin);
+
+    const res = await sendData(url, formData);
+    setToastLoading("Saving data...");
+
+    if (res) setToastSuccess("Saved successfully");
+    else setToastFailed("Failed to save!");
+  };
+
+  const openLink = (link) => {
+    window.open(process.env.NEXT_PUBLIC_API_URL + "/" + link, "_blank");
+  };
+
+  useEffect(() => {
+    if (userInfo) setData(userInfo);
+  }, []);
   return (
     <>
       <div className="bg-base-grey">
@@ -38,13 +117,16 @@ export default function index({ user, navbarData }) {
         </Head>
         <div className="flex flex-col w-screen h-full lg:flex-row">
           <MyNavbar role_id={user.role_id} data={navbarData} />
-          <div className="flex flex-col w-full gap-4 p-4 overflow-hidden">
+          <div className="flex flex-col w-full gap-4 p-4">
             {/* User info */}
             <UserDashboard pageName="Biodata" user={user} />
 
             {/* Contents */}
-            <div className="_myapp_content">
-              <form className="flex flex-col w-full h-full gap-2">
+            <div className="myapp_content">
+              <form
+                onSubmit={submitHandler}
+                className="flex flex-col w-full gap-2"
+              >
                 <h3 className="text-lg font-semibold capitalize">Data diri</h3>
                 <div className="flex flex-col gap-4 p-6 mb-4 lg:gap-12 lg:flex-row form">
                   <div className="flex flex-col w-full gap-4">
@@ -222,9 +304,9 @@ export default function index({ user, navbarData }) {
                         type="text"
                         name="no_hp"
                         placeholder="+62800011112222"
-                        value={data.no_hp}
+                        value={data.no_hp_lain}
                         onChange={(e) =>
-                          setData({ ...data, no_hp: e.target.value })
+                          setData({ ...data, no_hp_lain: e.target.value })
                         }
                       />
                     </div>
@@ -272,66 +354,224 @@ export default function index({ user, navbarData }) {
                   <div className="flex flex-col w-full gap-4">
                     <div>
                       <label htmlFor="pas_photo">Pas Foto</label>
-                      <input
-                        type="file"
-                        className="file-input"
-                        id="pas_photo"
-                        accept="image/*"
-                      />
+                      {data.pas_photo ? (
+                        <div className="inline-flex items-end gap-2">
+                          <Image
+                            src={
+                              process.env.NEXT_PUBLIC_API_URL +
+                              "/" +
+                              data.pas_photo
+                            }
+                            height={200}
+                            width={150}
+                            alt=""
+                            className="border-2 rounded-md border-slate-300"
+                          />
+                          <button
+                            type="button"
+                            className="text-red-500"
+                            onClick={() => setData({ ...data, pas_photo: "" })}
+                          >
+                            remove
+                          </button>
+                        </div>
+                      ) : (
+                        <input
+                          type="file"
+                          className="file-input"
+                          id="pas_photo"
+                          accept="image/*"
+                          onChange={(e) =>
+                            uploadFileHandler(e, "pas_photo", "image/")
+                          }
+                          required={userInfo === null}
+                        />
+                      )}
                     </div>
                     <div>
                       <label htmlFor="ijazah">ijazah asli dan terjemah</label>
-                      <input
-                        type="file"
-                        className="file-input"
-                        id="ijazah"
-                        accept=".pdf"
-                      />
+                      {data.ijazah ? (
+                        <div className="inline-flex gap-2">
+                          <button
+                            type="button"
+                            className="px-3 py-1.5 text-white bg-black border border-black rounded-lg"
+                            onClick={() => openLink(data.ijazah)}
+                          >
+                            Open
+                          </button>
+                          <button
+                            type="button"
+                            className="text-red-500"
+                            onClick={() => setData({ ...data, ijazah: "" })}
+                          >
+                            remove
+                          </button>
+                        </div>
+                      ) : (
+                        <input
+                          type="file"
+                          className="file-input"
+                          id="ijazah"
+                          accept=".pdf"
+                          onChange={(e) =>
+                            uploadFileHandler(e, "ijazah", "application/pdf")
+                          }
+                          required={userInfo === null}
+                        />
+                      )}
                     </div>
                     <div>
-                      <label htmlFor="transkrip">transkrip</label>
-                      <input
-                        type="file"
-                        className="file-input"
-                        id="transkrip"
-                        accept=".pdf"
-                      />
+                      <label htmlFor="transkrip">
+                        transkrip asli dan terjemah
+                      </label>
+                      {data.transkrip ? (
+                        <div className="inline-flex gap-2">
+                          <button
+                            type="button"
+                            className="px-3 py-1.5 text-white bg-black border border-black rounded-lg"
+                            onClick={() => openLink(data.transkrip)}
+                          >
+                            Open
+                          </button>
+                          <button
+                            type="button"
+                            className="text-red-500"
+                            onClick={() => setData({ ...data, transkrip: "" })}
+                          >
+                            remove
+                          </button>
+                        </div>
+                      ) : (
+                        <input
+                          type="file"
+                          className="file-input"
+                          id="transkrip"
+                          accept=".pdf"
+                          onChange={(e) =>
+                            uploadFileHandler(e, "transkrip", "application/pdf")
+                          }
+                          required={userInfo === null}
+                        />
+                      )}
                     </div>
                   </div>
                   <div className="flex flex-col w-full gap-4">
                     <div>
                       <label htmlFor="paspor">paspor</label>
-                      <input
-                        type="file"
-                        className="file-input"
-                        id="paspor"
-                        accept=".pdf"
-                      />
+                      {data.paspor ? (
+                        <div className="inline-flex gap-2">
+                          <button
+                            type="button"
+                            className="px-3 py-1.5 text-white bg-black border border-black rounded-lg"
+                            onClick={() => openLink(data.paspor)}
+                          >
+                            Open
+                          </button>
+                          <button
+                            type="button"
+                            className="text-red-500"
+                            onClick={() => setData({ ...data, paspor: "" })}
+                          >
+                            remove
+                          </button>
+                        </div>
+                      ) : (
+                        <input
+                          type="file"
+                          className="file-input"
+                          id="paspor"
+                          accept=".pdf"
+                          onChange={(e) =>
+                            uploadFileHandler(e, "paspor", "application/pdf")
+                          }
+                          required={userInfo === null}
+                        />
+                      )}
                     </div>
                     <div>
                       <label htmlFor="surat_rekomendasi">
                         surat rekomendasi
                       </label>
-                      <input
-                        type="file"
-                        className="file-input"
-                        id="surat_rekomendasi"
-                        accept=".pdf"
-                      />
+                      {data.surat_rekomendasi ? (
+                        <div className="inline-flex gap-2">
+                          <button
+                            type="button"
+                            className="px-3 py-1.5 text-white bg-black border border-black rounded-lg"
+                            onClick={() => openLink(data.surat_rekomendasi)}
+                          >
+                            Open
+                          </button>
+                          <button
+                            type="button"
+                            className="text-red-500"
+                            onClick={() =>
+                              setData({ ...data, surat_rekomendasi: "" })
+                            }
+                          >
+                            remove
+                          </button>
+                        </div>
+                      ) : (
+                        <input
+                          type="file"
+                          className="file-input"
+                          id="surat_rekomendasi"
+                          accept=".pdf"
+                          onChange={(e) =>
+                            uploadFileHandler(
+                              e,
+                              "surat_rekomendasi",
+                              "application/pdf"
+                            )
+                          }
+                          required={userInfo === null}
+                        />
+                      )}
                     </div>
                     <div>
                       <label htmlFor="surat_izin">surat izin</label>
-                      <input
-                        type="file"
-                        className="file-input"
-                        id="surat_izin"
-                        accept=".pdf"
-                      />
+                      {data.surat_izin ? (
+                        <div className="inline-flex gap-2">
+                          <button
+                            type="button"
+                            className="px-3 py-1.5 text-white bg-black border border-black rounded-lg"
+                            onClick={() => openLink(data.surat_izin)}
+                          >
+                            Open
+                          </button>
+                          <button
+                            type="button"
+                            className="text-red-500"
+                            onClick={() => setData({ ...data, surat_izin: "" })}
+                          >
+                            remove
+                          </button>
+                        </div>
+                      ) : (
+                        <input
+                          type="file"
+                          className="file-input"
+                          id="surat_izin"
+                          accept=".pdf"
+                          onChange={(e) =>
+                            uploadFileHandler(
+                              e,
+                              "surat_izin",
+                              "application/pdf"
+                            )
+                          }
+                          required={userInfo === null}
+                        />
+                      )}
                     </div>
                   </div>
                 </div>
-                <button className="px-4 py-2 mb-4 rounded-md _green">
-                  Submit
+                <button
+                  type="submit"
+                  className="px-4 py-2 mb-4 rounded-md _green disabled:_gray"
+                  disabled={loading}
+                >
+                  Save
                 </button>
               </form>
             </div>
@@ -367,5 +607,9 @@ export async function getServerSideProps({ req, res, resolvedUrl }) {
 
   const navbarData = await getNavbarData({ req, res });
 
-  return { props: { user, navbarData } };
+  const userInfo = await fetchData("/user-info", req, res, {
+    user_id: user.id,
+  });
+
+  return { props: { user, navbarData, userInfo } };
 }

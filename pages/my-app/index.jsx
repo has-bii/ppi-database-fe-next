@@ -162,13 +162,13 @@ export default function index({ user, analytics, navbarData }) {
       <Head>
         <title>My App | PPI Karabük</title>
       </Head>
-      <div className="flex flex-col w-screen h-screen overflow-auto _hide_scrollbar lg:overflow-hidden lg:flex-row">
+      <div className="flex flex-col w-screen h-full lg:flex-row">
         <MyNavbar role_id={user.role_id} data={navbarData} />
         <div className="flex flex-col w-full gap-4 p-4">
           <UserDashboard pageName="Dashboard" user={user} />
 
           {/* Content */}
-          <div className="_myapp_content">
+          <div className="myapp_content">
             {/* Analytics overview */}
             <div>
               <p className="mb-3 text-xl font-semibold">Analytics overview</p>

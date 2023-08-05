@@ -134,7 +134,7 @@ export default function index({ user, navbarData }) {
             <UserDashboard pageName="Manage Menu" user={user} />
 
             {/* Contents */}
-            <div className="_myapp_content">
+            <div className="myapp_content">
               <div>
                 {loading ? (
                   <SkeletonTable />

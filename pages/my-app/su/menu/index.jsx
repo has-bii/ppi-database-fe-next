@@ -97,14 +97,14 @@ export default function index({ user, data, navbarData }) {
         <Head>
           <title>My App | PPI Karabük</title>
         </Head>
-        <div className="flex flex-col w-screen h-screen overflow-auto _hide_scrollbar lg:flex-row">
+        <div className="flex flex-col w-screen h-full lg:flex-row">
           <MyNavbar role_id={user.role_id} data={navbarData} />
           <div className="flex flex-col w-full gap-4 p-4">
             {/* User info */}
             <UserDashboard pageName="Manage Menu" user={user} />
 
             {/* Contents */}
-            <div className="_myapp_content">
+            <div className="myapp_content">
               <div>
                 <h2 className="mb-2 text-xl font-semibold">Menus</h2>
                 <div className="_table_container">

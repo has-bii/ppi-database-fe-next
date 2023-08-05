@@ -213,6 +213,7 @@ export default function index({ user, data, navbarData }) {
               <option value="1">Admin</option>
               <option value="2">Student</option>
               <option value="3">User</option>
+              <option value="5">PPMB</option>
             </select>
           </div>
           <div className="_modal_buttons">
@@ -283,7 +284,7 @@ export default function index({ user, data, navbarData }) {
             <UserDashboard pageName="Users" user={user} />
 
             {/* Contents */}
-            <div className="_myapp_content">
+            <div className="myapp_content">
               <div className="_filters_container">
                 {/* Search by name */}
                 <form

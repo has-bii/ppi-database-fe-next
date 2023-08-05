@@ -354,7 +354,7 @@ export default function index({ user, data, navbarData }) {
 
             {/* Contents */}
             {Object.keys(selectedForm).length === 0 ? (
-              <div className="_myapp_content">
+              <div className="myapp_content">
                 <div className="_filters_container">
                   {/* Search by name */}
                   <form
@@ -587,7 +587,7 @@ export default function index({ user, data, navbarData }) {
                 {/* Table End */}
               </div>
             ) : (
-              <div className="_myapp_content">
+              <div className="myapp_content">
                 <div className="flex flex-row w-full gap-2">
                   <button
                     className="px-4 py-2 ml-auto text-white rounded-md bg-sky-500"
