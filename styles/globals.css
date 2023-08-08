@@ -588,6 +588,14 @@ span.status {
     @apply text-sky-500 border-sky-500;
 }
 
+._sky {
+    @apply bg-sky-200 text-sky-400;
+}
+
+.blue {
+    @apply text-blue-500 border-blue-500;
+}
+
 .rose {
     @apply text-rose-500 border-rose-500;
 }

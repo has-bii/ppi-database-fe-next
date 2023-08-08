@@ -63,6 +63,7 @@ export default function index({ user, navbarData, userInfo }) {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     let url;
 
@@ -100,6 +101,8 @@ export default function index({ user, navbarData, userInfo }) {
 
     if (res) setToastSuccess("Saved successfully");
     else setToastFailed("Failed to save!");
+
+    setLoading(false);
   };
 
   const openLink = (link) => {

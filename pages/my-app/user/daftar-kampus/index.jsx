@@ -6,8 +6,16 @@ import { getNavbarData } from "@lib/getNavbarData";
 import { hasCookie, setCookie } from "cookies-next";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-export default function index({ user, navbarData, userInfo }) {
+export default function index({
+  user,
+  navbarData,
+  userInfo,
+  apps,
+  userAppDatas,
+}) {
+  const router = useRouter();
   const openLink = (link) => {
     window.open(process.env.NEXT_PUBLIC_API_URL + "/" + link, "_blank");
   };
@@ -26,13 +34,51 @@ export default function index({ user, navbarData, userInfo }) {
 
             {/* Contents */}
             <div className="myapp_content">
+              {/* Apps */}
               <div className="overflow-hidden border divide-y rounded-md border-slate-300 divide-slate-300">
                 <h3 className="px-4 py-2 text-lg font-semibold capitalize bg-slate-100">
                   Pendaftaran
                 </h3>
-                <div className="p-4">
+                <div className="flex flex-col gap-2 divide-y divide-slate-300">
                   {userInfo ? (
-                    ""
+                    apps ? (
+                      apps.map(
+                        (app) =>
+                          app.active == 1 && (
+                            <div
+                              key={app.id}
+                              className="inline-flex items-center justify-between w-full px-6 py-3"
+                            >
+                              <div>
+                                <h2 className="text-lg font-semibold text-black">
+                                  {app.name}
+                                </h2>
+                                <p className="text-sm text-slate-400">
+                                  {app.desc}
+                                </p>
+                              </div>
+                              <button
+                                className={
+                                  "px-3 py-1.5 h-fit disabled:_gray rounded-md _" +
+                                  app.app_status.style
+                                }
+                                disabled={app.app_status_id !== 1}
+                                onClick={() =>
+                                  router.push(
+                                    "/my-app/user/daftar-kampus/" + app.id
+                                  )
+                                }
+                              >
+                                {app.app_status.name}
+                              </button>
+                            </div>
+                          )
+                      )
+                    ) : (
+                      <div className="w-full px-4 py-2 text-yellow-400 bg-yellow-100 border border-yellow-300 rounded">
+                        Tidak ada pendaftaran yang tersedia.
+                      </div>
+                    )
                   ) : (
                     <div className="w-full px-4 py-2 text-red-400 bg-red-100 border border-red-300 rounded">
                       Biodata belum diisi, silahkan isi biodata terlebih dahulu.{" "}
@@ -46,6 +92,55 @@ export default function index({ user, navbarData, userInfo }) {
                   )}
                 </div>
               </div>
+
+              {userInfo !== null && (
+                <div className="overflow-hidden border divide-y rounded-md border-slate-300 divide-slate-300">
+                  <h3 className="px-4 py-2 text-lg font-semibold capitalize bg-slate-100">
+                    My Applications
+                  </h3>
+                  <div className="flex flex-col gap-2 divide-y divide-slate-300">
+                    {userAppDatas ? (
+                      userAppDatas.map((userApp) => (
+                        <div
+                          key={userApp.id}
+                          className="inline-flex items-center justify-between w-full px-6 py-3"
+                        >
+                          <div>
+                            <h2 className="text-lg font-semibold text-black">
+                              {userApp?.application?.name}
+                            </h2>
+                            <span
+                              className={
+                                "px-2 py-1 rounded-lg text-sm _" +
+                                userApp?.app_status?.style
+                              }
+                            >
+                              {userApp?.app_status?.name}
+                            </span>
+                          </div>
+                          <button
+                            className="px-3 py-1.5 bg-black rounded-lg text-white"
+                            onClick={() =>
+                              router.push(
+                                "/my-app/user/daftar-kampus/" +
+                                  userApp?.application_id
+                              )
+                            }
+                          >
+                            Open
+                          </button>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="w-full px-4 py-2 text-yellow-400 bg-yellow-100 border border-yellow-300 rounded">
+                        Tidak ada pendaftaran yang tersedia.
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Apps end */}
               <div className="w-full overflow-hidden border divide-y rounded-md border-slate-300 divide-slate-300">
                 <h3 className="px-4 py-2 text-lg font-semibold capitalize bg-slate-100">
                   Data diri
@@ -275,5 +370,13 @@ export async function getServerSideProps({ req, res, resolvedUrl }) {
     user_id: user.id,
   });
 
-  return { props: { user, navbarData, userInfo } };
+  const application = await fetchData("/application", req, res);
+
+  const { apps } = application;
+
+  const userAppDatas = await fetchData("/user-app", req, res, {
+    user_id: user.id,
+  });
+
+  return { props: { user, navbarData, userInfo, apps, userAppDatas } };
 }
