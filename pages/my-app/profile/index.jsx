@@ -5,7 +5,7 @@ import { getNavbarData } from "@lib/getNavbarData";
 import { hasCookie, setCookie } from "cookies-next";
 import Head from "next/head";
 
-export default function index({ user, navbarData }) {
+export default function Index({ user, navbarData }) {
   return (
     <>
       <div className="bg-base-grey">

@@ -14,7 +14,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 
-export default function index({ user, navbarData }) {
+export default function Index({ user, navbarData }) {
   const { setToastLoading, setToastFailed, setToastSuccess } =
     useToastContext();
   const router = useRouter();
@@ -105,20 +105,23 @@ export default function index({ user, navbarData }) {
     );
   };
 
-  const fetchMenuLink = async () => {
-    setLoading(true);
-    const res = await fetchDataClient("/my-menu", { id: router.query.id });
-    setLoading(false);
-
-    if (res) {
-      setLinkCol(res.link_columns);
-      setMenu(res.menus);
-      setLinks(res.menus.link);
-    } else setToastFailed("Failed to load data...");
-  };
-
   useEffect(() => {
-    fetchMenuLink();
+    setLoading(true);
+    const fetch = async () => {
+      await fetchDataClient("/my-menu", { id: router.query.id })
+        .then((res) => {
+          setLinkCol(res.link_columns);
+          setMenu(res.menus);
+          setLinks(res.menus.link);
+        })
+        .catch((error) => {
+          setToastFailed("Failed to load data...");
+          console.error(error);
+        })
+        .finally(() => setLoading(false));
+    };
+
+    fetch();
   }, []);
 
   return (

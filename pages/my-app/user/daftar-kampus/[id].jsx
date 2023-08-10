@@ -114,7 +114,7 @@ const departments = [
   "Turkish Language and Literature",
 ];
 
-export default function index({
+export default function Index({
   user,
   navbarData,
   applicationData,

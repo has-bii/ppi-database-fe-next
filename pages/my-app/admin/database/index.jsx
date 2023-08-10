@@ -24,7 +24,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 
-export default function index({ user, students, navbarData }) {
+export default function Index({ user, students, navbarData }) {
   const { setToastLoading, setToastFailed, setToastSuccess } =
     useToastContext();
   const router = useRouter();

@@ -23,7 +23,7 @@ import { getNavbarData } from "@lib/getNavbarData";
 
 const rows = ["name", "email", "role_id", "is_verified", "created_at"];
 
-export default function index({ user, data, navbarData }) {
+export default function Index({ user, data, navbarData }) {
   const { setToastLoading, setToastFailed, setToastSuccess } =
     useToastContext();
   const cookie = getCookie("user_token");

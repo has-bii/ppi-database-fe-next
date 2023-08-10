@@ -9,7 +9,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { useRef, useState } from "react";
 
-export default function index({ user, student, jurusans, navbarData }) {
+export default function Index({ user, student, jurusans, navbarData }) {
   const cookie = getCookie("user_token");
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(false);

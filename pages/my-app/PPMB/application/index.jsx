@@ -13,7 +13,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-export default function index({ user, navbarData, application }) {
+export default function Index({ user, navbarData, application }) {
   const { setToastLoading, setToastFailed, setToastSuccess } =
     useToastContext();
   const router = useRouter();

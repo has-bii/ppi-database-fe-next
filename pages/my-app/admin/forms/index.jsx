@@ -3,7 +3,6 @@ import MyNavbar from "@components/MyNavbar";
 import SkeletonTable from "@components/SkeletonTable";
 import UserDashboard from "@components/UserDashboard";
 import {
-  faArrowLeft,
   faCircle,
   faPlus,
   faSearch,
@@ -23,7 +22,7 @@ import Head from "next/head";
 import React, { useEffect, useRef, useState } from "react";
 import { getNavbarData } from "@lib/getNavbarData";
 
-export default function index({ user, data, navbarData }) {
+export default function Index({ user, data, navbarData }) {
   const { setToastLoading, setToastFailed, setToastSuccess } =
     useToastContext();
   const [dataForm, setDataForm] = useState(data?.cols?.data);
@@ -243,7 +242,6 @@ export default function index({ user, data, navbarData }) {
       setToastFailed("Failed to save...");
       return;
     }
-
     setToastSuccess("Saved successfully...");
   };
 

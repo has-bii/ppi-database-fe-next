@@ -12,7 +12,7 @@ import Head from "next/head";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 
-export default function index({ user, data, navbarData }) {
+export default function Index({ user, data, navbarData }) {
   const router = useRouter();
   const { setToastLoading, setToastFailed, setToastSuccess } =
     useToastContext();
@@ -89,7 +89,7 @@ export default function index({ user, data, navbarData }) {
 
   useEffect(() => {
     setMenuData(data.menu);
-  }, []);
+  }, [data]);
 
   return (
     <>

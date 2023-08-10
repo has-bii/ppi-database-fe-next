@@ -11,7 +11,7 @@ import { hasCookie, setCookie } from "cookies-next";
 import Head from "next/head";
 import { useState } from "react";
 
-export default function index({ user, navbarData, statusData }) {
+export default function Index({ user, navbarData, statusData }) {
   const { setToastLoading, setToastFailed, setToastSuccess } =
     useToastContext();
   const [loading, setLoading] = useState(false);

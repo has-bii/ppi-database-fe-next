@@ -9,7 +9,7 @@ import AuthLayout from "@components/AuthLayout";
 import { hasCookie } from "cookies-next";
 import { useToastContext } from "@components/ToastContext";
 
-export default function page() {
+export default function Index() {
   const [form, setForm] = useState({ email: "" });
   const { setToastFailed } = useToastContext();
   const [emailValidation, setEmailValidation] = useState({

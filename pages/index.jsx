@@ -23,7 +23,7 @@ export const album = [
   "photo_16.jpg",
 ];
 
-export default function Home() {
+export default function Index() {
   return (
     <Layout>
       <Head>
@@ -36,7 +36,7 @@ export default function Home() {
             <h1 className="mb-5 text-4xl font-light text-center lg:text-left">
               Welcome to
               <span className="block font-extrabold text-red-900 lg:text-6xl">
-                "PPI Karabük"
+                &quot;PPI Karabük&quot;
               </span>
             </h1>
             <p className="text-xl text-center lg:text-left">
