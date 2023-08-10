@@ -3,7 +3,6 @@ import MyNavbar from "@components/MyNavbar";
 import SkeletonTable from "@components/SkeletonTable";
 import UserDashboard from "@components/UserDashboard";
 import {
-  faArrowLeft,
   faCircle,
   faPlus,
   faSearch,
