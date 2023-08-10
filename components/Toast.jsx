@@ -1,17 +1,7 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 
-function Toast({ toastData, setToastData }) {
-  useEffect(() => {
-    const shiftToast = () => {
-      if (toastData.length) setToastData(toastData.slice(1));
-    };
-
-    const timeoutID = setTimeout(() => shiftToast(), 2000);
-
-    return () => clearTimeout(timeoutID);
-  }, [toastData]);
-
+function Toast({ toastData }) {
   return (
     <div className={`_toast_container`}>
       {toastData.map((t, index) => (
@@ -32,8 +22,6 @@ Toast.propTypes = {
       style: PropTypes.string,
     })
   ).isRequired,
-  setToastData: PropTypes.func.isRequired,
-  position: PropTypes.string,
 };
 
 export default Toast;

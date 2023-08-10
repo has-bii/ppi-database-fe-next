@@ -1,9 +1,19 @@
 import { ToastContext } from "@components/ToastContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Toast from "./Toast";
 
 export default function ToastProvider({ children }) {
   const [toastData, setToastData] = useState([]);
+
+  useEffect(() => {
+    const shiftToast = () => {
+      if (toastData.length) setToastData(toastData.slice(1));
+    };
+
+    const timeoutID = setTimeout(() => shiftToast(), 2000);
+
+    return () => clearTimeout(timeoutID);
+  }, [toastData]);
 
   const setToastLoading = (body = "Sending data to the server") => {
     setToastData((prev) => [...prev, { title: "Loading", body: body }]);

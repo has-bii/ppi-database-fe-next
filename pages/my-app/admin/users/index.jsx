@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { formatDate } from "@lib/formatDate";
 import Head from "next/head";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchUser } from "@lib/fetchUser";
 import { fetchData } from "@lib/fetchData";
 import { getCookie, hasCookie, setCookie } from "cookies-next";
@@ -23,7 +23,7 @@ import { getNavbarData } from "@lib/getNavbarData";
 
 const rows = ["name", "email", "role_id", "is_verified", "created_at"];
 
-export default function index({ user, data, navbarData }) {
+export default function Index({ user, data, navbarData }) {
   const { setToastLoading, setToastFailed, setToastSuccess } =
     useToastContext();
   const cookie = getCookie("user_token");
@@ -47,32 +47,33 @@ export default function index({ user, data, navbarData }) {
     order_by: "desc",
   });
 
-  const fetchUsers = async (
-    url = `${process.env.NEXT_PUBLIC_API_URL}/api/users`
-  ) => {
-    setLoading(true);
-    setSelected([]);
+  const fetchUsers = useCallback(
+    async (url = `${process.env.NEXT_PUBLIC_API_URL}/api/users`) => {
+      setLoading(true);
+      setSelected([]);
 
-    const res = await axios
-      .get(url, {
-        headers: {
-          Authorization: `Bearer ${cookie}`,
-        },
-        params: filter,
-      })
-      .then((res) => {
-        return res.data.result;
-      })
-      .catch((err) => {
-        console.error(err.response);
-        return null;
-      });
+      const res = await axios
+        .get(url, {
+          headers: {
+            Authorization: `Bearer ${cookie}`,
+          },
+          params: filter,
+        })
+        .then((res) => {
+          return res.data.result;
+        })
+        .catch((err) => {
+          console.error(err.response);
+          return null;
+        });
 
-    if (res) {
-      setDatas(res);
-      setLoading(false);
-    } else setToastFailed("Server-side error occurred!");
-  };
+      if (res) {
+        setDatas(res);
+        setLoading(false);
+      } else setToastFailed("Server-side error occurred!");
+    },
+    [cookie, filter, setToastFailed]
+  );
 
   const checkHandler = (e, id) => {
     if (e.target.checked) setSelected((old) => [...old, id]);
@@ -151,6 +152,7 @@ export default function index({ user, data, navbarData }) {
     filter.order_field,
     filter.order_by,
     filter.limit,
+    fetchUsers,
   ]);
 
   return (

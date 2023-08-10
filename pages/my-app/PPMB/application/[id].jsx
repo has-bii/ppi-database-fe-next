@@ -17,7 +17,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { useRef, useState } from "react";
 
-export default function index({ user, navbarData, userApps }) {
+export default function Index({ user, navbarData, userApps }) {
   const { setToastLoading, setToastFailed, setToastSuccess } =
     useToastContext();
   const [modal, setModal] = useState(false);

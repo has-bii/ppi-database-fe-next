@@ -17,7 +17,7 @@ import { useToastContext } from "@components/ToastContext";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-export default function page() {
+export default function Index() {
   const router = useRouter();
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -105,7 +105,7 @@ export default function page() {
     setLoading(true);
 
     if (!nameValidation.ok || !emailValidation.ok || !passValidation.ok) {
-      addAlert("All fields are required!");
+      setToastFailed("All fields are required!");
     } else {
       await axios
         .post(`${process.env.NEXT_PUBLIC_API_URL}/api/register`, {

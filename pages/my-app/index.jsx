@@ -19,7 +19,7 @@ export const selectAnalytics = [
   "Jenjang pendidikan",
 ];
 
-export default function index({ user, analytics, navbarData }) {
+export default function Index({ user, analytics, navbarData }) {
   const [selectedChart, setSelectedChart] = useState(1);
 
   const dataStudent = {

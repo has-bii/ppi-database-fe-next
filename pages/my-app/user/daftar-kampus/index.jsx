@@ -8,7 +8,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function index({
+export default function Index({
   user,
   navbarData,
   userInfo,

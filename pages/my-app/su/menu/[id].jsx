@@ -14,7 +14,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 
-export default function index({ user, navbarData }) {
+export default function Index({ user, navbarData }) {
   const { setToastLoading, setToastFailed, setToastSuccess } =
     useToastContext();
   const router = useRouter();
@@ -105,9 +105,9 @@ export default function index({ user, navbarData }) {
     );
   };
 
-  const fetchMenuLink = async () => {
+  useEffect(() => {
     setLoading(true);
-    const res = await fetchDataClient("/my-menu", { id: router.query.id });
+    const res = fetchDataClient("/my-menu", { id: router.query.id });
     setLoading(false);
 
     if (res) {
@@ -115,11 +115,7 @@ export default function index({ user, navbarData }) {
       setMenu(res.menus);
       setLinks(res.menus.link);
     } else setToastFailed("Failed to load data...");
-  };
-
-  useEffect(() => {
-    fetchMenuLink();
-  }, []);
+  }, [router, setToastFailed]);
 
   return (
     <>

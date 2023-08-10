@@ -1,9 +1,11 @@
+import MyNavbar from "@components/MyNavbar";
 import { getNavbarData } from "@lib/getNavbarData";
 import { isAdmin } from "@lib/isRole";
 import { hasCookie, setCookie } from "cookies-next";
+import Head from "next/head";
 import React from "react";
 
-export default function index({ user, navbarData }) {
+export default function Index({ user, navbarData }) {
   return (
     <>
       <div className="bg-base-grey">

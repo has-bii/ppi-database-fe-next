@@ -19,10 +19,10 @@ import { useToastContext } from "@components/ToastContext";
 import axios from "axios";
 import { getCookie, hasCookie, setCookie } from "cookies-next";
 import Head from "next/head";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { getNavbarData } from "@lib/getNavbarData";
 
-export default function index({ user, data, navbarData }) {
+export default function Index({ user, data, navbarData }) {
   const { setToastLoading, setToastFailed, setToastSuccess } =
     useToastContext();
   const [dataForm, setDataForm] = useState(data?.cols?.data);
@@ -232,7 +232,7 @@ export default function index({ user, data, navbarData }) {
     setQuestion(updatedQuestion);
   };
 
-  const saveForm = async () => {
+  const saveForm = useCallback(async () => {
     let data = selectedForm;
     data.question = question;
     setToastLoading("Saving...");
@@ -242,9 +242,14 @@ export default function index({ user, data, navbarData }) {
       setToastFailed("Failed to save...");
       return;
     }
-
     setToastSuccess("Saved successfully...");
-  };
+  }, [
+    question,
+    selectedForm,
+    setToastFailed,
+    setToastLoading,
+    setToastSuccess,
+  ]);
 
   useEffect(() => {
     if (Object.keys(question).length) {
@@ -256,7 +261,7 @@ export default function index({ user, data, navbarData }) {
         }, 2000)
       );
     }
-  }, [question]);
+  }, [question, saveForm, timerID]);
 
   return (
     <>

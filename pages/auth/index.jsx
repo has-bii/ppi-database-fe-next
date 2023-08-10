@@ -15,7 +15,7 @@ import axios from "axios";
 import { deleteCookie, getCookie, hasCookie, setCookie } from "cookies-next";
 import { useToastContext } from "@components/ToastContext";
 
-export default function page() {
+export default function Index() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const { setToastLoading, setToastFailed, setToastSuccess } =
@@ -139,7 +139,7 @@ export default function page() {
             Login
           </button>
           <div className="text-sm text-center text-gray-400">
-            Don't have an account?
+            Don&apos;t have an account?
           </div>
           <div className="flex justify-center w-full">
             <Link href="/auth/register" className="text-center _link">

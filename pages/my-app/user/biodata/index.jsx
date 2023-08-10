@@ -10,7 +10,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-export default function index({ user, navbarData, userInfo }) {
+export default function Index({ user, navbarData, userInfo }) {
   const { setToastLoading, setToastFailed, setToastSuccess } =
     useToastContext();
   const [loading, setLoading] = useState(false);
@@ -111,7 +111,8 @@ export default function index({ user, navbarData, userInfo }) {
 
   useEffect(() => {
     if (userInfo) setData(userInfo);
-  }, []);
+  }, [userInfo]);
+
   return (
     <>
       <div className="bg-base-grey">

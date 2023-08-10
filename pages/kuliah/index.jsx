@@ -6,7 +6,7 @@ import JalurBerkas from "@public/image/jalur-berkas.jpg";
 import JalurYos from "@public/image/jalur-yos.jpg";
 import ListJurusan from "@public/image/list-jurusan.jpg";
 
-export default function index() {
+export default function Index() {
   return (
     <Layout>
       <Head>
