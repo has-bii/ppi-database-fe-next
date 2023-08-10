@@ -212,9 +212,8 @@ export default function page() {
                   value={purpose}
                   onChange={(e) => setPurpose(e.target.value)}
                 >
-                  <option value="">Mendaftar sebagai</option>
-                  <option value="1">Anggota PPI Karabük</option>
                   <option value="2">Daftar kuliah</option>
+                  <option value="1">Anggota PPI Karabük</option>
                 </select>
               </div>
               <Link href="/auth/forgot" className=" _link">

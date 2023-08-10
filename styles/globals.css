@@ -281,6 +281,9 @@ tbody tr {
 ._red {
     @apply bg-red-200 text-red-400 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed
 }
+._rose {
+    @apply bg-rose-200 text-rose-400 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed
+}
 ._yellow {
     @apply bg-yellow-200 text-yellow-400 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed
 }
@@ -315,7 +318,7 @@ th span {
 }
 
 .modal {
-    @apply flex flex-col gap-2 bg-white rounded-xl w-fit min-w-[20rem] animate-fade;
+    @apply flex flex-col gap-2 bg-white rounded-xl w-fit min-w-[20rem] max-h-full animate-fade;
 }
 
 .show {
@@ -332,6 +335,10 @@ th span {
 
 .modal_buttons button {
     @apply px-3 py-1.5 rounded-lg
+}
+
+.modal_body {
+    @apply overflow-auto;
 }
 
 ._modal_container {
@@ -568,8 +575,12 @@ table.biodata :where(tr, td, th) {
     @apply whitespace-normal;
 }
 
-span.status {
+.status {
     @apply px-2 py-1 text-sm border rounded-xl;
+}
+
+._status {
+    @apply px-2 py-1 text-sm text-gray-400 bg-gray-200;
 }
 
 .green {
@@ -606,4 +617,8 @@ span.status {
 
 .slate {
     @apply text-slate-500 border-slate-500;
+}
+
+.btn {
+    @apply px-3 py-1.5 rounded-md disabled:bg-slate-200 disabled:text-slate-400 capitalize;
 }

@@ -71,7 +71,6 @@ export default function index({ user, navbarData, application }) {
           else return app;
         })
       );
-      console.log(res);
     } else setToastFailed();
   };
 
@@ -180,7 +179,7 @@ export default function index({ user, navbarData, application }) {
               Cancel
             </button>
             <button
-              className="_yellow"
+              className="_green"
               onClick={() => {
                 setEditModal(false);
                 editAppHandler();
@@ -197,7 +196,7 @@ export default function index({ user, navbarData, application }) {
         <Head>
           <title>My App | PPI Karabük</title>
         </Head>
-        <div className="flex flex-col w-screen h-full lg:flex-row">
+        <div className="flex flex-col w-screen h-screen lg:h-full lg:flex-row">
           <MyNavbar role_id={user.role_id} data={navbarData} />
           <div className="flex flex-col w-full gap-4 p-4">
             {/* User info */}
@@ -314,7 +313,7 @@ export default function index({ user, navbarData, application }) {
                         <td>
                           <select
                             value={newApp.app_status_id}
-                            className="appearance-none "
+                            className="appearance-none"
                             onChange={(e) =>
                               setNewApp({
                                 ...newApp,
