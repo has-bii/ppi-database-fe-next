@@ -22,7 +22,7 @@ import { getCookie, hasCookie, setCookie } from "cookies-next";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Index({ user, students, navbarData }) {
   const { setToastLoading, setToastFailed, setToastSuccess } =
@@ -93,35 +93,32 @@ export default function Index({ user, students, navbarData }) {
     else setSelected([]);
   };
 
-  const fetchStudents = useCallback(
-    async (
-      url = `${process.env.NEXT_PUBLIC_API_URL}/api/student/fetch_students`
-    ) => {
-      setLoading(true);
-      setSelected([]);
+  const fetchStudents = async (
+    url = `${process.env.NEXT_PUBLIC_API_URL}/api/student/fetch_students`
+  ) => {
+    setLoading(true);
+    setSelected([]);
 
-      const res = await axios
-        .get(url, {
-          headers: {
-            Authorization: `Bearer ${cookie}`,
-          },
-          params: filter,
-        })
-        .then((res) => {
-          return res.data.result;
-        })
-        .catch((err) => {
-          console.error(err.response);
-          return null;
-        });
+    const res = await axios
+      .get(url, {
+        headers: {
+          Authorization: `Bearer ${cookie}`,
+        },
+        params: filter,
+      })
+      .then((res) => {
+        return res.data.result;
+      })
+      .catch((err) => {
+        console.error(err.response);
+        return null;
+      });
 
-      if (res) {
-        setDatas(res);
-        setLoading(false);
-      } else setToastFailed("Server-side error occurred!");
-    },
-    [cookie, filter, setToastFailed]
-  );
+    if (res) {
+      setDatas(res);
+      setLoading(false);
+    } else setToastFailed("Server-side error occurred!");
+  };
 
   const checkColHandler = (index) => {
     const updated = cols.map((col, i) => {
@@ -192,7 +189,6 @@ export default function Index({ user, students, navbarData }) {
     filter.jenjang_pendidikan,
     filter.universitas_turki_id,
     filter.tahun_ke,
-    fetchStudents,
   ]);
 
   useEffect(() => {
@@ -203,7 +199,7 @@ export default function Index({ user, students, navbarData }) {
       )
         fetchStudents();
     } else didMounted2.current = true;
-  }, [filter.tahun_kedatangan, fetchStudents]);
+  }, [filter.tahun_kedatangan]);
 
   return (
     <>

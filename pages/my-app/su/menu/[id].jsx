@@ -107,15 +107,22 @@ export default function Index({ user, navbarData }) {
 
   useEffect(() => {
     setLoading(true);
-    const res = fetchDataClient("/my-menu", { id: router.query.id });
-    setLoading(false);
+    const fetch = async () => {
+      await fetchDataClient("/my-menu", { id: router.query.id })
+        .then((res) => {
+          setLinkCol(res.link_columns);
+          setMenu(res.menus);
+          setLinks(res.menus.link);
+        })
+        .catch((error) => {
+          setToastFailed("Failed to load data...");
+          console.error(error);
+        })
+        .finally(() => setLoading(false));
+    };
 
-    if (res) {
-      setLinkCol(res.link_columns);
-      setMenu(res.menus);
-      setLinks(res.menus.link);
-    } else setToastFailed("Failed to load data...");
-  }, [router, setToastFailed]);
+    fetch();
+  }, []);
 
   return (
     <>
