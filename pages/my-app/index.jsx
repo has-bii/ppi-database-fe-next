@@ -6,7 +6,7 @@ import { fetchData } from "@lib/fetchData";
 import { fetchUser } from "@lib/fetchUser";
 import { getNavbarData } from "@lib/getNavbarData";
 import axios from "axios";
-import { getCookie, hasCookie, setCookie } from "cookies-next";
+import { deleteCookie, getCookie, hasCookie, setCookie } from "cookies-next";
 import Head from "next/head";
 import { useState } from "react";
 
@@ -267,13 +267,16 @@ export async function getServerSideProps({ req, res, resolvedUrl }) {
 
   const user = await fetchUser(req, res);
 
-  if (!user)
+  if (!user) {
+    deleteCookie("user_token", { req, res });
+
     return {
       redirect: {
         destination: "/auth",
         permanent: false,
       },
     };
+  }
 
   const analytics = await fetchData("/student/statistic", req, res);
 

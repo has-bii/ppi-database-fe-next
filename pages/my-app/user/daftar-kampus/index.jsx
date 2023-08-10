@@ -80,7 +80,7 @@ export default function Index({
                       </div>
                     )
                   ) : (
-                    <div className="w-full px-4 py-2 text-red-400 bg-red-100 border border-red-300 rounded">
+                    <div className="w-full px-4 py-2 m-4 text-red-400 bg-red-100 border border-red-300 rounded">
                       Biodata belum diisi, silahkan isi biodata terlebih dahulu.{" "}
                       <Link
                         href="/my-app/user/biodata"
