@@ -27,10 +27,10 @@ export default function Index() {
   return (
     <Layout>
       <Head>
-        <title>PPI Karabük | Perhimpunan Pelajar Indonesia di Karabük</title>
+        <title>PPI Karabük - Perhimpunan Pelajar Indonesia di Karabük</title>
         <meta
           name="description"
-          content="PPI Karabuk | PPI Karabük adalah wadah berhimpunnya pelajar Indonesia di Karabük untuk membina anggota, pendalaman etika, ilmu, akselerasi potensi diri dan penyaluran aspirasi."
+          content="PPI Karabük adalah wadah berhimpunnya pelajar Indonesia di Karabük untuk membina anggota, pendalaman etika, ilmu, akselerasi potensi diri..."
         />
       </Head>
       <div className="flex flex-wrap">
@@ -38,7 +38,6 @@ export default function Index() {
         <div className="w-full flex divide-x-2 divide-black h-[calc(100vh-84px)]">
           <div className="self-center block w-full px-12 lg:w-2/5">
             <h1 className="mb-5 text-4xl font-light text-center lg:text-left">
-              Welcome to
               <span className="block font-extrabold text-red-900 lg:text-6xl">
                 &quot;PPI Karabük&quot;
               </span>
