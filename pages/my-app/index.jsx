@@ -5,8 +5,7 @@ import UserDashboard from "@components/UserDashboard";
 import { fetchData } from "@lib/fetchData";
 import { fetchUser } from "@lib/fetchUser";
 import { getNavbarData } from "@lib/getNavbarData";
-import axios from "axios";
-import { deleteCookie, getCookie, hasCookie, setCookie } from "cookies-next";
+import { deleteCookie, hasCookie, setCookie } from "cookies-next";
 import Head from "next/head";
 import { useState } from "react";
 
