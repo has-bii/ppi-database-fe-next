@@ -27,7 +27,11 @@ export default function Index() {
   return (
     <Layout>
       <Head>
-        <title>Home | PPI Karabük</title>
+        <title>PPI Karabük</title>
+        <meta
+          name="description"
+          content="PPI Karabuk | PPI Karabük adalah wadah berhimpunnya pelajar Indonesia di Karabük untuk membina anggota, pendalaman etika, ilmu, akselerasi potensi diri dan penyaluran aspirasi."
+        />
       </Head>
       <div className="flex flex-wrap">
         {/* Hero */}
