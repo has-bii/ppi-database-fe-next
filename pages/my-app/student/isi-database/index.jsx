@@ -9,7 +9,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { useRef, useState } from "react";
 
-const maxFileSize = (1024 * 1024) * process.env.NEXT_PUBLIC_MAX_FILE_SIZE
+const maxFileSize = 1024 * 1024 * process.env.NEXT_PUBLIC_MAX_FILE_SIZE;
 
 export default function Index({ user, student, jurusans, navbarData }) {
   const cookie = getCookie("user_token");
@@ -86,7 +86,9 @@ export default function Index({ user, student, jurusans, navbarData }) {
           if (maxFileSize < photoRef.current?.files[0].size) {
             photoRef.current.value = "";
             setPhotoUrl(false);
-            alert(`File size exceeds maximum limit ${process.env.NEXT_PUBLIC_MAX_FILE_SIZE} MB`);
+            alert(
+              `File size exceeds maximum limit ${process.env.NEXT_PUBLIC_MAX_FILE_SIZE} MB`
+            );
           } else setPhotoUrl(URL.createObjectURL(photoRef.current.files[0]));
         } else
           setPhotoUrl(
@@ -462,6 +464,7 @@ export default function Index({ user, student, jurusans, navbarData }) {
                     >
                       <option value="">Pendidikan yang sedang ditempuh</option>
                       <option value="Lise">Lise</option>
+                      <option value="D3/D4">D3/D4</option>
                       <option value="S1">S1</option>
                       <option value="S2">S2</option>
                       <option value="S3">S3</option>
