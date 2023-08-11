@@ -23,7 +23,12 @@ export default function Index() {
   const [loading, setLoading] = useState(false);
   const { setToastLoading, setToastFailed, setToastSuccess } =
     useToastContext();
-  const [form, setForm] = useState({ name: "", email: "", pass: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    role_id: "3",
+  });
   const [nameValidation, setNameValidation] = useState({
     message: "",
     style: "",
@@ -39,7 +44,6 @@ export default function Index() {
     style: "",
     ok: false,
   });
-  const [purpose, setPurpose] = useState('2');
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
@@ -48,7 +52,7 @@ export default function Index() {
       setNameValidation({ message: "", style: "", ok: true });
     } else {
       setNameValidation({
-        message: "Contains characters only!",
+        message: "Contains alphabet only!",
         style: "text-red-500",
         ok: false,
       });
@@ -70,7 +74,7 @@ export default function Index() {
   }, [form.email]);
 
   useEffect(() => {
-    if (form.pass.length === 0 || form.pass.length > 7) {
+    if (form.password.length === 0 || form.password.length > 7) {
       setPassValidation({ message: "", style: "", ok: true });
     } else {
       setPassValidation({
@@ -79,20 +83,20 @@ export default function Index() {
         ok: false,
       });
     }
-  }, [form.pass]);
+  }, [form.password]);
 
   const openWaLink = (i) => {
     const link = `https://wa.me/${process.env.NEXT_PUBLIC_ADMIN_CONTACT}?`;
     let message = "";
 
-    if (i === "2")
+    if (i === "3")
       message = `text=Hi admin, Saya ${form.name} telah membuat akun di website PPI Karabük untuk "DAFTAR KULIAH" di Karabük University. Saya meminta untuk aktifkan akun saya.`;
-    else if (i === "1")
+    else if (i === "2")
       message = `text=Hi admin, Saya ${form.name} telah membuat akun di website PPI Karabük sebagai "ANGGOTA" di PPI Karabük. Saya meminta untuk aktifkan akun saya.`;
 
     message = encodeURI(message);
 
-    const linkMessage = link.concat(message)
+    const linkMessage = link.concat(message);
 
     window.open(linkMessage, "_blank");
 
@@ -110,11 +114,7 @@ export default function Index() {
       setToastFailed("All fields are required!");
     } else {
       await axios
-        .post(`${process.env.NEXT_PUBLIC_API_URL}/api/register`, {
-          name: form.name,
-          email: form.email,
-          password: form.pass,
-        })
+        .post(`${process.env.NEXT_PUBLIC_API_URL}/api/register`, form)
         .then((res) => {
           setToastSuccess(res.data.meta.message);
 
@@ -187,10 +187,16 @@ export default function Index() {
                   id="password"
                   placeholder="At least 8 characters"
                   className={`_input ${
-                    form.pass ? (passValidation.ok ? "_success" : "_error") : ""
+                    form.password
+                      ? passValidation.ok
+                        ? "_success"
+                        : "_error"
+                      : ""
                   }`}
-                  value={form.pass}
-                  onChange={(e) => setForm({ ...form, pass: e.target.value })}
+                  value={form.password}
+                  onChange={(e) =>
+                    setForm({ ...form, password: e.target.value })
+                  }
                   required
                 />
                 <Validation
@@ -211,11 +217,13 @@ export default function Index() {
                   id="purpose"
                   className="_input"
                   required
-                  value={purpose}
-                  onChange={(e) => setPurpose(e.target.value)}
+                  value={form.role_id}
+                  onChange={(e) =>
+                    setForm({ ...form, role_id: e.target.value })
+                  }
                 >
-                  <option value="1">Anggota PPI Karabük</option>
-                  <option value="2">Daftar kuliah</option>
+                  <option value="2">Anggota PPI Karabük</option>
+                  <option value="3">Daftar kuliah</option>
                 </select>
               </div>
               <Link href="/auth/forgot" className=" _link">
@@ -251,7 +259,7 @@ export default function Index() {
             </div>
             <button
               className="mx-auto w-fit"
-              onClick={() => openWaLink(purpose)}
+              onClick={() => openWaLink(form.role_id)}
             >
               <Image src={waButton} height="auto" width="200" alt="" priority />
             </button>
