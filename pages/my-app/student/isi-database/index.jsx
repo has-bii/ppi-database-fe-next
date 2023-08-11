@@ -507,12 +507,16 @@ export default function Index({ user, student, jurusans, navbarData }) {
                   <div className="_form_col">
                     <div className="flex flex-col gap-4 lg:mb-4 lg:items-end lg:flex-row">
                       {photoUrl ? (
-                        <Image
-                          src={photoUrl}
-                          width={150}
-                          height={150}
-                          alt="Pas photo"
-                        />
+                        <div className="relative w-[150px] h-[200px]">
+                          <Image
+                            src={photoUrl}
+                            fill
+                            priority
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            alt="Pas photo"
+                            style={{ objectFit: "cover" }}
+                          />
+                        </div>
                       ) : (
                         <Image
                           src="/image/dummy-pp.jpeg"
@@ -522,7 +526,9 @@ export default function Index({ user, student, jurusans, navbarData }) {
                         />
                       )}
                       <div>
-                        <label htmlFor="photo-file">Pas foto</label>
+                        <label htmlFor="photo-file" className="block">
+                          Pas foto
+                        </label>
                         <input
                           type="file"
                           className="_file_input"
