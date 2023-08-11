@@ -39,7 +39,7 @@ export default function Index() {
     style: "",
     ok: false,
   });
-  const [purpose, setPurpose] = useState();
+  const [purpose, setPurpose] = useState('2');
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
@@ -85,14 +85,16 @@ export default function Index() {
     const link = `https://wa.me/${process.env.NEXT_PUBLIC_ADMIN_CONTACT}?`;
     let message = "";
 
-    if (i === "1")
+    if (i === "2")
       message = `text=Hi admin, Saya ${form.name} telah membuat akun di website PPI Karabük untuk "DAFTAR KULIAH" di Karabük University. Saya meminta untuk aktifkan akun saya.`;
-    else if (i === "2")
+    else if (i === "1")
       message = `text=Hi admin, Saya ${form.name} telah membuat akun di website PPI Karabük sebagai "ANGGOTA" di PPI Karabük. Saya meminta untuk aktifkan akun saya.`;
 
     message = encodeURI(message);
 
-    window.open(link.concat(message), "_blank");
+    const linkMessage = link.concat(message)
+
+    window.open(linkMessage, "_blank");
 
     setToastLoading("Redirecting to Login page...");
     router.push("/auth");
@@ -212,8 +214,8 @@ export default function Index() {
                   value={purpose}
                   onChange={(e) => setPurpose(e.target.value)}
                 >
-                  <option value="2">Daftar kuliah</option>
                   <option value="1">Anggota PPI Karabük</option>
+                  <option value="2">Daftar kuliah</option>
                 </select>
               </div>
               <Link href="/auth/forgot" className=" _link">
