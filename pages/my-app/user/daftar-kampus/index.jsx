@@ -39,15 +39,15 @@ export default function Index({
                 <h3 className="px-4 py-2 text-lg font-semibold capitalize bg-slate-100">
                   Pendaftaran
                 </h3>
-                <div className="flex flex-col gap-2 divide-y divide-slate-300">
+                <div className="flex flex-col gap-2 p-4 divide-y divide-slate-300">
                   {userInfo ? (
-                    apps ? (
+                    apps.length !== 0 ? (
                       apps.map(
                         (app) =>
                           app.active == 1 && (
                             <div
                               key={app.id}
-                              className="inline-flex items-center justify-between w-full px-6 py-3"
+                              className="inline-flex items-center justify-between w-full px-3 py-1.5"
                             >
                               <div>
                                 <h2 className="text-lg font-semibold text-black">
@@ -80,7 +80,7 @@ export default function Index({
                       </div>
                     )
                   ) : (
-                    <div className="w-full px-4 py-2 m-4 text-red-400 bg-red-100 border border-red-300 rounded">
+                    <div className="w-full px-4 py-2 text-red-400 bg-red-100 border border-red-300 rounded">
                       Biodata belum diisi, silahkan isi biodata terlebih dahulu.{" "}
                       <Link
                         href="/my-app/user/biodata"
@@ -98,12 +98,12 @@ export default function Index({
                   <h3 className="px-4 py-2 text-lg font-semibold capitalize bg-slate-100">
                     My Applications
                   </h3>
-                  <div className="flex flex-col gap-2 divide-y divide-slate-300">
-                    {userAppDatas ? (
+                  <div className="flex flex-col gap-2 p-4 divide-y divide-slate-300">
+                    {userAppDatas.length !== 0 ? (
                       userAppDatas.map((userApp) => (
                         <div
                           key={userApp.id}
-                          className="inline-flex items-center justify-between w-full px-6 py-3"
+                          className="inline-flex items-center justify-between w-full px-3 py-1.5"
                         >
                           <div>
                             <h2 className="text-lg font-semibold text-black">
@@ -370,7 +370,9 @@ export async function getServerSideProps({ req, res, resolvedUrl }) {
     user_id: user.id,
   });
 
-  const application = await fetchData("/application", req, res);
+  const application = await fetchData("/application", req, res, {
+    active: 1,
+  });
 
   const { apps } = application;
 

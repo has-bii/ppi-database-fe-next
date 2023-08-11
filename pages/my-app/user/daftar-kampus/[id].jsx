@@ -7,7 +7,10 @@ import { getNavbarData } from "@lib/getNavbarData";
 import { sendData } from "@lib/sendData";
 import { hasCookie, setCookie } from "cookies-next";
 import Head from "next/head";
+import BCA from "@public/image/bca-logo.png";
 import { useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/router";
 
 const departments = [
   "Accounting and Tax Applications",
@@ -114,6 +117,9 @@ const departments = [
   "Turkish Language and Literature",
 ];
 
+const noRek = process.env.NEXT_PUBLIC_REK;
+const namaRek = process.env.NEXT_PUBLIC_NAMA_REK;
+
 export default function Index({
   user,
   navbarData,
@@ -124,6 +130,7 @@ export default function Index({
     useToastContext();
   const [loading, setLoading] = useState(false);
   const [files, setFiles] = useState({ receipt: "" });
+  const router = useRouter();
 
   const [form, setForm] = useState({
     app_status_id: 4,
@@ -151,16 +158,18 @@ export default function Index({
     const res = await sendData("/user-app/create", formData);
     setToastLoading("Sending data...");
 
-    if (res) setToastSuccess("Sent successfully");
-    else setToastFailed();
+    if (res) {
+      setToastSuccess("Sent successfully");
+      router.push("/my-app/user/daftar-kampus");
+    } else setToastFailed();
 
     setLoading(false);
   };
 
   const uploadFileHandler = (e, property, type) => {
     if (e.target.files[0]) {
-      if (e.target.files[0].size > 1024 * 1024) {
-        alert("File size exceeds maximum limit 1 MB");
+      if (e.target.files[0].size > 1024 ** 2 * 5) {
+        alert("File size exceeds maximum limit 5 MB");
         e.target.value = "";
       } else if (!e.target.files[0].type.startsWith(type)) {
         alert("File type does not support!");
@@ -174,6 +183,13 @@ export default function Index({
 
   const openLink = (link) => {
     window.open(process.env.NEXT_PUBLIC_API_URL + "/" + link, "_blank");
+  };
+
+  const formatNumber = (number) => {
+    const stringNum = number.toString();
+    const newNum = stringNum.slice(0, 3) + "." + stringNum.slice(3);
+
+    return newNum;
   };
 
   return (
@@ -225,28 +241,10 @@ export default function Index({
                             setForm({ ...form, education_id: e.target.value })
                           }
                         >
-                          <option value="2">D3/D4</option>
+                          <option value="">Pilih program studi</option>
                           <option value="3">S1</option>
-                          <option value="4">S2</option>
-                          <option value="5">S3</option>
                         </select>
                       </div>
-                      <div>
-                        <label htmlFor="receipt">Bukti transfer</label>
-                        <input
-                          type="file"
-                          className="file-input"
-                          id="receipt"
-                          accept="image/png,image/jpg,image/jpeg"
-                          onChange={(e) =>
-                            uploadFileHandler(e, "receipt", "image/")
-                          }
-                          required
-                        />
-                      </div>
-                    </div>
-                    {/* Right */}
-                    <div className="flex flex-col w-full gap-4">
                       <div>
                         <label htmlFor="jurusan_1">Pilihan jurusan 1</label>
                         <select
@@ -300,6 +298,53 @@ export default function Index({
                             </option>
                           ))}
                         </select>
+                      </div>
+                    </div>
+                    {/* Right */}
+                    <div className="flex flex-col w-full gap-4">
+                      <div className="flex flex-col w-full h-full gap-2 p-4 rounded-md bg-sky-700">
+                        <h2 className="text-lg font-semibold text-white">
+                          Biaya Pendaftaran
+                        </h2>
+                        <div className="w-full p-2 bg-white rounded shadow-md">
+                          <span className="text-sm text-slate-500">Total</span>
+                          <p className="text-lg font-bold text-black ">
+                            Rp{formatNumber(380000 + user.id)}
+                          </p>
+                        </div>
+                        <div className="w-full p-2 bg-white rounded shadow-md">
+                          <div className="inline-flex items-center justify-between w-full">
+                            <h3 className="text-lg font-semibold text-black">
+                              Transfer Bank BCA
+                            </h3>
+                            <Image
+                              src={BCA}
+                              height={36}
+                              style={{ width: "auto" }}
+                              alt=""
+                            />
+                          </div>
+
+                          <p className=" text-slate-500">
+                            Lakukan transfer ke rekening BCA <b>{noRek}</b> a.n{" "}
+                            <b>{namaRek}</b>, kemudian upload bukti transfer di
+                            bawah ini.
+                          </p>
+
+                          <div className="mt-8">
+                            <label htmlFor="receipt">Bukti transfer</label>
+                            <input
+                              type="file"
+                              className="file-input"
+                              id="receipt"
+                              accept="image/png,image/jpg,image/jpeg"
+                              onChange={(e) =>
+                                uploadFileHandler(e, "receipt", "image/")
+                              }
+                              required
+                            />
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

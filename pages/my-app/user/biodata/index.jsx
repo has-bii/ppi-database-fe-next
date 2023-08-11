@@ -8,6 +8,7 @@ import { sendData } from "@lib/sendData";
 import { hasCookie, setCookie } from "cookies-next";
 import Head from "next/head";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function Index({ user, navbarData, userInfo }) {
@@ -37,6 +38,7 @@ export default function Index({ user, navbarData, userInfo }) {
     surat_rekomendasi: "",
     surat_izin: "",
   });
+  const router = useRouter();
   const [files, setFiles] = useState({
     pas_photo: null,
     ijazah: null,
@@ -99,8 +101,10 @@ export default function Index({ user, navbarData, userInfo }) {
     const res = await sendData(url, formData);
     setToastLoading("Saving data...");
 
-    if (res) setToastSuccess("Saved successfully");
-    else setToastFailed("Failed to save!");
+    if (res) {
+      setToastSuccess("Saved successfully");
+      router.push("/my-app/user/biodata");
+    } else setToastFailed("Failed to save!");
 
     setLoading(false);
   };

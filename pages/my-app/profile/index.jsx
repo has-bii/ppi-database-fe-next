@@ -12,11 +12,11 @@ export default function Index({ user, navbarData }) {
         <Head>
           <title>My App | PPI Karabük</title>
         </Head>
-        <div className="flex flex-col w-screen h-full lg:flex-row">
+        <div className="flex flex-col w-screen min-h-screen lg:flex-row">
           <MyNavbar role_id={user.role_id} data={navbarData} />
           <div className="flex flex-col w-full gap-4 p-4">
             {/* User info */}
-            <UserDashboard pageName="Users" user={user} />
+            <UserDashboard pageName="Profile" user={user} />
 
             {/* Contents */}
             <div className="h-full myapp_content">
