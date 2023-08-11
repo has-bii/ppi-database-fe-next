@@ -27,7 +27,7 @@ export default function Index() {
   return (
     <Layout>
       <Head>
-        <title>PPI Karabük</title>
+        <title>PPI Karabük | Perhimpunan Pelajar Indonesia di Karabük</title>
         <meta
           name="description"
           content="PPI Karabuk | PPI Karabük adalah wadah berhimpunnya pelajar Indonesia di Karabük untuk membina anggota, pendalaman etika, ilmu, akselerasi potensi diri dan penyaluran aspirasi."
