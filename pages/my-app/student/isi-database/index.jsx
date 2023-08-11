@@ -9,6 +9,8 @@ import Head from "next/head";
 import Image from "next/image";
 import { useRef, useState } from "react";
 
+const maxFileSize = (1024 * 1024) * process.env.NEXT_PUBLIC_MAX_FILE_SIZE
+
 export default function Index({ user, student, jurusans, navbarData }) {
   const cookie = getCookie("user_token");
   const [step, setStep] = useState(0);
@@ -41,7 +43,6 @@ export default function Index({ user, student, jurusans, navbarData }) {
   const photoRef = useRef();
   const ikametRef = useRef();
   const obelRef = useRef();
-  const maxFileSize = 1024 * 1024;
   const [photoUrl, setPhotoUrl] = useState(
     student.photo ? `${process.env.NEXT_PUBLIC_API_URL}/${student.photo}` : ""
   );
@@ -85,7 +86,7 @@ export default function Index({ user, student, jurusans, navbarData }) {
           if (maxFileSize < photoRef.current?.files[0].size) {
             photoRef.current.value = "";
             setPhotoUrl(false);
-            alert("File size exceeds maximum limit 1 MB");
+            alert(`File size exceeds maximum limit ${process.env.NEXT_PUBLIC_MAX_FILE_SIZE} MB`);
           } else setPhotoUrl(URL.createObjectURL(photoRef.current.files[0]));
         } else
           setPhotoUrl(

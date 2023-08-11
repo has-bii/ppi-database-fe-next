@@ -11,6 +11,8 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
+const maxFileSize = (1024 * 1024) * process.env.NEXT_PUBLIC_MAX_FILE_SIZE
+
 export default function Index({ user, navbarData, userInfo }) {
   const { setToastLoading, setToastFailed, setToastSuccess } =
     useToastContext();
@@ -50,8 +52,8 @@ export default function Index({ user, navbarData, userInfo }) {
 
   const uploadFileHandler = (e, property, type) => {
     if (e.target.files[0]) {
-      if (e.target.files[0].size > 1024 * 1024) {
-        alert("File size exceeds maximum limit 1 MB");
+      if (e.target.files[0].size > maxFileSize) {
+        alert(`File size exceeds maximum limit ${process.env.NEXT_PUBLIC_MAX_FILE_SIZE} MB`);
         e.target.value = "";
       } else if (!e.target.files[0].type.startsWith(type)) {
         alert("File type does not support!");

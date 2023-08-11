@@ -119,6 +119,7 @@ const departments = [
 
 const noRek = process.env.NEXT_PUBLIC_REK;
 const namaRek = process.env.NEXT_PUBLIC_NAMA_REK;
+const maxFileSize = (1024 * 1024) * process.env.NEXT_PUBLIC_MAX_FILE_SIZE
 
 export default function Index({
   user,
@@ -168,8 +169,8 @@ export default function Index({
 
   const uploadFileHandler = (e, property, type) => {
     if (e.target.files[0]) {
-      if (e.target.files[0].size > 1024 ** 2 * 5) {
-        alert("File size exceeds maximum limit 5 MB");
+      if (e.target.files[0].size > maxFileSize) {
+        alert(`File size exceeds maximum limit ${process.env.NEXT_PUBLIC_MAX_FILE_SIZE} MB`);
         e.target.value = "";
       } else if (!e.target.files[0].type.startsWith(type)) {
         alert("File type does not support!");
