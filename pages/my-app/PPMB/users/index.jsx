@@ -31,7 +31,6 @@ export default function Index({ user, data, navbarData }) {
   const [loading, setLoading] = useState(false);
   const [modal, setModal] = useState({
     modal1: false,
-    modal3: false,
   });
   const [selected, setSelected] = useState([]);
   const didMounted = useRef(false);
@@ -190,85 +189,6 @@ export default function Index({ user, data, navbarData }) {
       </div>
       {/* Modal verify end */}
 
-      {/* Modal change role */}
-      <div className={`_modal_container ${modal.modal2 ? "_show" : ""}`}>
-        <div className="_modal">
-          <div className="_modal_header">
-            Change Role User
-            <button onClick={() => setModal({ ...modal, modal2: false })}>
-              <FontAwesomeIcon icon={faXmark} />
-            </button>
-          </div>
-          <div className="_modal_body">
-            <label htmlFor="change-role" className="block mb-1">
-              Change users role to be
-            </label>
-            <select
-              className="w-full _select_button"
-              defaultValue={2}
-              ref={roleValue}
-              id="change-role"
-            >
-              <option value="1">Admin</option>
-              <option value="2">Student</option>
-              <option value="3">User</option>
-              <option value="5">PPMB</option>
-            </select>
-          </div>
-          <div className="_modal_buttons">
-            <button
-              className="_green"
-              onClick={() => setModal({ ...modal, modal2: false })}
-            >
-              Cancel
-            </button>
-            <button
-              className="_yellow"
-              onClick={() => {
-                setModal({ ...modal, modal2: false });
-                updateUsersHandler(0, roleValue.current.value);
-              }}
-            >
-              Change
-            </button>
-          </div>
-        </div>
-      </div>
-      {/* Modal change role end */}
-
-      {/* Modal delete */}
-      <div className={`_modal_container ${modal.modal3 ? "_show" : ""}`}>
-        <div className="_modal">
-          <div className="_modal_header">
-            Delete User
-            <button onClick={() => setModal({ ...modal, modal3: false })}>
-              <FontAwesomeIcon icon={faXmark} />
-            </button>
-          </div>
-          <div className="_modal_body">
-            Are you sure to delete selected users
-          </div>
-          <div className="_modal_buttons">
-            <button
-              className="_green"
-              onClick={() => setModal({ ...modal, modal3: false })}
-            >
-              Cancel
-            </button>
-            <button
-              className="_red"
-              onClick={() => {
-                setModal({ ...modal, modal3: false });
-                deleteUsersHandler();
-              }}
-            >
-              Delete
-            </button>
-          </div>
-        </div>
-      </div>
-      {/* Modal delete end */}
-
       <div className="min-h-screen bg-base-grey">
         <Head>
           <title>My App | PPI Karabük</title>
@@ -349,13 +269,6 @@ export default function Index({ user, data, navbarData }) {
                       disabled={selected.length === 0}
                     >
                       Verify
-                    </button>
-                    <button
-                      className="_red"
-                      onClick={() => setModal({ ...modal, modal3: true })}
-                      disabled={selected.length === 0}
-                    >
-                      Delete
                     </button>
                   </div>
                   <p className="_selected_counter">
