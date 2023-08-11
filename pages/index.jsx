@@ -30,7 +30,7 @@ export default function Index() {
         <title>PPI Karabük - Perhimpunan Pelajar Indonesia di Karabük</title>
         <meta
           name="description"
-          content="PPI Karabük adalah wadah berhimpunnya pelajar Indonesia di Karabük untuk membina anggota, pendalaman etika, ilmu, akselerasi potensi diri..."
+          content="PPI Karabuk - PPI Karabük adalah wadah berhimpunnya pelajar Indonesia di Karabük untuk membina anggota, pendalaman etika, ilmu, akselerasi potensi diri..."
         />
       </Head>
       <div className="flex flex-wrap">
