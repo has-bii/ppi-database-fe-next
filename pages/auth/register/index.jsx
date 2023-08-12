@@ -86,8 +86,13 @@ export default function Index() {
   }, [form.password]);
 
   const openWaLink = (i) => {
-    const link = `https://wa.me/${process.env.NEXT_PUBLIC_ADMIN_CONTACT}?`;
-    let message = "";
+    let link;
+    let message;
+
+    if (i === 2)
+      link = `https://wa.me/${process.env.NEXT_PUBLIC_VERIFY_CONTACT}?`;
+    else if (i === 3)
+      link = `https://wa.me/${process.env.NEXT_PUBLIC_ADMIN_CONTACT}?`;
 
     if (i === "3")
       message = `text=Hi admin, Saya ${form.name} telah membuat akun di website PPI Karabük untuk "DAFTAR KULIAH" di Karabük University. Saya meminta untuk aktifkan akun saya.`;
