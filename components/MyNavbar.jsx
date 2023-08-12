@@ -15,6 +15,7 @@ import {
   faFileCirclePlus,
   faTag,
   faUserSecret,
+  faUserLock,
 } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
 import Link from "next/link";
@@ -32,6 +33,7 @@ const iconList = {
   faFileCirclePlus: faFileCirclePlus,
   faTag: faTag,
   faUserSecret: faUserSecret,
+  faUserLock: faUserLock,
 };
 
 export default function MyNavbar({ role_id, data }) {

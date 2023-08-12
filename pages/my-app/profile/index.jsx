@@ -22,7 +22,7 @@ export default function Index({ user, navbarData }) {
           <MyNavbar role_id={user.role_id} data={navbarData} />
           <div className="flex flex-col w-full gap-4 p-4">
             {/* User info */}
-            <UserDashboard pageName="Profile" user={user} />
+            <UserDashboard pageName="On Working" user={user} />
 
             {/* Contents */}
             <div className="h-full myapp_content">
