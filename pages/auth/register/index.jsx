@@ -89,9 +89,9 @@ export default function Index() {
     let link;
     let message;
 
-    if (i === 2)
+    if (i === "2")
       link = `https://wa.me/${process.env.NEXT_PUBLIC_VERIFY_CONTACT}?`;
-    else if (i === 3)
+    else if (i === "3")
       link = `https://wa.me/${process.env.NEXT_PUBLIC_ADMIN_CONTACT}?`;
 
     if (i === "3")
