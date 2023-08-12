@@ -1,11 +1,17 @@
 import MyNavbar from "@components/MyNavbar";
+import { useToastContext } from "@components/ToastContext";
 import UserDashboard from "@components/UserDashboard";
 import { fetchUser } from "@lib/fetchUser";
 import { getNavbarData } from "@lib/getNavbarData";
 import { hasCookie, setCookie } from "cookies-next";
 import Head from "next/head";
+import { useState } from "react";
 
 export default function Index({ user, navbarData }) {
+  const [loading, setLoading] = useState(false);
+  const { setToastLoading, setToastFailed, setToastSuccess } =
+    useToastContext();
+
   return (
     <>
       <div className="bg-base-grey">

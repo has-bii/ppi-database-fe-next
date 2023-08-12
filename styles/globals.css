@@ -508,7 +508,7 @@ ol._paragraph {
 }
 
 ._youtube_wrapper {
-    @apply bg-white relative z-10 lg:w-1/2  lg:h-9/16 md:w-3/4 md:h-96
+    @apply relative z-10 lg:w-1/2  lg:h-9/16 md:w-3/4 md:h-96
 }
 
 ._youtube_bg {
