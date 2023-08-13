@@ -16,7 +16,7 @@ const maxFileSize = 1024 * 1024 * process.env.NEXT_PUBLIC_MAX_FILE_SIZE;
 export default function Index({ user, navbarData }) {
   const { setToastLoading, setToastFailed, setToastSuccess } =
     useToastContext();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [update, setUpdate] = useState(false);
   const firstMount = useRef(true);
   const [data, setData] = useState({
