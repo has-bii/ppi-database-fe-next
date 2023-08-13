@@ -70,17 +70,17 @@ export default function Index() {
         {/* Hero end */}
 
         {/* Channel YT */}
-        <div className="flex flex-col items-center justify-center w-full gap-12 py-16 bg-black bg-center bg-no-repeat lg:py-0 lg:h-screen bg-mobile">
-          <h2 className="text-white _heading2">Konten PPI Karabük</h2>
-          <div className="_youtube_wrapper">
+        <div className="flex flex-col items-center justify-center w-full h-full gap-4 px-4 py-6 bg-black lg:gap-10 lg:px-20 lg:py-14">
+          <h2 className="text-2xl font-bold text-white lg:text-4xl">
+            Konten PPI Karabük
+          </h2>
+          <div className="relative w-full pb-[56.25%]">
             <iframe
-              src="https://www.youtube.com/embed/GwlJz_sn_RQ?controls=0"
+              src="https://www.youtube.com/embed/GwlJz_sn_RQ"
               title="YouTube video player"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;"
               allowFullScreen
-              className="w-full h-full border-2 border-black"
+              className="absolute top-0 bottom-0 w-full h-full border-0"
             ></iframe>
-            <span className="_youtube_bg"></span>
           </div>
           <Link
             href="https://www.youtube.com/@mahasiswakarabuk6988"
