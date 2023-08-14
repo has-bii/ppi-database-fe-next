@@ -578,7 +578,7 @@ export default function Index({ user, navbarData }) {
                         )}
                       </div>
                       <div>
-                        <label htmlFor="surat_izin">surat izin</label>
+                        <label htmlFor="surat_izin">surat izin orang tua</label>
                         {data.surat_izin ? (
                           <div className="inline-flex gap-2">
                             <button
