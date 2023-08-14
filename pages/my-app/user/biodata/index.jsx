@@ -18,7 +18,7 @@ export default function Index({ user, navbarData }) {
     useToastContext();
   const [loading, setLoading] = useState(false);
   const [update, setUpdate] = useState(false);
-  const firstMount = useRef(true);
+  const [firstMount, setFirstMount] = useState(true)
   const [data, setData] = useState({
     nama_depan: "",
     nama_belakang: "",
@@ -138,7 +138,7 @@ export default function Index({ user, navbarData }) {
 
         setData(res);
         setUpdate(true);
-        firstMount.current = false;
+        setFirstMount(false)
       }
     }
 
@@ -159,7 +159,7 @@ export default function Index({ user, navbarData }) {
 
             {/* Contents */}
             <div className="h-full myapp_content">
-              {firstMount.current ? (
+              {firstMount ? (
                 <SkeletonPage />
               ) : (
                 <form
