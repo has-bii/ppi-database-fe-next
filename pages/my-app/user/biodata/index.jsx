@@ -18,7 +18,7 @@ export default function Index({ user, navbarData }) {
     useToastContext();
   const [loading, setLoading] = useState(false);
   const [update, setUpdate] = useState(false);
-  const [firstMount, setFirstMount] = useState(true)
+  const [firstMount, setFirstMount] = useState(true);
   const [data, setData] = useState({
     nama_depan: "",
     nama_belakang: "",
@@ -138,8 +138,9 @@ export default function Index({ user, navbarData }) {
 
         setData(res);
         setUpdate(true);
-        setFirstMount(false)
       }
+
+      setFirstMount(false);
     }
 
     fetchData();
