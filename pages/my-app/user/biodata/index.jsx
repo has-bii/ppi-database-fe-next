@@ -9,7 +9,7 @@ import { sendData } from "@lib/sendData";
 import { hasCookie, setCookie } from "cookies-next";
 import Head from "next/head";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 const maxFileSize = 1024 * 1024 * process.env.NEXT_PUBLIC_MAX_FILE_SIZE;
 
@@ -152,7 +152,7 @@ export default function Index({ user, navbarData }) {
         <Head>
           <title>My App | PPI Karabük</title>
         </Head>
-        <div className="flex flex-col w-screen h-full lg:flex-row">
+        <div className="flex flex-col w-screen h-full min-h-screen lg:flex-row">
           <MyNavbar role_id={user.role_id} data={navbarData} />
           <div className="flex flex-col w-full gap-4 p-4">
             {/* User info */}
