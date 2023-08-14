@@ -8,22 +8,20 @@ import { fetchUser } from "@lib/fetchUser";
 import { formatDate } from "@lib/formatDate";
 import { getNavbarData } from "@lib/getNavbarData";
 import { isPPMB } from "@lib/isRole";
-import LOGO_HIGH from "@public/image/logo-high.png";
-import LOGO_KBU from "@public/image/logo-kbu.png";
+import { sendData } from "@lib/sendData";
 import axios from "axios";
 import { getCookie, hasCookie, setCookie } from "cookies-next";
-import jsPDF from "jspdf";
 import Head from "next/head";
-import Image from "next/image";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 export default function Index({ user, navbarData, userApps }) {
   const { setToastLoading, setToastFailed, setToastSuccess } =
     useToastContext();
   const [modal, setModal] = useState(false);
+  const [editModal, setEditModal] = useState(false);
+  const [editData, setEditData] = useState({});
   const [loading, setLoading] = useState(false);
   const [userAppData, setUserAppData] = useState(userApps.user_apps);
-  const pdfRef = useRef();
 
   const [selected, setSelected] = useState({});
 
@@ -55,16 +53,40 @@ export default function Index({ user, navbarData, userApps }) {
         setUserAppData(res.data.result.user_apps);
         setLoading(false);
       })
-      .catch((err) => {
+      .catch(() => {
         return null;
       });
+  };
+
+  const editUserAppHandler = async () => {
+    const res = await sendData("/user-app/update", {
+      id: editData.id,
+      app_status_id: editData.app_status_id,
+    });
+    setToastLoading("Sending data to server...");
+
+    if (res) {
+      setToastSuccess("Status has been changed");
+      console.log(res);
+
+      const updated = userAppData.data.map((d) => {
+        if (editData.id === d.id) return res;
+        else return d;
+      });
+
+      setUserAppData({ ...userAppData, data: updated });
+
+      return;
+    }
+
+    setToastFailed();
   };
 
   return (
     <>
       {/* Biodata Modal */}
       <Modal title="Biodata" show={modal} setShow={setModal}>
-        <div className="flex flex-col gap-4 p-4 pdf" ref={pdfRef}>
+        <div className="flex flex-col gap-4 p-4 pdf">
           {/* Apps end */}
           <div className="w-full overflow-hidden border divide-y rounded-md border-slate-300 divide-slate-300">
             <h3 className="px-4 py-2 text-lg font-semibold capitalize bg-slate-100">
@@ -291,13 +313,67 @@ export default function Index({ user, navbarData, userApps }) {
         </div>
       </Modal>
       {/* Biodata Model end */}
+
+      {/* Edit Modal */}
+      <Modal title="Change status" show={editModal} setShow={setEditModal}>
+        <div className="px-5 py-2">
+          <label
+            htmlFor="name"
+            className="block mb-1 capitalize text-slate-400"
+          >
+            user name
+          </label>
+          <p className="w-full px-2 py-1 mb-3 border rounded border-slate-300">
+            {editData?.user?.name}
+          </p>
+          <label
+            htmlFor="style"
+            className="block mb-1 capitalize text-slate-400"
+          >
+            app status
+          </label>
+          {Object.keys(editData).length !== 0 && (
+            <select
+              type="text"
+              id="style"
+              className="w-full px-2 py-1 mb-3 border rounded border-slate-300"
+              value={editData.app_status_id}
+              onChange={(e) =>
+                setEditData({ ...editData, app_status_id: e.target.value })
+              }
+            >
+              {userApps?.app_status.map((app_stat) => (
+                <option key={app_stat.id} value={app_stat.id}>
+                  {app_stat?.name}
+                </option>
+              ))}
+            </select>
+          )}
+        </div>
+        <div className="modal_buttons">
+          <button className="_gray" onClick={() => setEditModal(false)}>
+            Cancel
+          </button>
+          <button
+            className="_green"
+            onClick={() => {
+              editUserAppHandler();
+              setEditModal(false);
+            }}
+          >
+            Save
+          </button>
+        </div>
+      </Modal>
+      {/* Edit Modal end */}
+
       <div className="bg-base-grey">
         <Head>
           <title>My App | PPI Karabük</title>
         </Head>
-        <div className="flex flex-col w-screen h-screen lg:h-full lg:flex-row">
+        <div className="flex flex-col w-screen h-screen overflow-hidden _hide_scrollbar lg:h-full lg:flex-row">
           <MyNavbar role_id={user.role_id} data={navbarData} />
-          <div className="flex flex-col w-full gap-4 p-4">
+          <div className="flex flex-col w-full gap-4 p-4 overflow-auto _hide_scrollbar">
             {/* User info */}
             <UserDashboard pageName="Pendaftaran" user={user} />
 
@@ -365,14 +441,25 @@ export default function Index({ user, navbarData, userApps }) {
                               view
                             </button>
                           </td>
-                          <td>{formatDate(user_app.updated_at)}</td>
+                          <td>{formatDate(user_app?.updated_at)}</td>
                           <td>
-                            <button
-                              className="px-2 py-1 rounded-md _green"
-                              onClick={() => fetchData(user_app.id)}
-                            >
-                              Biodata
-                            </button>
+                            <div className="inline-flex items-center gap-2">
+                              <button
+                                className="px-2 py-1 rounded-md _yellow"
+                                onClick={() => {
+                                  setEditData(user_app);
+                                  setEditModal(true);
+                                }}
+                              >
+                                Edit
+                              </button>
+                              <button
+                                className="px-2 py-1 rounded-md _green"
+                                onClick={() => fetchData(user_app.id)}
+                              >
+                                Biodata
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       ))
