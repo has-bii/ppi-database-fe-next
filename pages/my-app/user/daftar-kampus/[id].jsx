@@ -119,7 +119,7 @@ const departments = [
 
 const noRek = process.env.NEXT_PUBLIC_REK;
 const namaRek = process.env.NEXT_PUBLIC_NAMA_REK;
-const maxFileSize = (1024 * 1024) * process.env.NEXT_PUBLIC_MAX_FILE_SIZE
+const maxFileSize = 1024 * 1024 * process.env.NEXT_PUBLIC_MAX_FILE_SIZE;
 
 export default function Index({
   user,
@@ -150,7 +150,7 @@ export default function Index({
 
     formData.append("application_id", applicationData.id);
     formData.append("education_id", form.education_id);
-    formData.append("nilai_ujian", form.nilai_ujian);
+    formData.append("nilai_ujian", form.nilai_ujian.replace(",", "."));
     formData.append("jurusan_1", form.jurusan_1);
     formData.append("jurusan_2", form.jurusan_2);
     formData.append("jurusan_3", form.jurusan_3);
@@ -170,7 +170,9 @@ export default function Index({
   const uploadFileHandler = (e, property, type) => {
     if (e.target.files[0]) {
       if (e.target.files[0].size > maxFileSize) {
-        alert(`File size exceeds maximum limit ${process.env.NEXT_PUBLIC_MAX_FILE_SIZE} MB`);
+        alert(
+          `File size exceeds maximum limit ${process.env.NEXT_PUBLIC_MAX_FILE_SIZE} MB`
+        );
         e.target.value = "";
       } else if (!e.target.files[0].type.startsWith(type)) {
         alert("File type does not support!");
