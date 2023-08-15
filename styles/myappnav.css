@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.myapp_nav {
+    @apply flex flex-row p-6 shadow-xl rounded-b-xl bg-light-secondary dark:bg-dark-secondary lg:rounded-xl lg:flex-col gap-y-8 shadow-light-secondary/50 dark:shadow-dark-secondary/50;
+
+    .myapp_navlist_container {
+        @apply absolute top-0 flex flex-col w-screen h-screen gap-4 p-6 transition-transform duration-300 ease-in lg:p-0 lg:h-full lg:w-full lg:static -right-full bg-light-secondary dark:bg-dark-secondary lg:right-0; 
+
+        transition-property: right;
+
+        &.show{
+            @apply right-0;
+        }
+
+        .head_navlist {
+                @apply font-semibold text-white/75;
+            }
+
+        ul.mynavlist {
+            @apply flex flex-col gap-2;
+
+            li a{
+                @apply inline-flex items-center w-full gap-4 px-3 py-1 text-lg text-white/75 hover:text-white;
+
+                &.active {
+                    @apply rounded-lg outline-none text-light-primary bg-light-accent;
+                }
+            }
+            
+            li button{
+                @apply inline-flex items-center w-full gap-4 px-3 py-1 text-lg text-white/75 hover:text-white; 
+            }
+        }
+    }
+}

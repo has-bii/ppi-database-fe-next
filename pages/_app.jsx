@@ -2,6 +2,9 @@ import "@styles/globals.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import ToastProvider from "@components/ToastProvider";
+import { UserProvider } from "@components/UserProvider";
+import { MyNavProvider } from "@components/MyNavContext";
+import ThemeProvider from "@components/ThemeProvider";
 config.autoAddCss = false;
 
 export const metadata = {
@@ -11,9 +14,15 @@ export const metadata = {
 export default function MyApp({ Component, pageProps }) {
   return (
     <main>
-      <ToastProvider>
-        <Component {...pageProps} />
-      </ToastProvider>
+      <ThemeProvider>
+        <UserProvider>
+          <MyNavProvider>
+            <ToastProvider>
+              <Component {...pageProps} />
+            </ToastProvider>
+          </MyNavProvider>
+        </UserProvider>
+      </ThemeProvider>
     </main>
   );
 }

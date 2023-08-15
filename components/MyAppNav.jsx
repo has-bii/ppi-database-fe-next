@@ -21,6 +21,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { deleteCookie } from "cookies-next";
+import { useNavData } from "./MyNavContext";
+import { useSession } from "./UserProvider";
+import Theme from "./Theme";
 
 const iconList = {
   faFilePen: faFilePen,
@@ -36,9 +39,11 @@ const iconList = {
   faUserLock: faUserLock,
 };
 
-export default function MyNavbar({ role_id, data = [] }) {
+export default function MyAppNav() {
   const router = useRouter();
   const [show, setShow] = useState(false);
+  const { menuData } = useNavData();
+  const { user } = useSession();
 
   const logoutHandler = () => {
     deleteCookie("user_token");
@@ -46,28 +51,48 @@ export default function MyNavbar({ role_id, data = [] }) {
   };
 
   return (
-    <nav className="_myapp_nav">
-      <div className="flex flex-row items-center justify-between w-full">
-        <Image
-          src={logowithtext}
-          width="auto"
-          height="50"
-          alt="PPI Karabuk"
-          priority
-        />
+    <nav className="myapp_nav">
+      <div className="inline-flex items-center justify-between w-full">
+        <Link href="/my-app">
+          <Image
+            src={logowithtext}
+            width="auto"
+            height="50"
+            alt="PPI Karabuk"
+            priority
+          />
+        </Link>
+        <Theme style="white" hidden={true} />
         <button className="block lg:hidden" onClick={() => setShow(!show)}>
           <FontAwesomeIcon className="text-white" icon={faBars} size="2xl" />
         </button>
       </div>
 
       {/* Dashboard */}
-      <div className={`_myapp_navlist_container ${show ? "_show" : ""}`}>
+      <div className={`myapp_navlist_container ${show ? "show" : ""}`}>
+        {/* Button */}
+        <div className="inline-flex items-center justify-between w-full lg:hidden">
+          <Link href="/my-app">
+            <Image
+              src={logowithtext}
+              width="auto"
+              height="50"
+              alt="PPI Karabuk"
+              priority
+            />
+          </Link>
+          <button className="block lg:hidden" onClick={() => setShow(!show)}>
+            <FontAwesomeIcon className="text-white" icon={faBars} size="2xl" />
+          </button>
+        </div>
+        {/* Button End */}
+
         {/* Dashboard */}
-        <ul className="_mynavlist">
+        <ul className="mynavlist">
           <li>
             <Link
               href="/my-app"
-              className={router.asPath === "/my-app" ? "_active" : ""}
+              className={router.asPath === "/my-app" ? "active" : ""}
             >
               <FontAwesomeIcon icon={faHouse} />
               Dashboard
@@ -75,13 +100,13 @@ export default function MyNavbar({ role_id, data = [] }) {
           </li>
         </ul>
 
-        {data.map(
+        {menuData.map(
           (nav, index) =>
-            nav.role_id === role_id &&
+            nav.role_id === user?.role_id &&
             nav.active && (
-              <div key={index} className="_mynavlist">
-                <p className="_head_navlist">{nav.label}</p>
-                <ul className="_mynavlist">
+              <div key={index} className="flex flex-col gap-2">
+                <p className="head_navlist">{nav.label}</p>
+                <ul className="mynavlist">
                   {nav.link.map((l, index) =>
                     l.active ? (
                       <li key={index}>
@@ -89,7 +114,7 @@ export default function MyNavbar({ role_id, data = [] }) {
                           href={l.url}
                           className={
                             router.pathname.replace("/[id]", "") === l.url
-                              ? "_active"
+                              ? "active"
                               : ""
                           }
                         >
@@ -107,11 +132,11 @@ export default function MyNavbar({ role_id, data = [] }) {
         )}
 
         {/* Logout */}
-        <ul className="pt-4 border-t-2 lg:pt-8 lg:mt-auto _mynavlist border-t-white/40">
+        <ul className="pt-4 mt-auto border-t lg:pt-8 mynavlist border-t-white/40">
           <li>
             <Link
               href="/my-app/profile"
-              className={router.asPath === "/my-app/profile" ? "_active" : ""}
+              className={router.asPath === "/my-app/profile" ? "active" : ""}
             >
               <FontAwesomeIcon icon={faUserPen} />
               Profile
