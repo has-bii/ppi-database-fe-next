@@ -1,20 +1,21 @@
 // components/ThemeToggle.js
-import { faCircleHalfStroke } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTheme } from "./ThemeProvider";
 
-function Theme({ style, hidden = false }) {
-  const { toggleTheme } = useTheme();
+function Theme() {
+  const { toggleTheme, theme } = useTheme();
 
   return (
-    <button
-      onClick={toggleTheme}
-      className={`px-4 ml-auto w-fit text-light-text dark:text-dark-text ${
-        style === "white" ? "text-white" : "text-light-text dark:text-dark-text"
-      } ${hidden ? "lg:hidden" : ""}`}
-    >
-      <FontAwesomeIcon icon={faCircleHalfStroke} size="xl" />
-    </button>
+    <div className="inline-flex items-center gap-2">
+      <button
+        onClick={toggleTheme}
+        className={`theme-btn ${theme === "dark" ? "active" : ""}`}
+      >
+        <span className="theme-btn-circle" />
+      </button>
+      <p className="text-sm text-white/75 dark:text-white/75">
+        {theme === "light" ? "Dark" : "Light"} mode
+      </p>
+    </div>
   );
 }
 

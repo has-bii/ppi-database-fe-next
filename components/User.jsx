@@ -1,33 +1,31 @@
 import Image from "next/image";
-import React from "react";
 
-export default function User({ user }) {
+export default function User({ user, className, showName = false }) {
   return (
-    <div className="inline-flex items-center gap-4">
+    <div className={`inline-flex items-center gap-4 ${className}`}>
       {user ? (
         <Image
           src={user.profile_photo_url}
-          width={46}
-          height={46}
+          width={40}
+          height={40}
           className="object-cover rounded-xl"
           alt=""
         />
       ) : (
         <Image
           src="/image/dummy-pp.jpeg"
-          width={46}
-          height={46}
-          className="object-cover rounded-full"
+          width={40}
+          height={40}
+          className="object-cover rounded-xl "
           alt=""
         />
       )}
 
-      <div>
-        <p className="font-bold">{user ? user.name : "Loading..."}</p>
-        <p className="text-sm font-semibold secondary">
-          {user ? user.role.name : "Loading..."}
-        </p>
-      </div>
+      {showName && (
+        <div className="text-slate-400 dark:text-white/75 hidden lg:flex">
+          {user ? user.name : "Loading..."}
+        </div>
+      )}
     </div>
   );
 }

@@ -1,0 +1,11 @@
+.theme-btn {
+    @apply inline-flex items-center justify-start p-1 transition-all duration-300 ease-in-out rounded-full dark:justify-end h-7 w-11 bg-slate-300;
+
+    &.active {
+        @apply bg-sky-300;
+    }
+
+    .theme-btn-circle {
+        @apply w-5 h-5 transition-all duration-300 ease-in-out bg-white rounded-full;
+    }
+}

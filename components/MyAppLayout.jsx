@@ -8,11 +8,13 @@ export default function MyAppLayout({ children }) {
       <Head>
         <title>My App | PPI Karabük</title>
       </Head>
-      <div className="relative flex flex-col w-screen h-screen gap-4 bg-primary dark:bg-dark-primary lg:p-4 lg:flex-row">
+      <div className="relative flex flex-col w-screen h-screen gap-4 transition-colors duration-300 ease-in-out bg-primary dark:bg-dark-primary lg:p-2 lg:flex-row">
         <MyAppNav />
-        <div className="flex flex-col w-full gap-4 px-4">
+        <div className="flex flex-col w-full gap-4">
           <TopBar />
-          <div className="w-full h-full overflow-auto">{children}</div>
+          <div className="w-full h-full overflow-auto rounded-xl">
+            {children}
+          </div>
         </div>
       </div>
     </>

@@ -1,11 +1,10 @@
 import axios from "@lib/axios";
-import { getCookie } from "cookies-next";
+import { hasCookie } from "cookies-next";
 import { createContext, useContext, useEffect, useState } from "react";
 
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  let cookie = getCookie("user_token");
   const [user, setUser] = useState(null); // Set initial state to null
 
   useEffect(() => {
@@ -20,7 +19,7 @@ export const UserProvider = ({ children }) => {
       }
     }
 
-    fetchUser();
+    if (hasCookie("user_token")) fetchUser();
   }, []);
 
   const isLogged = () => {
@@ -28,7 +27,7 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ cookie, user, isLogged }}>
+    <UserContext.Provider value={{ user, isLogged }}>
       {children}
     </UserContext.Provider>
   );

@@ -16,6 +16,7 @@ import {
   faTag,
   faUserSecret,
   faUserLock,
+  faGear,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import Link from "next/link";
@@ -62,7 +63,6 @@ export default function MyAppNav() {
             priority
           />
         </Link>
-        <Theme style="white" hidden={true} />
         <button className="block lg:hidden" onClick={() => setShow(!show)}>
           <FontAwesomeIcon className="text-white" icon={faBars} size="2xl" />
         </button>
@@ -132,7 +132,7 @@ export default function MyAppNav() {
         )}
 
         {/* Logout */}
-        <ul className="pt-4 mt-auto border-t lg:pt-8 mynavlist border-t-white/40">
+        <ul className="pt-4 mt-auto border-y lg:py-4 mynavlist border-y-white/10">
           <li>
             <Link
               href="/my-app/profile"
@@ -143,12 +143,25 @@ export default function MyAppNav() {
             </Link>
           </li>
           <li>
+            <Link
+              href="/my-app/settings"
+              className={router.asPath === "/my-app/settings" ? "active" : ""}
+            >
+              <FontAwesomeIcon icon={faGear} />
+              Settings
+            </Link>
+          </li>
+          <li>
             <button onClick={logoutHandler}>
               <FontAwesomeIcon icon={faRightFromBracket} />
               Logout
             </button>
           </li>
         </ul>
+
+        <div>
+          <Theme />
+        </div>
       </div>
     </nav>
   );
